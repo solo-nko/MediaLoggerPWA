@@ -6,14 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write src/"
   },
   "dependencies": {
     "dexie": "^4.0.8",
     "luxon": "^3.5.0",
     "pinia": "^2.2.2",
     "vue": "^3.4.26",
-    "vue-router": "^4.4.3"
+    "vue-router": "^4.4.3",
+    "vuetify": "^3.7.1"
   },
   "devDependencies": {
     "@vite-pwa/assets-generator": "^0.2.4",
