@@ -5,7 +5,7 @@ import { RouterView } from 'vue-router';
 <template>
 	<VApp>
 		<VAppBar title="Media Logger"></VAppBar>
-		<VMain>
+		<VMain id="content-area">
 			<RouterView></RouterView>
 		</VMain>
 
@@ -18,5 +18,10 @@ import { RouterView } from 'vue-router';
 </template>
 
 <style scoped>
-
+#content-area {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
 </style>
