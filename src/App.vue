@@ -1,34 +1,22 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue';
-import PWABadge from './components/PWABadge.vue';
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-	<div>
-		<a href="https://vitejs.dev" target="_blank">
-			<img src="/favicon.svg" class="logo" alt="Media Tracker Progressive logo" />
-		</a>
-		<a href="https://vuejs.org/" target="_blank">
-			<img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-		</a>
-	</div>
-	<HelloWorld msg="Media Tracker Progressive" />
-	<PWABadge />
+	<VApp>
+		<VAppBar title="Media Logger"></VAppBar>
+		<VMain>
+			<RouterView></RouterView>
+		</VMain>
+
+		<VBottomNavigation grow>
+			<VBtn :to="{ name: 'Home' }">Home</VBtn>
+			<VBtn :to="{ name: 'Entry' }">Entry</VBtn>
+			<VBtn :to="{ name: 'Database' }">Log</VBtn>
+		</VBottomNavigation>
+	</VApp>
 </template>
 
 <style scoped>
-.logo {
-	height: 6em;
-	padding: 1.5em;
-	will-change: filter;
-	transition: filter 300ms;
-}
 
-.logo:hover {
-	filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-	filter: drop-shadow(0 0 2em #42b883aa);
-}
 </style>
