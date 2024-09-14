@@ -1,8 +1,8 @@
-import { Entity } from 'dexie';
-import type DatabaseSchema from '../src/database/DatabaseSchema.ts';
+import Log from './Log.ts';
+import { GameStatus } from './GameStatus.ts';
 
-export default class GameLog extends Entity<DatabaseSchema> {
-	id!: number
-	title: string
+export default class GameLog extends Log {
 	platform: string
+	progress: string
+	status: GameStatus | undefined
 }
