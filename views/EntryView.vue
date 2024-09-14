@@ -1,10 +1,23 @@
 <script setup lang="ts">
 import { appDatabase } from '../src/database/db.ts';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { GameStatus } from '../types/GameStatus.ts';
 import { DateTime } from 'luxon';
+import Quill from 'quill';
+import { Delta } from 'quill/core';
+import 'quill/dist/quill.snow.css';
+
+let quill: Quill;
+// Quill can't be called until the DOM finishes rendering, otherwise you'll get an error
+onMounted(() => {
+	quill = new Quill('#editor', {
+		placeholder: 'Thoughts so far',
+		theme: 'snow'
+	});
+});
 
 const gameStatus = Object.values(GameStatus);
+const quillDelta = ref<Delta>()
 
 const gameLogEntry = ref({
 	title: null,
@@ -25,7 +38,7 @@ async function addGame() {
 	if (gameLogEntry.value.modifiedDate) {
 		luxonModified = DateTime.fromISO(gameLogEntry.value.modifiedDate);
 	} else {
-		luxonModified = DateTime.now()
+		luxonModified = DateTime.now();
 	}
 	const id = await appDatabase.games.add({
 		title: gameLogEntry.value.title,
@@ -44,13 +57,30 @@ async function addGame() {
 <template>
 	<VCard id="card">
 		<VCardTitle>Log Entry</VCardTitle>
-		<VTextField label="Title" v-model="gameLogEntry.title"></VTextField>
-		<VTextField label="Platform" v-model="gameLogEntry.platform"></VTextField>
-		<VAutocomplete label="Status" :items="gameStatus" v-model="gameLogEntry.status"></VAutocomplete>
-		<VTextarea label="Progress" v-model="gameLogEntry.progress" rows="2" no-resize></VTextarea>
-		<div id="editor"></div>
-		<VTextField label="Date Updated (if applicable)" type="date" v-model="gameLogEntry.modifiedDate"></VTextField>
-
+		<VContainer>
+			<VRow>
+				<VTextField label="Title" v-model="gameLogEntry.title"></VTextField>
+			</VRow>
+			<VRow>
+				<VCol>
+					<VTextField label="Platform" v-model="gameLogEntry.platform"></VTextField>
+				</VCol>
+				<VCol>
+					<VAutocomplete label="Status" :items="gameStatus" v-model="gameLogEntry.status"></VAutocomplete>
+				</VCol>
+			</VRow>
+			<VRow>
+				<VTextarea label="Progress" v-model="gameLogEntry.progress" rows="2" no-resize></VTextarea>
+			</VRow>
+			<VRow>
+				<div id="editor-wrapper">
+					<div id="editor"></div>
+				</div>
+			</VRow>
+			<VRow>
+				<VTextField label="Date Updated (if applicable)" type="date" v-model="gameLogEntry.modifiedDate"></VTextField>
+			</VRow>
+		</VContainer>
 		<VCardActions>
 			<VBtn @click="addGame">Save</VBtn>
 		</VCardActions>
@@ -63,7 +93,9 @@ async function addGame() {
 	padding: 3rem;
 }
 
-#editor {
-	border: black solid 1px;
+#editor-wrapper {
+	height: 100%;
+	width: 100%;
 }
+
 </style>
