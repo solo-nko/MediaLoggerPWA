@@ -4,7 +4,7 @@ import TVLog from '../../types/TVLog.ts';
 
 export default class DatabaseSchema extends Dexie {
 	games!: EntityTable<GameLog, 'id'>;
-	television!: EntityTable<TVLog, 'id'>
+	television!: EntityTable<TVLog, 'id'>;
 
 	constructor() {
 		// name of the database
@@ -12,7 +12,7 @@ export default class DatabaseSchema extends Dexie {
 		// add new stores (tables) here i think
 		this.version(1).stores({
 			games: '++id, title, platform, status, dateCreated, dateModified',
-			television: '++id, title, season, episode, dateCreated, dateModified',
+			television: '++id, title, season, episode, dateCreated, dateModified'
 		});
 		this.games.mapToClass(GameLog);
 	}
