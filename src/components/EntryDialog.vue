@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { appDatabase } from '../src/database/db.ts';
+import { appDatabase } from '../database/db.ts';
 import { onMounted, ref } from 'vue';
-import { GameStatus } from '../types/GameStatus.ts';
+import { GameStatus } from '../../types/GameStatus.ts';
 import { DateTime } from 'luxon';
 import Quill from 'quill';
 import { Delta } from 'quill/core';
@@ -19,6 +19,8 @@ onMounted(() => {
 const gameStatus = Object.values(GameStatus);
 const quillDelta = ref<Delta>()
 
+const emits = defineEmits(['close-entry'])
+
 const gameLogEntry = ref({
 	title: null,
 	progress: null,
@@ -31,6 +33,10 @@ function resetFields() {
 	for (const key in gameLogEntry.value) {
 		gameLogEntry.value[key] = null;
 	}
+}
+
+function closeEntry(): void {
+	emits('close-entry')
 }
 
 async function addGame() {
@@ -50,6 +56,7 @@ async function addGame() {
 		dateModified: luxonModified.toString()
 	});
 	resetFields();
+	closeEntry()
 }
 
 </script>
@@ -62,17 +69,17 @@ async function addGame() {
 				<VTextField label="Title" v-model="gameLogEntry.title"></VTextField>
 			</VRow>
 			<VRow>
-				<VCol>
+				<VCol class="pl-0">
 					<VTextField label="Platform" v-model="gameLogEntry.platform"></VTextField>
 				</VCol>
-				<VCol>
+				<VCol class="pr-0">
 					<VAutocomplete label="Status" :items="gameStatus" v-model="gameLogEntry.status"></VAutocomplete>
 				</VCol>
 			</VRow>
 			<VRow>
 				<VTextarea label="Progress" v-model="gameLogEntry.progress" rows="2" no-resize></VTextarea>
 			</VRow>
-			<VRow>
+			<VRow class="pb-4">
 				<div id="editor-wrapper">
 					<div id="editor"></div>
 				</div>
@@ -83,6 +90,7 @@ async function addGame() {
 		</VContainer>
 		<VCardActions>
 			<VBtn @click="addGame">Save</VBtn>
+			<VBtn @click="closeEntry()">Close</VBtn>
 		</VCardActions>
 	</VCard>
 </template>
