@@ -83,7 +83,8 @@ async function updateGame(key: number) {
 		status: logModel.value.status,
 		progress: logModel.value.progress,
 		rating: logModel.value.rating,
-		impression: Log.impressionToString(logModel.value.impression)
+		impression: Log.impressionToString(logModel.value.impression),
+		dateModified: logModel.value.dateModified
 	});
 	closeEntry();
 }

@@ -8,14 +8,14 @@ export default class Log extends Entity<DatabaseSchema> {
 	title: string
 	dateCreated: DateTime | null
 	dateModified: DateTime | null
-	impression: Delta | string | null
+	impression: Delta | null
 
 	static dateToString(dateObject: DateTime) {
-		return dateObject.toSQL()
+		return dateObject.toISODate()
 	}
 
 	static dateFromString(dateString: string) {
-		return DateTime.fromSQL()
+		return DateTime.fromISO(dateString)
 	}
 
 	static impressionToString(impressionObject: Delta) {
@@ -23,7 +23,7 @@ export default class Log extends Entity<DatabaseSchema> {
 	}
 
 	static impressionFromString(impressionString: string) {
-		return JSON.parse(impressionString)
+		return new Delta(JSON.parse(impressionString))
 	}
 
 }

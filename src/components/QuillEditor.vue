@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
+import Log from '../types/Log.ts';
 
 let quill: Quill | null = null;
 const emits = defineEmits(['content-change']);
@@ -13,6 +14,12 @@ onMounted(() => {
 		placeholder: 'Thoughts so far',
 		theme: 'snow'
 	});
+	const existingContent = Log.impressionFromString(editorContent.value)
+	if (existingContent) {
+		console.log("test")
+		console.log(existingContent)
+		quill.setContents(existingContent)
+	}
 	quill.on('text-change', (delta, oldDelta, source) => {
 		editorContent.value = quill.getContents();
 		emits('content-change', delta, oldDelta, source);
