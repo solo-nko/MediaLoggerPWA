@@ -27,16 +27,16 @@ function editEntry(entryInfo) {
 </script>
 
 <template>
-	<VTabs></VTabs>
-	<VList title="Database">
-		<VListItem v-for="game in games" :key="game.id">{{ game.title }}</VListItem>
-	</VList>
 	<VDataTable :headers="gameHeaders" :items="games" items-per-page="10">
 		<template v-slot:item.actions="{item}">
-			<VLabel>Edit</VLabel>
+			<VLabel @click="editEntry(item)">Edit</VLabel>
 		</template>
 	</VDataTable>
+	<VDialog v-model="showEditDialog">
+		<EntryDialogGames @close-entry="showEditDialog = false" :game-entry="entryDetails" ></EntryDialogGames>
+	</VDialog>
 </template>
+
 
 <style scoped>
 

@@ -59,7 +59,7 @@ const showDialog = ref(false)
 			</VCard>
 		</VRow>
 		<VDialog v-model="showDialog">
-			<EntryDialog @close-entry="showDialog = false" ></EntryDialog>
+			<EntryDialogGames @close-entry="showDialog = false" ></EntryDialogGames>
 		</VDialog>
 
 	</VContainer>

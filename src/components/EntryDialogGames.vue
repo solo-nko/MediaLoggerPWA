@@ -10,19 +10,43 @@ import GameLog from '../../types/GameLog.ts';
 const gameStatus = Object.values(GameStatus);
 const emits = defineEmits(['close-entry']);
 
-const gameLogEntry = ref({
-	title: null,
-	platform: null,
-	status: null,
-	progress: null,
-	rating: null,
-	impression: null,
-	modifiedDate: null
-});
+const props = withDefaults(defineProps<{
+	gameEntry?: GameLog;
+}>(), {
+	gameEntry: {
+		title: null,
+		platform: null,
+		status: null,
+		progress: null,
+		rating: null,
+		impression: null,
+		dateModified: null
+	}
+})
+
+const logModel = ref({
+	title: props.gameEntry.title,
+	platform: props.gameEntry.platform,
+	status: props.gameEntry.status,
+	progress: props.gameEntry.progress,
+	rating: props.gameEntry.rating,
+	impression: props.gameEntry.impression,
+	dateModified: props.gameEntry.dateModified
+})
+
+/*
+* 	title: null,
+		platform: null,
+		status: null,
+		progress: null,
+		rating: null,
+		impression: null,
+		modifiedDate: null
+* */
 
 function resetFields() {
-	for (const key in gameLogEntry.value) {
-		gameLogEntry.value[key] = null;
+	for (const key in logModel.value) {
+		logModel.value[key] = null;
 	}
 }
 
@@ -32,12 +56,12 @@ function closeEntry(): void {
 
 async function addGame() {
 	const id = await appDatabase.games.add({
-		title: gameLogEntry.value.title,
-		platform: gameLogEntry.value.platform,
-		status: gameLogEntry.value.status,
-		progress: gameLogEntry.value.progress,
-		rating: gameLogEntry.value.rating,
-		impression: Log.impressionToString(gameLogEntry.value.impression),
+		title: logModel.value.title,
+		platform: logModel.value.platform,
+		status: logModel.value.status,
+		progress: logModel.value.progress,
+		rating: logModel.value.rating,
+		impression: Log.impressionToString(logModel.value.impression),
 		dateCreated: Log.dateToString(DateTime.now()),
 		dateModified: Log.dateToString(DateTime.now())
 	});
@@ -55,37 +79,37 @@ async function updateGame() {
 		<VCardTitle>Log Entry</VCardTitle>
 		<VContainer>
 			<VRow>
-				<VTextField label="Title" v-model="gameLogEntry.title"></VTextField>
+				<VTextField label="Title" v-model="logModel.title"></VTextField>
 			</VRow>
 			<VRow>
 				<VCol class="pl-0">
-					<VTextField label="Platform" v-model="gameLogEntry.platform"></VTextField>
+					<VTextField label="Platform" v-model="logModel.platform"></VTextField>
 				</VCol>
 				<VCol class="pr-0">
 					<VAutocomplete
 						label="Status"
 						:items="gameStatus"
-						v-model="gameLogEntry.status"
+						v-model="logModel.status"
 					></VAutocomplete>
 				</VCol>
 			</VRow>
 			<VRow>
 				<div id="rating-container">
 					<VLabel id="rating-label">Rating</VLabel>
-					<VSlider min="1" max="10" step="1" thumb-label show-ticks="always" v-model="gameLogEntry.rating"></VSlider>
+					<VSlider min="1" max="10" step="1" thumb-label show-ticks="always" v-model="logModel.rating"></VSlider>
 				</div>
 			</VRow>
 			<VRow>
-				<VTextarea label="Progress" v-model="gameLogEntry.progress" rows="2" no-resize></VTextarea>
+				<VTextarea label="Progress" v-model="logModel.progress" rows="2" no-resize></VTextarea>
 			</VRow>
 			<VRow class="pb-4">
-				<QuillEditor v-model="gameLogEntry.impression"></QuillEditor>
+				<QuillEditor v-model="logModel.impression"></QuillEditor>
 			</VRow>
 			<VRow>
 				<VTextField
 					label="Date Updated (if applicable)"
 					type="date"
-					v-model="gameLogEntry.modifiedDate"
+					v-model="logModel.dateModified"
 				></VTextField>
 			</VRow>
 		</VContainer>
