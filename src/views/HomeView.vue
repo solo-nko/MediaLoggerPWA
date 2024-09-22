@@ -6,12 +6,7 @@ import { GameStatus } from '../types/GameStatus.ts';
 import EntryDialog from '../components/EntryDialogGames.vue';
 import EntryDialogGames from '../components/EntryDialogGames.vue';
 
-const testGames = [
-	{ title: 'game1' },
-	{ title: 'game2' },
-	{ title: 'game3' },
-	{ title: 'game4' }
-];
+const testGames = [{ title: 'game1' }, { title: 'game2' }, { title: 'game3' }, { title: 'game4' }];
 // const nowPlayingGames = ref<GameLog[]>([
 // 	{
 // 		title: 'Red Dead Redemption 2',
@@ -36,8 +31,7 @@ const testGames = [
 // 	}
 // ]);
 
-const showDialog = ref(false)
-
+const showDialog = ref(false);
 </script>
 
 <template>
@@ -47,7 +41,9 @@ const showDialog = ref(false)
 			<VCard>
 				<VCardTitle>Current Games</VCardTitle>
 				<VList>
-					<VListItem v-for="game in testGames">{{ game.title}} <VBtn v-on:click="showDialog = true">Edit</VBtn> </VListItem>
+					<VListItem v-for="game in testGames"
+						>{{ game.title }} <VBtn v-on:click="showDialog = true">Edit</VBtn>
+					</VListItem>
 				</VList>
 				<!--				<VExpansionPanels>-->
 				<!--					<VExpansionPanel v-for="game in nowPlayingGames" :title="game.title">-->
@@ -59,14 +55,9 @@ const showDialog = ref(false)
 			</VCard>
 		</VRow>
 		<VDialog v-model="showDialog">
-			<EntryDialogGames @close-entry="showDialog = false" ></EntryDialogGames>
+			<EntryDialogGames @close-entry="showDialog = false"></EntryDialogGames>
 		</VDialog>
-
 	</VContainer>
-
-
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -144,9 +144,9 @@ async function updateGame(key: number) {
 </template>
 
 <style scoped>
-#card {
-	width: 70%;
-	padding: 3rem;
+/* Used this internal class to access the VCard component styling because the #card id wasn't working*/
+.v-card {
+	padding: 1rem 3rem;
 }
 
 #rating-container {

@@ -42,8 +42,9 @@ This project was built with the following major technologies:
 ## To-Do
 * Create themes
   * Color-code by status
-* Allow deletion of existing entries
-* Allow editing of existing entries
+* ~~Allow deletion of existing entries~~
+* ~~Allow editing of existing entries~~
+* Make installable (installation function seems to have broken at some point)
 * Add entries to the start page, filtered by what is "currently being played"
 
 ## Things to investigate

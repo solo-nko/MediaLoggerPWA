@@ -3,5 +3,5 @@ export enum TVStatus {
 	Completed = 'completed',
 	Hiatus = 'hiatus',
 	Dropped = 'dropped',
-	Rewatching = 'rewatching',
+	Rewatching = 'rewatching'
 }

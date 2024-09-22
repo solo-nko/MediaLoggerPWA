@@ -14,11 +14,11 @@ onMounted(() => {
 		placeholder: 'Thoughts so far',
 		theme: 'snow'
 	});
-	const existingContent = Log.impressionFromString(editorContent.value)
+	const existingContent = Log.impressionFromString(editorContent.value);
 	if (existingContent) {
-		console.log("test")
-		console.log(existingContent)
-		quill.setContents(existingContent)
+		console.log('test');
+		console.log(existingContent);
+		quill.setContents(existingContent);
 	}
 	quill.on('text-change', (delta, oldDelta, source) => {
 		editorContent.value = quill.getContents();
