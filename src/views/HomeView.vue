@@ -3,8 +3,8 @@ import { ref } from 'vue';
 import GameLog from '../types/GameLog.ts';
 import { DateTime } from 'luxon';
 import { GameStatus } from '../types/GameStatus.ts';
-import EntryDialog from '../src/components/EntryDialogGames.vue';
-import EntryDialogGames from '../src/components/EntryDialogGames.vue';
+import EntryDialog from '../components/EntryDialogGames.vue';
+import EntryDialogGames from '../components/EntryDialogGames.vue';
 
 const testGames = [
 	{ title: 'game1' },

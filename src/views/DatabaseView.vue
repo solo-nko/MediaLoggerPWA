@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { liveQuery } from 'dexie';
 import { useObservable } from '@vueuse/rxjs';
-import { appDatabase } from '../src/database/db';
+import { appDatabase } from '../database/db.ts';
 import { ref } from 'vue';
-import EntryDialogGames from '../src/components/EntryDialogGames.vue';
+import EntryDialogGames from '../components/EntryDialogGames.vue';
 
 // ref may be required
 const games = useObservable(liveQuery(() => appDatabase.games.toArray()));

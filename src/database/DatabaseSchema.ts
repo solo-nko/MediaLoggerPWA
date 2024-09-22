@@ -1,6 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie';
-import GameLog from '../../types/GameLog.ts';
-import TVLog from '../../types/TVLog.ts';
+import GameLog from '../types/GameLog.ts';
+import TVLog from '../types/TVLog.ts';
 
 export default class DatabaseSchema extends Dexie {
 	games!: EntityTable<GameLog, 'id'>;

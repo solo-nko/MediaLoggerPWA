@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { appDatabase } from '../database/db.ts';
-import { GameStatus } from '../../types/GameStatus.ts';
+import { GameStatus } from '../types/GameStatus.ts';
 import { DateTime } from 'luxon';
 import QuillEditor from './QuillEditor.vue';
-import Log from '../../types/Log.ts';
+import Log from '../types/Log.ts';
 import { ref } from 'vue';
-import GameLog from '../../types/GameLog.ts';
+import GameLog from '../types/GameLog.ts';
 
 const gameStatus = Object.values(GameStatus);
 const emits = defineEmits(['close-entry']);

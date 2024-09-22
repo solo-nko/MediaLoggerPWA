@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import HomeView from '../views/HomeView.vue';
-import NewEntryView from '../views/NewEntryView.vue';
-import DatabaseView from '../views/DatabaseView.vue';
+import HomeView from './views/HomeView.vue';
+import NewEntryView from './views/NewEntryView.vue';
+import DatabaseView from './views/DatabaseView.vue';
 
 export const router = createRouter({
 	history: createWebHistory(),

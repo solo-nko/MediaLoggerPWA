@@ -1,4 +1,4 @@
-import Log from './Log';
+import Log from './Log.ts';
 
 export default class TVLog extends Log {
 	season: number

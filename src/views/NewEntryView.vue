@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import EntryDialogGames from '../src/components/EntryDialogGames.vue';
+import EntryDialogGames from '../components/EntryDialogGames.vue';
 
 
 </script>

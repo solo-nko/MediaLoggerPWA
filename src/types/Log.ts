@@ -1,5 +1,5 @@
 import { DateTime } from "luxon"
-import DatabaseSchema from '../src/database/DatabaseSchema';
+import DatabaseSchema from '../database/DatabaseSchema.ts';
 import { Entity } from 'dexie';
 import { Delta } from 'quill/core';
 
