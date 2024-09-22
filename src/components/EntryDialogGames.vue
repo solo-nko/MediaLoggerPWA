@@ -10,19 +10,26 @@ import GameLog from '../../types/GameLog.ts';
 const gameStatus = Object.values(GameStatus);
 const emits = defineEmits(['close-entry']);
 
-const props = withDefaults(defineProps<{
-	gameEntry?: GameLog;
-}>(), {
-	gameEntry: {
-		title: null,
-		platform: null,
-		status: null,
-		progress: null,
-		rating: null,
-		impression: null,
-		dateModified: null
+const props = withDefaults(
+	defineProps<{
+		gameEntry?: GameLog;
+		editEntry?: boolean;
+		closeButton?: boolean;
+	}>(),
+	{
+		gameEntry: {
+			title: null,
+			platform: null,
+			status: null,
+			progress: null,
+			rating: null,
+			impression: null,
+			dateModified: null
+		},
+		editEntry: true,
+		closeButton: true
 	}
-})
+);
 
 const logModel = ref({
 	title: props.gameEntry.title,
@@ -32,7 +39,7 @@ const logModel = ref({
 	rating: props.gameEntry.rating,
 	impression: props.gameEntry.impression,
 	dateModified: props.gameEntry.dateModified
-})
+});
 
 /*
 * 	title: null,
@@ -51,7 +58,7 @@ function resetFields() {
 }
 
 function closeEntry(): void {
-	emits('close-entry');
+	if (props.closeButton) emits('close-entry');
 }
 
 async function addGame() {
@@ -69,8 +76,16 @@ async function addGame() {
 	closeEntry();
 }
 
-async function updateGame() {
-	const id = await appDatabase.games.update({});
+async function updateGame(key: number) {
+	const id = await appDatabase.games.update(key, {
+		title: logModel.value.title,
+		platform: logModel.value.platform,
+		status: logModel.value.status,
+		progress: logModel.value.progress,
+		rating: logModel.value.rating,
+		impression: Log.impressionToString(logModel.value.impression)
+	});
+	closeEntry();
 }
 </script>
 
@@ -96,7 +111,14 @@ async function updateGame() {
 			<VRow>
 				<div id="rating-container">
 					<VLabel id="rating-label">Rating</VLabel>
-					<VSlider min="1" max="10" step="1" thumb-label show-ticks="always" v-model="logModel.rating"></VSlider>
+					<VSlider
+						min="1"
+						max="10"
+						step="1"
+						thumb-label
+						show-ticks="always"
+						v-model="logModel.rating"
+					></VSlider>
 				</div>
 			</VRow>
 			<VRow>
@@ -114,8 +136,8 @@ async function updateGame() {
 			</VRow>
 		</VContainer>
 		<VCardActions>
-			<VBtn @click="addGame">Save</VBtn>
-			<VBtn @click="closeEntry()">Close</VBtn>
+			<VBtn @click="props.editEntry ? updateGame(props.gameEntry.id) : addGame()">Save</VBtn>
+			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
 		</VCardActions>
 	</VCard>
 </template>

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import HomeView from '../views/HomeView.vue';
-import EntryView from './components/EntryDialogGames.vue';
+import NewEntryView from '../views/NewEntryView.vue';
 import DatabaseView from '../views/DatabaseView.vue';
 
 export const router = createRouter({
@@ -19,7 +19,7 @@ export const router = createRouter({
 		{
 			path: '/entry',
 			name: 'Entry',
-			component: EntryView
+			component: NewEntryView
 		},
 		{
 			path: '/database',

@@ -3,7 +3,6 @@ import { liveQuery } from 'dexie';
 import { useObservable } from '@vueuse/rxjs';
 import { appDatabase } from '../src/database/db';
 import { ref } from 'vue';
-import { DateTime } from 'luxon';
 import EntryDialogGames from '../src/components/EntryDialogGames.vue';
 
 // ref may be required
@@ -33,7 +32,7 @@ function editEntry(entryInfo) {
 		</template>
 	</VDataTable>
 	<VDialog v-model="showEditDialog">
-		<EntryDialogGames @close-entry="showEditDialog = false" :game-entry="entryDetails" ></EntryDialogGames>
+		<EntryDialogGames @close-entry="showEditDialog = false" :game-entry="entryDetails" :edit-entry="true" ></EntryDialogGames>
 	</VDialog>
 </template>
 
