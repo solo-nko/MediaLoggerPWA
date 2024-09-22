@@ -5,6 +5,7 @@ import { DateTime } from 'luxon';
 import QuillEditor from './QuillEditor.vue';
 import Log from '../../types/Log.ts';
 import { ref } from 'vue';
+import GameLog from '../../types/GameLog.ts';
 
 const gameStatus = Object.values(GameStatus);
 const emits = defineEmits(['close-entry']);
@@ -14,6 +15,7 @@ const gameLogEntry = ref({
 	platform: null,
 	status: null,
 	progress: null,
+	rating: null,
 	impression: null,
 	modifiedDate: null
 });
@@ -34,6 +36,7 @@ async function addGame() {
 		platform: gameLogEntry.value.platform,
 		status: gameLogEntry.value.status,
 		progress: gameLogEntry.value.progress,
+		rating: gameLogEntry.value.rating,
 		impression: Log.impressionToString(gameLogEntry.value.impression),
 		dateCreated: Log.dateToString(DateTime.now()),
 		dateModified: Log.dateToString(DateTime.now())
@@ -67,6 +70,12 @@ async function updateGame() {
 				</VCol>
 			</VRow>
 			<VRow>
+				<div id="rating-container">
+					<VLabel id="rating-label">Rating</VLabel>
+					<VSlider min="1" max="10" step="1" thumb-label show-ticks="always" v-model="gameLogEntry.rating"></VSlider>
+				</div>
+			</VRow>
+			<VRow>
 				<VTextarea label="Progress" v-model="gameLogEntry.progress" rows="2" no-resize></VTextarea>
 			</VRow>
 			<VRow class="pb-4">
@@ -91,5 +100,15 @@ async function updateGame() {
 #card {
 	width: 70%;
 	padding: 3rem;
+}
+
+#rating-container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+#rating-label {
+	align-self: center;
 }
 </style>

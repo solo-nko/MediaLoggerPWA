@@ -5,4 +5,5 @@ export default class GameLog extends Log {
 	platform: string
 	progress: string
 	status: GameStatus | undefined
+	rating: number | null
 }

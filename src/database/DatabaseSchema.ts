@@ -11,7 +11,7 @@ export default class DatabaseSchema extends Dexie {
 		super('AppDatabase');
 		// add new stores (tables) here i think
 		this.version(1).stores({
-			games: '++id, title, platform, status, dateCreated, dateModified',
+			games: '++id, title, platform, status, progress, impression, rating, dateCreated, dateModified',
 			television: '++id, title, season, episode, dateCreated, dateModified'
 		});
 		this.games.mapToClass(GameLog);
