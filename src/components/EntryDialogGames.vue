@@ -5,8 +5,6 @@ import { DateTime } from 'luxon';
 import QuillEditor from './QuillEditor.vue';
 import Log from '../types/Log.ts';
 import { ref } from 'vue';
-import GameLog from '../types/GameLog.ts';
-import { Delta } from 'quill/core';
 
 const gameStatus = Object.values(GameStatus);
 const emits = defineEmits(['close-entry']);
@@ -69,7 +67,7 @@ async function addGame() {
 		status: logModel.value.status,
 		progress: logModel.value.progress,
 		rating: logModel.value.rating,
-		impression: Log.impressionToString(logModel.value.impression as Delta),
+		impression: logModel.value.impression,
 		dateCreated: Log.dateToString(DateTime.now()),
 		dateModified: Log.dateToString(DateTime.now())
 	});
@@ -84,7 +82,7 @@ async function updateGame(key: number) {
 		status: logModel.value.status,
 		progress: logModel.value.progress,
 		rating: logModel.value.rating,
-		impression: Log.impressionToString(logModel.value.impression as Delta),
+		impression: logModel.value.impression,
 		dateModified: logModel.value.dateModified
 	});
 	closeEntry();

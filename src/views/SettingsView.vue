@@ -18,14 +18,14 @@ async function exportDatabase() {
 
 async function importDatabase(file) {
 	const importMetadata = await peakImportFile(file);
-		if (importMetadata.formatName != 'dexie') throw new Error('Invalid format');
-		console.log('Database name:', importMetadata.data.databaseName);
-		console.log('Database version:', importMetadata.data.databaseVersion);
-		console.log('Database version:', importMetadata.data.databaseVersion);
-		console.log(
-			'Tables:',
-			importMetadata.data.tables.map((t) => `${t.name} (${t.rowCount} rows)`).join('\n\t')
-		);
+	if (importMetadata.formatName != 'dexie') throw new Error('Invalid format');
+	console.log('Database name:', importMetadata.data.databaseName);
+	console.log('Database version:', importMetadata.data.databaseVersion);
+	console.log('Database version:', importMetadata.data.databaseVersion);
+	console.log(
+		'Tables:',
+		importMetadata.data.tables.map((t) => `${t.name} (${t.rowCount} rows)`).join('\n\t')
+	);
 	await appDatabase.delete();
 	await appDatabase.import(file);
 }
@@ -33,6 +33,9 @@ async function importDatabase(file) {
 
 <template>
 	<VBtn @click="exportDatabase">Export database</VBtn>
+	<!--	Platform Master -->
+	<!--	Status Master -->
+	<!--	Themes Setting -->
 </template>
 
 <style scoped></style>
