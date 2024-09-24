@@ -5,9 +5,10 @@ import { appDatabase } from '../database/db.ts';
 import { ref } from 'vue';
 import EntryDialogGames from '../components/EntryDialogGames.vue';
 import ConfirmDialog from '../components/ConfirmDialog.vue';
+import GameLog from '../types/GameLog.ts';
 
 // ref may be required
-const games = useObservable(liveQuery(() => appDatabase.games.toArray()));
+const games = useObservable<GameLog[]>(liveQuery(() => appDatabase.games.toArray()));
 const gameHeaders = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Platform', value: 'platform' },

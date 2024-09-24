@@ -3,10 +3,11 @@ import { onMounted } from 'vue';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import Log from '../types/Log.ts';
+import { Delta } from 'quill/core';
 
 let quill: Quill | null = null;
 const emits = defineEmits(['content-change']);
-const editorContent = defineModel();
+const editorContent = defineModel<string | Delta>();
 
 // Quill can't be called until the DOM finishes rendering, otherwise you'll get an error
 onMounted(() => {
@@ -14,11 +15,11 @@ onMounted(() => {
 		placeholder: 'Thoughts so far',
 		theme: 'snow'
 	});
-	const existingContent = Log.impressionFromString(editorContent.value);
-	if (existingContent) {
-		console.log('test');
-		console.log(existingContent);
-		quill.setContents(existingContent);
+	if (typeof editorContent.value === 'string') {
+		const existingContent = Log.impressionFromString(editorContent.value);
+		if (existingContent) {
+			quill.setContents(existingContent);
+		}
 	}
 	quill.on('text-change', (delta, oldDelta, source) => {
 		editorContent.value = quill.getContents();
