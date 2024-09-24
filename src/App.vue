@@ -13,6 +13,7 @@ import { RouterView } from 'vue-router';
 			<VBtn :to="{ name: 'Home' }">Home</VBtn>
 			<VBtn :to="{ name: 'Entry' }">Entry</VBtn>
 			<VBtn :to="{ name: 'Database' }">Log</VBtn>
+			<VBtn :to="{ name: 'Settings' }">Settings</VBtn>
 		</VBottomNavigation>
 	</VApp>
 </template>
