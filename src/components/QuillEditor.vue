@@ -17,7 +17,7 @@ onMounted(() => {
 		theme: 'snow'
 	});
 	// if there is already content loaded from the database, use that
-	if (editorContent.value) {
+	if (editorContent.value && typeof editorContent.value === 'string') {
 		quill.setContents(Log.impressionFromString(editorContent.value));
 	}
 	quill.on('text-change', (delta, oldDelta, source) => {

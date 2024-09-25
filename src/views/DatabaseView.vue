@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { liveQuery } from 'dexie';
-import { useObservable } from '@vueuse/rxjs';
+import { useObservable, from } from '@vueuse/rxjs';
 import { appDatabase } from '../database/db.ts';
 import { ref } from 'vue';
 import EntryDialogGames from '../components/EntryDialogGames.vue';
 import ConfirmDialog from '../components/ConfirmDialog.vue';
 import GameLog from '../types/GameLog.ts';
 
-// ref may be required
-const games = useObservable<GameLog[]>(liveQuery(() => appDatabase.games.toArray()));
+// see https://github.com/dexie/Dexie.js/issues/1608
+const games = useObservable<GameLog[]>(from(liveQuery(() => appDatabase.games.toArray())));
+
+
 const gameHeaders = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Platform', value: 'platform' },
@@ -21,6 +23,7 @@ const gameHeaders = [
 const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
 const entryDetails = ref();
+
 function editEntry(entryInfo) {
 	showEditDialog.value = true;
 	entryDetails.value = entryInfo;

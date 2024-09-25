@@ -1,41 +1,47 @@
 <script setup lang="ts">
-import Dexie from 'dexie';
-import 'dexie-export-import';
-import { saveAs } from 'file-saver';
+import ImportExport from '../components/settings/ImportExport.vue';
+import AppearanceSettings from '../components/settings/AppearanceSettings.vue';
+import { ref } from 'vue';
 
-import { appDatabase } from '../database/db.ts';
-import { peakImportFile } from 'dexie-export-import';
+const currentTab = ref('ImportExport');
+const settingsTabs = {
+	ImportExport,
+	AppearanceSettings
+};
 
-function progressCallback({ totalRows, completedRows }) {
-	console.log(`Progress: ${completedRows} / ${totalRows} rows completed`);
-}
-
-async function exportDatabase() {
-	const blob = await appDatabase.export({ prettyJson: true, progressCallback });
-	const fileName = 'database.json';
-	saveAs(blob, fileName);
-}
-
-async function importDatabase(file) {
-	const importMetadata = await peakImportFile(file);
-	if (importMetadata.formatName != 'dexie') throw new Error('Invalid format');
-	console.log('Database name:', importMetadata.data.databaseName);
-	console.log('Database version:', importMetadata.data.databaseVersion);
-	console.log('Database version:', importMetadata.data.databaseVersion);
-	console.log(
-		'Tables:',
-		importMetadata.data.tables.map((t) => `${t.name} (${t.rowCount} rows)`).join('\n\t')
-	);
-	await appDatabase.delete();
-	await appDatabase.import(file);
-}
 </script>
 
 <template>
-	<VBtn @click="exportDatabase">Export database</VBtn>
+	<VContainer height="100%">
+		<VRow>
+			<VCol id="settings-drawer" cols="3">
+				<VList >
+					<VListItem title="Settings"></VListItem>
+					<VDivider></VDivider>
+					<VListItem link @click="currentTab='ImportExport'">Import / Export Database</VListItem>
+					<VListItem link	@click="currentTab='AppearanceSettings'">Appearance</VListItem>
+					<VListItem>Games Master Settings</VListItem>
+					<VListItem>Television Master Settings</VListItem>
+					<VListItem>Book Master Settings</VListItem>
+					<VListItem>Movie Master Settings</VListItem>
+				</VList>
+			</VCol>
+			<VCol>
+				<Component :is="settingsTabs[currentTab]"></Component>
+			</VCol>
+		</VRow>
+	</VContainer>
+
+
 	<!--	Platform Master -->
 	<!--	Status Master -->
 	<!--	Themes Setting -->
 </template>
 
-<style scoped></style>
+<style scoped>
+
+#settings-drawer {
+	border-right: solid 1px gray;
+}
+
+</style>
