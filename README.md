@@ -44,11 +44,17 @@ This project was built with the following major technologies:
   * Color-code by status
 * ~~Allow deletion of existing entries~~
 * ~~Allow editing of existing entries~~
-* Make installable (installation function seems to have broken at some point)
-* Add entries to the start page, filtered by what is "currently being played"
+* ~~Make installable (installation function seems to have broken at some point)~~
+* ~~Add entries to the start page, filtered by what is "currently being played"~~
+* Allow exporting of database
+* Allow importing of database
+* Add ability to set platforms for games
+* Add TV support
+* Add Movie support
+* Add Book support
 
 ## Things to investigate
 
-* Export data to local file, and import data from local file
+* ~~Export data to local file, and import data from local file~~
 * Cloud sync (specifically between desktop and mobile)
   * Considering Firebase or Dexie Cloud for this
