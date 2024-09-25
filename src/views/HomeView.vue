@@ -1,35 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import GameLog from '../types/GameLog.ts';
-import { DateTime } from 'luxon';
-import { GameStatus } from '../types/GameStatus.ts';
-import EntryDialog from '../components/EntryDialogGames.vue';
 import EntryDialogGames from '../components/EntryDialogGames.vue';
+import { appDatabase } from '../database/db.ts';
+import { from, useObservable } from '@vueuse/rxjs';
+import GameLog from '../types/GameLog.ts';
+import { liveQuery } from 'dexie';
 
-const testGames = [{ title: 'game1' }, { title: 'game2' }, { title: 'game3' }, { title: 'game4' }];
-// const nowPlayingGames = ref<GameLog[]>([
-// 	{
-// 		title: 'Red Dead Redemption 2',
-// 		platform: 'PlayStation 5',
-// 		dateCreated: null,
-// 		dateModified: null,
-// 		status: GameStatus.Playing
-// 	},
-// 	{
-// 		title: 'Arknights',
-// 		platform: 'Mobile',
-// 		dateCreated: null,
-// 		dateModified: null,
-// 		status: GameStatus.Indefinite
-// 	},
-// 	{
-// 		title: 'Ace Attorney: Apollo Justice',
-// 		platform: 'Nintendo 3DS',
-// 		dateCreated: null,
-// 		dateModified: null,
-// 		status: GameStatus.Playing
-// 	}
-// ]);
+const currentGames = useObservable<GameLog[]>(
+	from(
+		liveQuery(() => appDatabase.games.where('status').anyOf(['playing', 'indefinite']).toArray())
+	)
+);
 
 const showDialog = ref(false);
 </script>
@@ -40,15 +21,21 @@ const showDialog = ref(false);
 		<VRow justify="space-around">
 			<VCard>
 				<VCardTitle>Current Games</VCardTitle>
+				<VCardSubtitle>Playing</VCardSubtitle>
 				<VList>
-					<VListItem v-for="game in testGames"
-						>{{ game.title }} <VBtn v-on:click="showDialog = true">Edit</VBtn>
-					</VListItem>
+					<template v-for="game in currentGames" :key="game.id">
+						<VListItem v-if="game.status === 'playing'">
+							<span class="item-title">{{ game.title }}</span>
+						</VListItem>
+					</template>
+					<VDivider></VDivider>
+					<VCardSubtitle>Replaying</VCardSubtitle>
+					<template v-for="game in currentGames" :key="game.id">
+						<VListItem v-if="game.status === 'indefinite'">
+							<span class="item-title">{{ game.title }}</span>
+						</VListItem>
+					</template>
 				</VList>
-				<!--				<VExpansionPanels>-->
-				<!--					<VExpansionPanel v-for="game in nowPlayingGames" :title="game.title">-->
-				<!--					</VExpansionPanel>-->
-				<!--				</VExpansionPanels>-->
 			</VCard>
 			<VCard>
 				<VCardTitle>Current Television</VCardTitle>
@@ -60,4 +47,8 @@ const showDialog = ref(false);
 	</VContainer>
 </template>
 
-<style scoped></style>
+<style scoped>
+.item-title {
+	font-weight: bold;
+}
+</style>
