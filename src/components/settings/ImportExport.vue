@@ -38,12 +38,10 @@ async function importDatabase(file) {
 <template>
 	<div id="flex-container">
 		<VLabel>Import Database</VLabel>
-		<VFileInput label="Place database file here..." accept=".json" ></VFileInput>
+		<VFileInput label="Place database file here..." accept=".json"></VFileInput>
 		<VDivider></VDivider>
 		<VBtn @click="exportDatabase">Export database</VBtn>
 	</div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

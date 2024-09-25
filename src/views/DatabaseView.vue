@@ -10,7 +10,6 @@ import GameLog from '../types/GameLog.ts';
 // see https://github.com/dexie/Dexie.js/issues/1608
 const games = useObservable<GameLog[]>(from(liveQuery(() => appDatabase.games.toArray())));
 
-
 const gameHeaders = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Platform', value: 'platform' },
@@ -43,8 +42,8 @@ async function deleteEntry() {
 <template>
 	<VDataTable :headers="gameHeaders" :items="games" items-per-page="10">
 		<template v-slot:item.actions="{ item }">
-			<VLabel @click="editEntry(item)">Edit</VLabel>
-			<VLabel @click="deleteEntryConfirmation(item)">Delete</VLabel>
+			<VIcon @click="editEntry(item)">mdi-pencil</VIcon>
+			<VIcon @click="deleteEntryConfirmation(item)">mdi-delete</VIcon>
 		</template>
 	</VDataTable>
 	<VDialog id="entry-form" v-model="showEditDialog">

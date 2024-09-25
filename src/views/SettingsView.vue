@@ -8,18 +8,17 @@ const settingsTabs = {
 	ImportExport,
 	AppearanceSettings
 };
-
 </script>
 
 <template>
 	<VContainer height="100%">
 		<VRow>
 			<VCol id="settings-drawer" cols="3">
-				<VList >
+				<VList>
 					<VListItem title="Settings"></VListItem>
 					<VDivider></VDivider>
-					<VListItem link @click="currentTab='ImportExport'">Import / Export Database</VListItem>
-					<VListItem link	@click="currentTab='AppearanceSettings'">Appearance</VListItem>
+					<VListItem link @click="currentTab = 'ImportExport'">Import / Export Database</VListItem>
+					<VListItem link @click="currentTab = 'AppearanceSettings'">Appearance</VListItem>
 					<VListItem>Games Master Settings</VListItem>
 					<VListItem>Television Master Settings</VListItem>
 					<VListItem>Book Master Settings</VListItem>
@@ -32,16 +31,13 @@ const settingsTabs = {
 		</VRow>
 	</VContainer>
 
-
 	<!--	Platform Master -->
 	<!--	Status Master -->
 	<!--	Themes Setting -->
 </template>
 
 <style scoped>
-
 #settings-drawer {
 	border-right: solid 1px gray;
 }
-
 </style>
