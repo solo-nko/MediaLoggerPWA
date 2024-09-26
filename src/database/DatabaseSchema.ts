@@ -13,7 +13,10 @@ export default class DatabaseSchema extends Dexie {
 		this.version(1).stores({
 			games:
 				'++id, title, platform, status, progress, impression, rating, dateCreated, dateModified',
-			television: '++id, title, season, episode, dateCreated, dateModified'
+			television:
+				'++id, title, season, episode, status, impression, rating, dateCreated, dateModified',
+			movies: '++id, title, impression, rating, dateCreated, dateModified',
+			books: '++id, title, type, progress, status, impression, rating, dateCreated, dateModified'
 		});
 		this.games.mapToClass(GameLog);
 	}

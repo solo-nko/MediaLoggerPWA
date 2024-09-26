@@ -22,7 +22,6 @@ import { RouterView } from 'vue-router';
 #content-area {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
 }
 </style>

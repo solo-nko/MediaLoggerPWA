@@ -1,7 +1,7 @@
 export enum GameStatus {
-	Playing = 'playing',
-	Completed = 'completed',
-	Dropped = 'dropped',
-	Hiatus = 'hiatus',
-	Indefinite = 'indefinite'
+	Playing = 'Playing',
+	Completed = 'Completed',
+	Dropped = 'Dropped',
+	Hiatus = 'Hiatus',
+	Indefinite = 'Indefinite'
 }

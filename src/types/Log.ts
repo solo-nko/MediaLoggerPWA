@@ -6,9 +6,10 @@ import { Delta } from 'quill/core';
 export default class Log extends Entity<DatabaseSchema> {
 	id!: number | null;
 	title: string | null;
+	impression: Delta | string | null; //handled as Delta internally, stored as string
+	rating: number | null;
 	dateCreated: DateTime | string | null; //handled as DateTime internally, stored as string
 	dateModified: DateTime | string | null; //handled as DateTime internally, stored as string
-	impression: Delta | string | null; //handled as Delta internally, stored as string
 
 	static dateToString(dateObject: DateTime) {
 		return dateObject.toISODate();

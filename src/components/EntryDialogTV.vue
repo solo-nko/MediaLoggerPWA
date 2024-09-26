@@ -1,26 +1,26 @@
 <script setup lang="ts">
 import { appDatabase } from '../database/db.ts';
-import { GameStatus } from '../types/GameStatus.ts';
 import { DateTime } from 'luxon';
 import QuillEditor from './QuillEditor.vue';
 import Log from '../types/Log.ts';
 import { ref } from 'vue';
+import { TVStatus } from '../types/TVStatus.ts';
 
-const gameStatus = Object.values(GameStatus);
+const tvStatus = Object.values(TVStatus);
 const emits = defineEmits(['close-entry']);
 
 const props = withDefaults(
 	defineProps<{
-		gameEntry?;
+		tvEntry?;
 		editEntry?: boolean;
 		closeButton?: boolean;
 	}>(),
 	{
-		gameEntry: {
+		tvEntry: {
 			title: null,
-			platform: null,
+			season: null,
+			episode: null,
 			status: null,
-			progress: null,
 			rating: null,
 			impression: null,
 			dateModified: null
@@ -31,24 +31,14 @@ const props = withDefaults(
 );
 
 const logModel = ref({
-	title: props.gameEntry.title,
-	platform: props.gameEntry.platform,
-	status: props.gameEntry.status,
-	progress: props.gameEntry.progress,
-	rating: props.gameEntry.rating,
-	impression: props.gameEntry.impression,
-	dateModified: props.gameEntry.dateModified
+	title: props.tvEntry.title,
+	season: props.tvEntry.season,
+	episode: props.tvEntry.episode,
+	status: props.tvEntry.status,
+	rating: props.tvEntry.rating,
+	impression: props.tvEntry.impression,
+	dateModified: props.tvEntry.dateModified
 });
-
-/*
-* 	title: null,
-		platform: null,
-		status: null,
-		progress: null,
-		rating: null,
-		impression: null,
-		modifiedDate: null
-* */
 
 function resetFields() {
 	for (const key in logModel.value) {
@@ -60,12 +50,12 @@ function closeEntry(): void {
 	if (props.closeButton) emits('close-entry');
 }
 
-async function addGame() {
-	const id = await appDatabase.games.add({
+async function addTV() {
+	const id = await appDatabase.television.add({
 		title: logModel.value.title,
-		platform: logModel.value.platform,
+		season: logModel.value.season,
+		episode: logModel.value.episode,
 		status: logModel.value.status,
-		progress: logModel.value.progress,
 		rating: logModel.value.rating,
 		impression: logModel.value.impression,
 		dateCreated: Log.dateToString(DateTime.now()),
@@ -75,12 +65,12 @@ async function addGame() {
 	closeEntry();
 }
 
-async function updateGame(key: number) {
-	const id = await appDatabase.games.update(key, {
+async function updateTV(key: number) {
+	const id = await appDatabase.television.update(key, {
 		title: logModel.value.title,
-		platform: logModel.value.platform,
+		season: logModel.value.season,
+		episode: logModel.value.episode,
 		status: logModel.value.status,
-		progress: logModel.value.progress,
 		rating: logModel.value.rating,
 		impression: logModel.value.impression,
 		dateModified: logModel.value.dateModified
@@ -91,21 +81,20 @@ async function updateGame(key: number) {
 
 <template>
 	<VCard id="card">
-		<VCardTitle>Add New Game</VCardTitle>
+		<VCardTitle>Add New TV Series</VCardTitle>
 		<VContainer>
 			<VRow>
 				<VTextField label="Title" v-model="logModel.title"></VTextField>
 			</VRow>
 			<VRow>
 				<VCol class="pl-0">
-					<VTextField label="Platform" v-model="logModel.platform"></VTextField>
+					<VTextField label="Season" v-model="logModel.season" type="number"></VTextField>
+				</VCol>
+				<VCol>
+					<VTextField label="Episode" v-model="logModel.episode" type="number"></VTextField>
 				</VCol>
 				<VCol class="pr-0">
-					<VAutocomplete
-						label="Status"
-						:items="gameStatus"
-						v-model="logModel.status"
-					></VAutocomplete>
+					<VAutocomplete label="Status" :items="tvStatus" v-model="logModel.status"></VAutocomplete>
 				</VCol>
 			</VRow>
 			<VRow>
@@ -122,9 +111,6 @@ async function updateGame(key: number) {
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
 			</VRow>
-			<VRow>
-				<VTextarea label="Progress" v-model="logModel.progress" rows="2" no-resize></VTextarea>
-			</VRow>
 			<VRow class="pb-4">
 				<QuillEditor v-model="logModel.impression"></QuillEditor>
 			</VRow>
@@ -137,7 +123,7 @@ async function updateGame(key: number) {
 			</VRow>
 		</VContainer>
 		<VCardActions>
-			<VBtn @click="props.editEntry ? updateGame(props.gameEntry.id) : addGame()">Save</VBtn>
+			<VBtn @click="props.editEntry ? updateTV(props.tvEntry.id) : addTV()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
 		</VCardActions>
 	</VCard>

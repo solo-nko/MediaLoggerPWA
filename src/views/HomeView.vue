@@ -5,10 +5,19 @@ import { appDatabase } from '../database/db.ts';
 import { from, useObservable } from '@vueuse/rxjs';
 import GameLog from '../types/GameLog.ts';
 import { liveQuery } from 'dexie';
+import TVLog from '../types/TVLog.ts';
 
 const currentGames = useObservable<GameLog[]>(
 	from(
-		liveQuery(() => appDatabase.games.where('status').anyOf(['playing', 'indefinite']).toArray())
+		liveQuery(() => appDatabase.games.where('status').anyOf(['Playing', 'Indefinite']).toArray())
+	)
+);
+
+const currentTV = useObservable<TVLog[]>(
+	from(
+		liveQuery(() =>
+			appDatabase.television.where('status').anyOf(['Watching', 'Rewatching']).toArray()
+		)
 	)
 );
 
@@ -39,6 +48,21 @@ const showDialog = ref(false);
 			</VCard>
 			<VCard>
 				<VCardTitle>Current Television</VCardTitle>
+				<VCardSubtitle>Watching</VCardSubtitle>
+				<VList>
+					<template v-for="tv in currentTV" :key="tv.id">
+						<VListItem v-if="tv.status === 'Watching'">
+							<span class="item-title">{{ tv.title }}</span>
+						</VListItem>
+					</template>
+					<VDivider></VDivider>
+					<VCardSubtitle>Replaying</VCardSubtitle>
+					<template v-for="tv in currentTV" :key="tv.id">
+						<VListItem v-if="tv.status === 'Rewatching'">
+							<span class="item-title">{{ tv.title }}</span>
+						</VListItem>
+					</template>
+				</VList>
 			</VCard>
 		</VRow>
 		<VDialog v-model="showDialog">
