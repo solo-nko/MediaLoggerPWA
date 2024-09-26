@@ -33,14 +33,14 @@ const showDialog = ref(false);
 				<VCardSubtitle>Playing</VCardSubtitle>
 				<VList>
 					<template v-for="game in currentGames" :key="game.id">
-						<VListItem v-if="game.status === 'playing'">
+						<VListItem v-if="game.status === 'Playing'">
 							<span class="item-title">{{ game.title }}</span>
 						</VListItem>
 					</template>
 					<VDivider></VDivider>
 					<VCardSubtitle>Replaying</VCardSubtitle>
 					<template v-for="game in currentGames" :key="game.id">
-						<VListItem v-if="game.status === 'indefinite'">
+						<VListItem v-if="game.status === 'Indefinite'">
 							<span class="item-title">{{ game.title }}</span>
 						</VListItem>
 					</template>

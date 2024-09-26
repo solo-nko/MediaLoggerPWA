@@ -4,6 +4,9 @@ import { saveAs } from 'file-saver';
 
 import { appDatabase } from '../../database/db.ts';
 import { peakImportFile } from 'dexie-export-import';
+import { ref } from 'vue';
+
+const importedFile = ref<Blob>()
 
 function progressCallback({ totalRows, completedRows }): boolean {
 	try {
@@ -20,7 +23,8 @@ async function exportDatabase() {
 	saveAs(blob, fileName);
 }
 
-async function importDatabase(file) {
+async function importDatabase(file: Blob) {
+	if (!file) throw new Error('No file provided.');
 	const importMetadata = await peakImportFile(file);
 	if (importMetadata.formatName != 'dexie') throw new Error('Invalid format');
 	console.log('Database name:', importMetadata.data.databaseName);
@@ -30,15 +34,18 @@ async function importDatabase(file) {
 		'Tables:',
 		importMetadata.data.tables.map((t) => `${t.name} (${t.rowCount} rows)`).join('\n\t')
 	);
-	await appDatabase.delete();
-	await appDatabase.import(file);
+	await appDatabase.import(file, {clearTablesBeforeImport: true});
+	importedFile.value = undefined;
+	// TODO add feedback toast message or something to let the user know the database was successfully imported
 }
 </script>
 
 <template>
 	<div id="flex-container">
 		<VLabel>Import Database</VLabel>
-		<VFileInput label="Place database file here..." accept=".json"></VFileInput>
+		<VFileInput label="Place database file here..." accept=".json" v-model="importedFile"></VFileInput>
+		<VBtn @click="importDatabase(importedFile)">Import database</VBtn>
+	<!--	TODO Add confirmation, as importing will also clear the existing database -->
 		<VDivider></VDivider>
 		<VBtn @click="exportDatabase">Export database</VBtn>
 	</div>
