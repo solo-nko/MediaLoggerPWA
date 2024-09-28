@@ -5,9 +5,14 @@ import { saveAs } from 'file-saver';
 import { appDatabase } from '../../database/db.ts';
 import { peakImportFile } from 'dexie-export-import';
 import { ref } from 'vue';
+import ConfirmDialog from '../ConfirmDialog.vue';
 
-const importedFile = ref<File>()
-const displayDBImportMsg = ref(false)
+const importedFile = ref<File>();
+const showDBImportSuccess = ref(false);
+const showDBImportFailure = ref(false);
+const DBImportFailureMsg = ref('');
+const showDBImportConfirm = ref(false);
+const importWarningMessage = 'Importing a new database will clear the existing one. This cannot be undone!';
 
 function progressCallback({ totalRows, completedRows }): boolean {
 	try {
@@ -25,7 +30,12 @@ async function exportDatabase() {
 }
 
 async function importDatabase(file: Blob) {
-	if (!file) throw new Error('No file provided.');
+	if (!file) {
+		DBImportFailureMsg.value = 'Import failed! No file was provided.'
+		showDBImportFailure.value = true;
+		showDBImportConfirm.value = false;
+		return
+	}
 	const importMetadata = await peakImportFile(file);
 	if (importMetadata.formatName != 'dexie') throw new Error('Invalid format');
 	console.log('Database name:', importMetadata.data.databaseName);
@@ -34,8 +44,8 @@ async function importDatabase(file: Blob) {
 		'Tables:',
 		importMetadata.data.tables.map((t) => `${t.name} (${t.rowCount} rows)`).join('\n\t')
 	);
-	await appDatabase.import(file, {clearTablesBeforeImport: true});
-	displayDBImportMsg.value = true;
+	await appDatabase.import(file, { clearTablesBeforeImport: true });
+	showDBImportSuccess.value = true;
 	importedFile.value = undefined;
 }
 </script>
@@ -44,11 +54,16 @@ async function importDatabase(file: Blob) {
 	<div id="flex-container">
 		<VLabel>Import Database</VLabel>
 		<VFileInput label="Place database file here..." accept=".json" v-model="importedFile"></VFileInput>
-		<VBtn @click="importDatabase(importedFile)">Import database</VBtn>
-	<!--	TODO Add confirmation, as importing will also clear the existing database -->
+		<VBtn @click="showDBImportConfirm = true">Import database</VBtn>
 		<VDivider></VDivider>
 		<VBtn @click="exportDatabase">Export database</VBtn>
-		<VSnackbar timeout="5000" v-model="displayDBImportMsg">Database successfully imported! <VBtn @click="displayDBImportMsg = false">Close</VBtn></VSnackbar>
+		<VDialog v-model="showDBImportConfirm">
+			<ConfirmDialog @confirm="importDatabase(importedFile)" @cancel="showDBImportConfirm = false" :message="importWarningMessage"></ConfirmDialog>
+		</VDialog>
+		<VSnackbar timeout="5000" v-model="showDBImportSuccess">Database successfully imported!
+			<VBtn @click="showDBImportSuccess = false">Close</VBtn>
+		</VSnackbar>
+		<VSnackbar timeout="5000" v-model="showDBImportFailure">{{ DBImportFailureMsg }}</VSnackbar>
 	</div>
 </template>
 

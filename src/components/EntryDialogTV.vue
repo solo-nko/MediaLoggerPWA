@@ -130,7 +130,7 @@ async function updateTV(key: number) {
 </template>
 
 <style scoped>
-/* Used this internal class to access the VCard component styling because the #card id wasn't working*/
+/* Used this internal class to access the VCard component styling because the #card id wasn't working */
 .v-card {
 	padding: 1rem 3rem;
 }
@@ -139,7 +139,7 @@ async function updateTV(key: number) {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	//align-items: center;
+	/* align-items: center; */
 }
 
 #rating-label {

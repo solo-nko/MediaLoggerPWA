@@ -9,6 +9,7 @@ import GameLog from '../types/GameLog.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const games = useObservable<GameLog[]>(from(liveQuery(() => appDatabase.games.toArray())));
+const warningMessage = "This action cannot be undone."
 
 const gameHeaders = [
 	{ title: 'Title', value: 'title', key: 'title' },
@@ -54,7 +55,7 @@ async function deleteEntry() {
 		></EntryDialogGames>
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">
-		<ConfirmDialog @confirm="deleteEntry" @cancel="showDeleteDialog = false"></ConfirmDialog>
+		<ConfirmDialog @confirm="deleteEntry" @cancel="showDeleteDialog = false" :message="warningMessage"></ConfirmDialog>
 	</VDialog>
 </template>
 
