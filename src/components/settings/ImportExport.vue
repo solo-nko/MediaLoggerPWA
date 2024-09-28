@@ -6,7 +6,8 @@ import { appDatabase } from '../../database/db.ts';
 import { peakImportFile } from 'dexie-export-import';
 import { ref } from 'vue';
 
-const importedFile = ref<Blob>()
+const importedFile = ref<File>()
+const displayDBImportMsg = ref(false)
 
 function progressCallback({ totalRows, completedRows }): boolean {
 	try {
@@ -29,14 +30,13 @@ async function importDatabase(file: Blob) {
 	if (importMetadata.formatName != 'dexie') throw new Error('Invalid format');
 	console.log('Database name:', importMetadata.data.databaseName);
 	console.log('Database version:', importMetadata.data.databaseVersion);
-	console.log('Database version:', importMetadata.data.databaseVersion);
 	console.log(
 		'Tables:',
 		importMetadata.data.tables.map((t) => `${t.name} (${t.rowCount} rows)`).join('\n\t')
 	);
 	await appDatabase.import(file, {clearTablesBeforeImport: true});
+	displayDBImportMsg.value = true;
 	importedFile.value = undefined;
-	// TODO add feedback toast message or something to let the user know the database was successfully imported
 }
 </script>
 
@@ -48,6 +48,7 @@ async function importDatabase(file: Blob) {
 	<!--	TODO Add confirmation, as importing will also clear the existing database -->
 		<VDivider></VDivider>
 		<VBtn @click="exportDatabase">Export database</VBtn>
+		<VSnackbar timeout="5000" v-model="displayDBImportMsg">Database successfully imported! <VBtn @click="displayDBImportMsg = false">Close</VBtn></VSnackbar>
 	</div>
 </template>
 
