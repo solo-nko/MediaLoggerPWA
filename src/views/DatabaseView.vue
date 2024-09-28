@@ -1,62 +1,33 @@
 <script setup lang="ts">
-import { liveQuery } from 'dexie';
-import { useObservable, from } from '@vueuse/rxjs';
-import { appDatabase } from '../database/db.ts';
 import { ref } from 'vue';
-import EntryDialogGames from '../components/EntryDialogGames.vue';
-import ConfirmDialog from '../components/ConfirmDialog.vue';
-import GameLog from '../types/GameLog.ts';
+import GamesDB from '../components/database_tabs/GamesDB.vue';
+import TVDB from '../components/database_tabs/TVDB.vue';
 
-// see https://github.com/dexie/Dexie.js/issues/1608
-const games = useObservable<GameLog[]>(from(liveQuery(() => appDatabase.games.toArray())));
-const warningMessage = "This action cannot be undone."
-
-const gameHeaders = [
-	{ title: 'Title', value: 'title', key: 'title' },
-	{ title: 'Platform', value: 'platform' },
-	{ title: 'Status', value: 'status', key: 'status' },
-	{ title: 'Date Created', value: 'dateCreated' },
-	{ title: 'Date Updated', value: 'dateModified' },
-	{ title: 'Actions', value: 'actions', key: 'actions', sortable: false }
-];
-
-const showEditDialog = ref(false);
-const showDeleteDialog = ref(false);
-const entryDetails = ref();
-
-function editEntry(entryInfo) {
-	showEditDialog.value = true;
-	entryDetails.value = entryInfo;
-}
-
-function deleteEntryConfirmation(entryInfo) {
-	showDeleteDialog.value = true;
-	entryDetails.value = entryInfo;
-}
-
-async function deleteEntry() {
-	appDatabase.games.delete(entryDetails.value.id);
-	showDeleteDialog.value = false;
-}
+const tabs = ref('game')
 </script>
 
 <template>
-	<VDataTable :headers="gameHeaders" :items="games" items-per-page="10">
-		<template v-slot:item.actions="{ item }">
-			<VIcon @click="editEntry(item)">mdi-pencil</VIcon>
-			<VIcon @click="deleteEntryConfirmation(item)">mdi-delete</VIcon>
-		</template>
-	</VDataTable>
-	<VDialog id="entry-form" v-model="showEditDialog">
-		<EntryDialogGames
-			@close-entry="showEditDialog = false"
-			:game-entry="entryDetails"
-			:edit-entry="true"
-		></EntryDialogGames>
-	</VDialog>
-	<VDialog v-model="showDeleteDialog">
-		<ConfirmDialog @confirm="deleteEntry" @cancel="showDeleteDialog = false" :message="warningMessage"></ConfirmDialog>
-	</VDialog>
+	<VTabs id="tab-bar" v-model="tabs" align-tabs="center">
+		<!--	<VTabs id="tab-bar" v-model="currentTab" align-tabs="center">-->
+		<VTab value="game">Game</VTab>
+		<VTab value="tv">TV Series</VTab>
+		<VTab value="movie">Movie</VTab>
+		<VTab value="book">Book</VTab>
+	</VTabs>
+	<VTabsWindow id="entry-form" v-model="tabs" class="">
+		<VTabsWindowItem value="game">
+			<GamesDB></GamesDB>
+		</VTabsWindowItem>
+		<VTabsWindowItem value="tv">
+			<TVDB></TVDB>
+		</VTabsWindowItem>
+		<VTabsWindowItem value="movie">
+			<h2>Movie Entry</h2>
+		</VTabsWindowItem>
+		<VTabsWindowItem value="book">
+			<h2>Book Entry</h2>
+		</VTabsWindowItem>
+	</VTabsWindow>
 </template>
 
 <style scoped>
