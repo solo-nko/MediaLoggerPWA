@@ -7,7 +7,7 @@ import { ref } from 'vue';
 import { TVStatus } from '../types/TVStatus.ts';
 
 const tvStatus = Object.values(TVStatus);
-const emits = defineEmits(['close-entry']);
+const emits = defineEmits(['close-entry', 'save-entry']);
 
 const props = withDefaults(
 	defineProps<{
@@ -23,7 +23,7 @@ const props = withDefaults(
 			status: null,
 			rating: null,
 			impression: null,
-			dateModified: null
+			dateModified: DateTime.now().toISODate()
 		},
 		editEntry: true,
 		closeButton: true
@@ -48,6 +48,11 @@ function resetFields() {
 
 function closeEntry(): void {
 	if (props.closeButton) emits('close-entry');
+}
+
+function saveEntry(editOrAdd: 'edit' | 'add') {
+	if (editOrAdd === 'edit') emits('save-entry', editOrAdd);
+	else emits('save-entry', editOrAdd);
 }
 
 async function addTV() {
@@ -87,13 +92,13 @@ async function updateTV(key: number) {
 				<VTextField label="Title" v-model="logModel.title"></VTextField>
 			</VRow>
 			<VRow>
-				<VCol class="pl-0">
+				<VCol class="pl-0" cols="3">
 					<VTextField label="Season" v-model="logModel.season" type="number"></VTextField>
 				</VCol>
-				<VCol>
+				<VCol cols="3">
 					<VTextField label="Episode" v-model="logModel.episode" type="number"></VTextField>
 				</VCol>
-				<VCol class="pr-0">
+				<VCol class="pr-0" cols="6">
 					<VAutocomplete label="Status" :items="tvStatus" v-model="logModel.status"></VAutocomplete>
 				</VCol>
 			</VRow>

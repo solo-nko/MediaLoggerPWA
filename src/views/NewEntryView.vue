@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import EntryDialogGames from '../components/EntryDialogGames.vue';
 import EntryDialogTV from '../components/EntryDialogTV.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { entryAddSuccess, entryEditSuccess } from '../config/Messages.ts';
+import EntryDialogBooks from '../components/EntryDialogBooks.vue';
 
 // for use with dynamic componenet solution
 /*const currentTab = ref('game');
@@ -11,6 +13,19 @@ const tabs = {
 };*/
 
 const tabs = ref('game');
+const showSaveSuccess = ref(false);
+
+const addOrEdit = ref('');
+
+function configureSaveMessage(which) {
+	showSaveSuccess.value = true;
+	addOrEdit.value = which;
+}
+
+const saveMessage = computed(() => {
+	if (addOrEdit.value === 'add') return entryAddSuccess;
+	else return entryEditSuccess;
+});
 </script>
 
 <template>
@@ -31,18 +46,30 @@ const tabs = ref('game');
 				v-if="tabs == 'game'"
 				:edit-entry="false"
 				:close-button="false"
+				@save-entry="configureSaveMessage"
 			></EntryDialogGames>
 		</VTabsWindowItem>
 		<VTabsWindowItem value="tv">
-			<EntryDialogTV v-if="tabs == 'tv'" :edit-entry="false" :close-button="false"></EntryDialogTV>
+			<EntryDialogTV
+				v-if="tabs == 'tv'"
+				:edit-entry="false"
+				:close-button="false"
+				@save-entry="configureSaveMessage"
+			></EntryDialogTV>
 		</VTabsWindowItem>
 		<VTabsWindowItem value="movie">
 			<h2>Movie Entry</h2>
 		</VTabsWindowItem>
 		<VTabsWindowItem value="book">
-			<h2>Book Entry</h2>
+			<EntryDialogBooks
+				v-if="tabs == 'book'"
+				:edit-entry="false"
+				:close-button="false"
+				@save-entry="configureSaveMessage"
+			></EntryDialogBooks>
 		</VTabsWindowItem>
 	</VTabsWindow>
+	<VSnackbar v-model="showSaveSuccess" timeout="5000">{{ saveMessage }}</VSnackbar>
 </template>
 
 <style scoped>

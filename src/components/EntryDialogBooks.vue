@@ -1,29 +1,31 @@
 <script setup lang="ts">
 import { appDatabase } from '../database/db.ts';
-import { GameStatus } from '../types/GameStatus.ts';
+import { BookStatus } from '../types/BookStatus.ts';
 import { DateTime } from 'luxon';
 import QuillEditor from './QuillEditor.vue';
 import Log from '../types/Log.ts';
 import { ref } from 'vue';
 
-const gameStatus = Object.values(GameStatus);
+const bookStatus = Object.values(BookStatus);
+
 const emits = defineEmits(['close-entry', 'save-entry']);
 
 const props = withDefaults(
 	defineProps<{
-		gameEntry?;
+		bookEntry?;
 		editEntry?: boolean;
 		closeButton?: boolean;
 	}>(),
 	{
-		gameEntry: {
+		bookEntry: {
 			title: null,
-			platform: null,
+			audiobook: false,
+			series: 'N/A',
 			status: null,
 			progress: null,
 			rating: null,
 			impression: null,
-			dateModified: DateTime.now().toISODate()
+			dateModified: null
 		},
 		editEntry: true,
 		closeButton: true
@@ -31,30 +33,20 @@ const props = withDefaults(
 );
 
 const logModel = ref({
-	title: props.gameEntry.title,
-	platform: props.gameEntry.platform,
-	status: props.gameEntry.status,
-	progress: props.gameEntry.progress,
-	rating: props.gameEntry.rating,
-	impression: props.gameEntry.impression,
-	dateModified: props.gameEntry.dateModified
+	title: props.bookEntry.title,
+	audiobook: props.bookEntry.audiobook,
+	status: props.bookEntry.status,
+	series: props.bookEntry.series,
+	progress: props.bookEntry.progress,
+	rating: props.bookEntry.rating,
+	impression: props.bookEntry.impression,
+	dateModified: props.bookEntry.dateModified
 });
-
-/*
-* 	title: null,
-		platform: null,
-		status: null,
-		progress: null,
-		rating: null,
-		impression: null,
-		modifiedDate: null
-* */
 
 function resetFields() {
 	for (const key in logModel.value) {
 		logModel.value[key] = null;
 	}
-	// TODO: reset quill editor contents
 }
 
 function closeEntry(): void {
@@ -65,10 +57,11 @@ function saveEntry(editOrAdd: 'edit' | 'add') {
 	emits('save-entry', editOrAdd);
 }
 
-async function addGame() {
-	const id = await appDatabase.games.add({
+async function addBook() {
+	const id = await appDatabase.books.add({
 		title: logModel.value.title,
-		platform: logModel.value.platform,
+		audiobook: logModel.value.audiobook,
+		series: logModel.value.series,
 		status: logModel.value.status,
 		progress: logModel.value.progress,
 		rating: logModel.value.rating,
@@ -81,10 +74,11 @@ async function addGame() {
 	closeEntry();
 }
 
-async function updateGame(key: number) {
-	const id = await appDatabase.games.update(key, {
+async function updateBook(key: number) {
+	const id = await appDatabase.books.update(key, {
 		title: logModel.value.title,
-		platform: logModel.value.platform,
+		audiobook: logModel.value.audiobook,
+		series: logModel.value.series,
 		status: logModel.value.status,
 		progress: logModel.value.progress,
 		rating: logModel.value.rating,
@@ -98,19 +92,22 @@ async function updateGame(key: number) {
 
 <template>
 	<VCard id="card">
-		<VCardTitle>Add New Game</VCardTitle>
+		<VCardTitle>Add New Book</VCardTitle>
 		<VContainer>
 			<VRow>
 				<VTextField label="Title" v-model="logModel.title"></VTextField>
 			</VRow>
 			<VRow>
-				<VCol class="pl-0">
-					<VTextField label="Platform" v-model="logModel.platform"></VTextField>
+				<VCol class="pl-0" cols="2">
+					<VCheckbox label="Audiobook" v-model="logModel.audiobook"></VCheckbox>
 				</VCol>
-				<VCol class="pr-0">
+				<VCol cols="7">
+					<VTextField label="Series" v-model="logModel.series"></VTextField>
+				</VCol>
+				<VCol class="pr-0" cols="3">
 					<VAutocomplete
 						label="Status"
-						:items="gameStatus"
+						:items="bookStatus"
 						v-model="logModel.status"
 					></VAutocomplete>
 				</VCol>
@@ -144,7 +141,7 @@ async function updateGame(key: number) {
 			</VRow>
 		</VContainer>
 		<VCardActions>
-			<VBtn @click="props.editEntry ? updateGame(props.gameEntry.id) : addGame()">Save</VBtn>
+			<VBtn @click="props.editEntry ? updateBook(props.bookEntry.id) : addBook()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
 		</VCardActions>
 	</VCard>
