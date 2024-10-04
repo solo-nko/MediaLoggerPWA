@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineEmits(['confirm', 'cancel']);
-const props = defineProps(['message'])
+const props = defineProps(['message']);
 </script>
 
 <template>
@@ -15,8 +15,4 @@ const props = defineProps(['message'])
 </template>
 
 <style scoped>
-.v-card {
-	margin: 0 auto;
-	width: 50%;
-}
 </style>

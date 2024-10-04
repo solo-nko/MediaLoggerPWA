@@ -3,5 +3,5 @@ export enum GameStatus {
 	Completed = 'Completed',
 	Dropped = 'Dropped',
 	Hiatus = 'Hiatus',
-	Indefinite = 'Indefinite'
+	Replaying = 'Replaying'
 }

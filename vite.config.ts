@@ -33,4 +33,11 @@ export default defineConfig({
       type: 'module',
     },
   })],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler'
+      },
+    }
+  }
 })

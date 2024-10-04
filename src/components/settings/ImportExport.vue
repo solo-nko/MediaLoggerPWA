@@ -12,7 +12,8 @@ const showDBImportSuccess = ref(false);
 const showDBImportFailure = ref(false);
 const DBImportFailureMsg = ref('');
 const showDBImportConfirm = ref(false);
-const importWarningMessage = 'Importing a new database will clear the existing one. This cannot be undone!';
+const importWarningMessage =
+	'Importing a new database will clear the existing one. This cannot be undone!';
 
 function progressCallback({ totalRows, completedRows }): boolean {
 	try {
@@ -30,11 +31,11 @@ async function exportDatabase() {
 }
 
 async function importDatabase(file: Blob) {
+	showDBImportConfirm.value = false;
 	if (!file) {
-		DBImportFailureMsg.value = 'Import failed! No file was provided.'
+		DBImportFailureMsg.value = 'Import failed! No file was provided.';
 		showDBImportFailure.value = true;
-		showDBImportConfirm.value = false;
-		return
+		return;
 	}
 	const importMetadata = await peakImportFile(file);
 	if (importMetadata.formatName != 'dexie') throw new Error('Invalid format');
@@ -53,14 +54,23 @@ async function importDatabase(file: Blob) {
 <template>
 	<div id="flex-container">
 		<VLabel>Import Database</VLabel>
-		<VFileInput label="Place database file here..." accept=".json" v-model="importedFile"></VFileInput>
+		<VFileInput
+			label="Place database file here..."
+			accept=".json"
+			v-model="importedFile"
+		></VFileInput>
 		<VBtn @click="showDBImportConfirm = true">Import database</VBtn>
 		<VDivider></VDivider>
 		<VBtn @click="exportDatabase">Export database</VBtn>
 		<VDialog v-model="showDBImportConfirm">
-			<ConfirmDialog @confirm="importDatabase(importedFile)" @cancel="showDBImportConfirm = false" :message="importWarningMessage"></ConfirmDialog>
+			<ConfirmDialog
+				@confirm="importDatabase(importedFile)"
+				@cancel="showDBImportConfirm = false"
+				:message="importWarningMessage"
+			></ConfirmDialog>
 		</VDialog>
-		<VSnackbar timeout="5000" v-model="showDBImportSuccess">Database successfully imported!
+		<VSnackbar timeout="5000" v-model="showDBImportSuccess"
+			>Database successfully imported!
 			<VBtn @click="showDBImportSuccess = false">Close</VBtn>
 		</VSnackbar>
 		<VSnackbar timeout="5000" v-model="showDBImportFailure">{{ DBImportFailureMsg }}</VSnackbar>

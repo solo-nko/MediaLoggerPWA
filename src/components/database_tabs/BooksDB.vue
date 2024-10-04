@@ -4,16 +4,16 @@ import { useObservable, from } from '@vueuse/rxjs';
 import { appDatabase } from '../../database/db.ts';
 import { ref } from 'vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
-import TVLog from '../../types/TVLog.ts';
-import EntryDialogTV from '../EntryDialogTV.vue';
+import EntryDialogBooks from '../EntryDialogBooks.vue';
+import BookLog from '../../types/BookLog.ts';
 import { cantBeUndone } from '../../config/Messages.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
-const tvSeries = useObservable<TVLog[]>(from(liveQuery(() => appDatabase.television.toArray())));
+const books = useObservable<BookLog[]>(from(liveQuery(() => appDatabase.books.toArray())));
 
-const tvHeaders = [
+const bookHeaders = [
 	{ title: 'Title', value: 'title', key: 'title' },
-	{ title: 'Episode', value: 'episode' },
+	{ title: 'Series', value: 'series' },
 	{ title: 'Status', value: 'status', key: 'status' },
 	{ title: 'Date Created', value: 'dateCreated' },
 	{ title: 'Date Updated', value: 'dateModified' },
@@ -35,24 +35,25 @@ function deleteEntryConfirmation(entryInfo) {
 }
 
 async function deleteEntry() {
-	appDatabase.television.delete(entryDetails.value.id);
+	appDatabase.books.delete(entryDetails.value.id);
 	showDeleteDialog.value = false;
 }
 </script>
 
 <template>
-	<VDataTable :headers="tvHeaders" :items="tvSeries" items-per-page="10">
+	<!--	TODO export items per page to external variable so it links with all of them. This is customizable on the screen though so careful-->
+	<VDataTable :headers="bookHeaders" :items="books" items-per-page="10">
 		<template v-slot:item.actions="{ item }">
 			<VIcon @click="editEntry(item)">mdi-pencil</VIcon>
 			<VIcon @click="deleteEntryConfirmation(item)">mdi-delete</VIcon>
 		</template>
 	</VDataTable>
 	<VDialog id="entry-form" v-model="showEditDialog">
-		<EntryDialogTV
+		<EntryDialogBooks
 			@close-entry="showEditDialog = false"
-			:tv-entry="entryDetails"
+			:book-entry="entryDetails"
 			:edit-entry="true"
-		></EntryDialogTV>
+		></EntryDialogBooks>
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">
 		<ConfirmDialog
@@ -65,6 +66,6 @@ async function deleteEntry() {
 
 <style scoped>
 #entry-form {
-	width: 80%;
+	width: 70%;
 }
 </style>

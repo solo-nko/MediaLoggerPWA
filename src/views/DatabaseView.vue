@@ -2,8 +2,9 @@
 import { ref } from 'vue';
 import GamesDB from '../components/database_tabs/GamesDB.vue';
 import TVDB from '../components/database_tabs/TVDB.vue';
+import BooksDB from '../components/database_tabs/BooksDB.vue';
 
-const tabs = ref('game')
+const tabs = ref('game');
 </script>
 
 <template>
@@ -14,7 +15,7 @@ const tabs = ref('game')
 		<VTab value="movie">Movie</VTab>
 		<VTab value="book">Book</VTab>
 	</VTabs>
-	<VTabsWindow id="entry-form" v-model="tabs" class="">
+	<VTabsWindow id="list-view" v-model="tabs" class="">
 		<VTabsWindowItem value="game">
 			<GamesDB></GamesDB>
 		</VTabsWindowItem>
@@ -25,13 +26,13 @@ const tabs = ref('game')
 			<h2>Movie Entry</h2>
 		</VTabsWindowItem>
 		<VTabsWindowItem value="book">
-			<h2>Book Entry</h2>
+			<BooksDB></BooksDB>
 		</VTabsWindowItem>
 	</VTabsWindow>
 </template>
 
 <style scoped>
-#entry-form {
-	width: 70%;
+#list-view {
+	width: 80%;
 }
 </style>
