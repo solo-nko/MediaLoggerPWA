@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import ImportExport from '../components/settings/ImportExport.vue';
 import AppearanceSettings from '../components/settings/AppearanceSettings.vue';
+import GeneralSettings from '../components/settings/GeneralSettings.vue';
 import { ref } from 'vue';
 
 const currentTab = ref('ImportExport');
 const settingsTabs = {
 	ImportExport,
-	AppearanceSettings
+	AppearanceSettings,
+	GeneralSettings
 };
 </script>
 
@@ -17,6 +19,7 @@ const settingsTabs = {
 				<VList>
 					<VListItem title="Settings"></VListItem>
 					<VDivider></VDivider>
+					<VListItem link @click="currentTab = 'GeneralSettings'">General Settings</VListItem>
 					<VListItem link @click="currentTab = 'ImportExport'">Import / Export Database</VListItem>
 					<VListItem link @click="currentTab = 'AppearanceSettings'">Appearance</VListItem>
 					<VListItem>Games Master Settings</VListItem>

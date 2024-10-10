@@ -3,8 +3,9 @@ import { ref } from 'vue';
 import GamesDB from '../components/database_tabs/GamesDB.vue';
 import TVDB from '../components/database_tabs/TVDB.vue';
 import BooksDB from '../components/database_tabs/BooksDB.vue';
+import { settingsStore } from '../stores/settings.ts';
 
-const tabs = ref('game');
+const tabs = ref(settingsStore.defaultDBScreen);
 </script>
 
 <template>

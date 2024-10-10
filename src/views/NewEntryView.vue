@@ -4,6 +4,7 @@ import EntryDialogTV from '../components/EntryDialogTV.vue';
 import { computed, ref } from 'vue';
 import { entryAddSuccess, entryEditSuccess } from '../config/Messages.ts';
 import EntryDialogBooks from '../components/EntryDialogBooks.vue';
+import { settingsStore } from '../stores/settings.ts';
 
 // for use with dynamic componenet solution
 /*const currentTab = ref('game');
@@ -12,7 +13,7 @@ const tabs = {
 	"tv": EntryDialogTV,
 };*/
 
-const tabs = ref('game');
+const tabs = ref(settingsStore.defaultEntryScreen);
 const showSaveSuccess = ref(false);
 
 const addOrEdit = ref('');
