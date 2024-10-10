@@ -14,5 +14,4 @@ const props = defineProps(['message']);
 	</VCard>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -50,7 +50,7 @@ async function deleteEntry() {
 	<VDialog id="entry-form" v-model="showEditDialog">
 		<EntryDialogGames
 			@close-entry="showEditDialog = false"
-			:game-entry="entryDetails"
+			:entry="entryDetails"
 			:edit-entry="true"
 		></EntryDialogGames>
 	</VDialog>

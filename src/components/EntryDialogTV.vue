@@ -11,12 +11,12 @@ const emits = defineEmits(['close-entry', 'save-entry']);
 
 const props = withDefaults(
 	defineProps<{
-		tvEntry?;
+		entry?;
 		editEntry?: boolean;
 		closeButton?: boolean;
 	}>(),
 	{
-		tvEntry: {
+		entry: {
 			title: null,
 			season: null,
 			episode: null,
@@ -31,13 +31,13 @@ const props = withDefaults(
 );
 
 const logModel = ref({
-	title: props.tvEntry.title,
-	season: props.tvEntry.season,
-	episode: props.tvEntry.episode,
-	status: props.tvEntry.status,
-	rating: props.tvEntry.rating,
-	impression: props.tvEntry.impression,
-	dateModified: props.tvEntry.dateModified
+	title: props.entry.title,
+	season: props.entry.season,
+	episode: props.entry.episode,
+	status: props.entry.status,
+	rating: props.entry.rating,
+	impression: props.entry.impression,
+	dateModified: props.entry.dateModified
 });
 
 function resetFields() {
@@ -128,7 +128,7 @@ async function updateTV(key: number) {
 			</VRow>
 		</VContainer>
 		<VCardActions>
-			<VBtn @click="props.editEntry ? updateTV(props.tvEntry.id) : addTV()">Save</VBtn>
+			<VBtn @click="props.editEntry ? updateTV(props.entry.id) : addTV()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
 		</VCardActions>
 	</VCard>
@@ -136,6 +136,7 @@ async function updateTV(key: number) {
 
 <style scoped>
 /* Used this internal class to access the VCard component styling because the #card id wasn't working */
+/*noinspection CssUnusedSymbol*/
 .v-card {
 	padding: 1rem 3rem;
 }

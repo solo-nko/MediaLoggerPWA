@@ -11,12 +11,12 @@ const emits = defineEmits(['close-entry', 'save-entry']);
 
 const props = withDefaults(
 	defineProps<{
-		gameEntry?;
+		entry?;
 		editEntry?: boolean;
 		closeButton?: boolean;
 	}>(),
 	{
-		gameEntry: {
+		entry: {
 			title: null,
 			platform: null,
 			status: null,
@@ -31,13 +31,13 @@ const props = withDefaults(
 );
 
 const logModel = ref({
-	title: props.gameEntry.title,
-	platform: props.gameEntry.platform,
-	status: props.gameEntry.status,
-	progress: props.gameEntry.progress,
-	rating: props.gameEntry.rating,
-	impression: props.gameEntry.impression,
-	dateModified: props.gameEntry.dateModified
+	title: props.entry.title,
+	platform: props.entry.platform,
+	status: props.entry.status,
+	progress: props.entry.progress,
+	rating: props.entry.rating,
+	impression: props.entry.impression,
+	dateModified: props.entry.dateModified
 });
 
 /*
@@ -144,7 +144,7 @@ async function updateGame(key: number) {
 			</VRow>
 		</VContainer>
 		<VCardActions>
-			<VBtn @click="props.editEntry ? updateGame(props.gameEntry.id) : addGame()">Save</VBtn>
+			<VBtn @click="props.editEntry ? updateGame(props.entry.id) : addGame()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
 		</VCardActions>
 	</VCard>
@@ -152,6 +152,7 @@ async function updateGame(key: number) {
 
 <style scoped>
 /* Used this internal class to access the VCard component styling because the #card id wasn't working*/
+/*noinspection CssUnusedSymbol*/
 .v-card {
 	padding: 1rem 3rem;
 }

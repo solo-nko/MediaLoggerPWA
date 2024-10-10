@@ -12,12 +12,12 @@ const emits = defineEmits(['close-entry', 'save-entry']);
 
 const props = withDefaults(
 	defineProps<{
-		bookEntry?;
+		entry?;
 		editEntry?: boolean;
 		closeButton?: boolean;
 	}>(),
 	{
-		bookEntry: {
+		entry: {
 			title: null,
 			audiobook: false,
 			series: 'N/A',
@@ -33,14 +33,14 @@ const props = withDefaults(
 );
 
 const logModel = ref({
-	title: props.bookEntry.title,
-	audiobook: props.bookEntry.audiobook,
-	status: props.bookEntry.status,
-	series: props.bookEntry.series,
-	progress: props.bookEntry.progress,
-	rating: props.bookEntry.rating,
-	impression: props.bookEntry.impression,
-	dateModified: props.bookEntry.dateModified
+	title: props.entry.title,
+	audiobook: props.entry.audiobook,
+	status: props.entry.status,
+	series: props.entry.series,
+	progress: props.entry.progress,
+	rating: props.entry.rating,
+	impression: props.entry.impression,
+	dateModified: props.entry.dateModified
 });
 
 function resetFields() {
@@ -141,7 +141,7 @@ async function updateBook(key: number) {
 			</VRow>
 		</VContainer>
 		<VCardActions>
-			<VBtn @click="props.editEntry ? updateBook(props.bookEntry.id) : addBook()">Save</VBtn>
+			<VBtn @click="props.editEntry ? updateBook(props.entry.id) : addBook()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
 		</VCardActions>
 	</VCard>
@@ -149,6 +149,7 @@ async function updateBook(key: number) {
 
 <style scoped>
 /* Used this internal class to access the VCard component styling because the #card id wasn't working*/
+/*noinspection CssUnusedSymbol*/
 .v-card {
 	padding: 1rem 3rem;
 }
