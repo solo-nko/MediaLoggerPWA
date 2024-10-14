@@ -102,6 +102,7 @@ async function updateBook(key: number) {
 					<VCheckbox label="Audiobook" v-model="logModel.audiobook"></VCheckbox>
 				</VCol>
 				<VCol cols="7">
+					<!--			TODO: clear N/A on focus-->
 					<VTextField label="Series" v-model="logModel.series"></VTextField>
 				</VCol>
 				<VCol class="pr-0" cols="3">

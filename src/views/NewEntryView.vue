@@ -6,7 +6,7 @@ import { entryAddSuccess, entryEditSuccess } from '../config/Messages.ts';
 import EntryDialogBooks from '../components/EntryDialogBooks.vue';
 import { settingsStore } from '../stores/settings.ts';
 
-// for use with dynamic componenet solution
+// for use with dynamic component solution
 /*const currentTab = ref('game');
 const tabs = {
 	"game": EntryDialogGames,

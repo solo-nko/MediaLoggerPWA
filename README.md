@@ -58,7 +58,7 @@ This project was built with the following major technologies:
 * ~~Allow importing of database~~
 * Add ability to set platforms for games
 * ~~Add TV support~~
-* Add Movie support
+* ~~Add Movie support~~
 * Add Book support
 
 ## Things to investigate
