@@ -118,8 +118,14 @@ function editEntry(entryInfo, dialogType = 'Game') {
 </script>
 
 <template>
-	<h1>Welcome to the Media Logger!</h1>
-	<VContainer>
+	<VContainer height="100%">
+		<VRow id="intro-text">
+			<h1>Welcome to the Media Logger!</h1>
+			<p>
+				This app allows you to keep track of your ongoing media. You can input games, movies,
+				television/anime, and books.
+			</p>
+		</VRow>
 		<VRow justify="space-around">
 			<!-- Games -->
 			<VCard>
@@ -198,5 +204,12 @@ function editEntry(entryInfo, dialogType = 'Game') {
 <style scoped>
 .item-title {
 	font-weight: bold;
+}
+
+#intro-text {
+	justify-content: center;
+	text-align: center;
+	width: 100%;
+	margin: 1rem 0;
 }
 </style>

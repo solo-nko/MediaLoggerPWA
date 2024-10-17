@@ -4,11 +4,13 @@ import App from './App.vue';
 
 // vuetify
 import 'vuetify/styles';
+// import './style/style.scss'
 import { createVuetify } from 'vuetify';
 import '@mdi/font/css/materialdesignicons.css';
 import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import { standardDarkTheme, standardLightTheme } from './style/Themes.ts';
 
 import { router } from './router.ts';
 
@@ -19,6 +21,13 @@ const vuetify = createVuetify({
 		aliases,
 		sets: {
 			mdi
+		}
+	},
+	theme: {
+		defaultTheme: 'light1',
+		themes: {
+			light1: standardLightTheme,
+			dark1: standardDarkTheme
 		}
 	},
 	components,

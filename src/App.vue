@@ -4,12 +4,19 @@ import { RouterView } from 'vue-router';
 
 <template>
 	<VApp>
-		<VAppBar title="Media Logger"></VAppBar>
+		<VAppBar color="primary">
+			<VAppBarTitle>Media Logger</VAppBarTitle>
+		</VAppBar>
+
 		<VMain id="content-area">
-			<RouterView></RouterView>
+			<RouterView v-slot="{ Component }">
+				<KeepAlive>
+					<Component :is="Component"></Component>
+				</KeepAlive>
+			</RouterView>
 		</VMain>
 
-		<VBottomNavigation grow>
+		<VBottomNavigation grow bg-color="primary" color="textOnColor" order="-1" tag="footer">
 			<VBtn :to="{ name: 'Home' }">Home</VBtn>
 			<VBtn :to="{ name: 'Entry' }">Entry</VBtn>
 			<VBtn :to="{ name: 'Database' }">Log</VBtn>
