@@ -4,7 +4,6 @@ import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
 import Log from '../../types/Log.ts';
 import { ref } from 'vue';
-import * as repl from 'node:repl';
 
 const emits = defineEmits(['close-entry', 'save-entry']);
 
@@ -60,7 +59,7 @@ function replaceNA(event: Event) {
 }
 
 async function addMovie() {
-	const id = await appDatabase.movies.add({
+	await appDatabase.movies.add({
 		title: logModel.value.title,
 		series: logModel.value.series,
 		rating: logModel.value.rating,
@@ -74,7 +73,7 @@ async function addMovie() {
 }
 
 async function updateMovie(key: number) {
-	const id = await appDatabase.books.update(key, {
+	await appDatabase.books.update(key, {
 		title: logModel.value.title,
 		series: logModel.value.series,
 		rating: logModel.value.rating,

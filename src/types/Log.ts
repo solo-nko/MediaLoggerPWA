@@ -15,6 +15,7 @@ export default class Log extends Entity<DatabaseSchema> {
 		return dateObject.toISODate();
 	}
 
+	// TODO: improve date handling. indexdb can store date objects
 	static dateFromString(dateString: string) {
 		return DateTime.fromISO(dateString);
 	}

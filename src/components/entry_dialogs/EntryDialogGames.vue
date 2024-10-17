@@ -40,16 +40,6 @@ const logModel = ref({
 	dateModified: props.entry.dateModified
 });
 
-/*
-* 	title: null,
-		platform: null,
-		status: null,
-		progress: null,
-		rating: null,
-		impression: null,
-		modifiedDate: null
-* */
-
 function resetFields() {
 	for (const key in logModel.value) {
 		logModel.value[key] = null;
@@ -66,7 +56,7 @@ function saveEntry(editOrAdd: 'edit' | 'add') {
 }
 
 async function addGame() {
-	const id = await appDatabase.games.add({
+	await appDatabase.games.add({
 		title: logModel.value.title,
 		platform: logModel.value.platform,
 		status: logModel.value.status,
@@ -82,7 +72,7 @@ async function addGame() {
 }
 
 async function updateGame(key: number) {
-	const id = await appDatabase.games.update(key, {
+	await appDatabase.games.update(key, {
 		title: logModel.value.title,
 		platform: logModel.value.platform,
 		status: logModel.value.status,
@@ -92,6 +82,7 @@ async function updateGame(key: number) {
 		dateModified: logModel.value.dateModified
 	});
 	saveEntry('edit');
+	// TODO: validate fields before saving, namely for blanks
 	closeEntry();
 }
 </script>

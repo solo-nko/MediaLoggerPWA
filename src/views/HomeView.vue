@@ -128,66 +128,110 @@ function editEntry(entryInfo, dialogType = 'Game') {
 		</VRow>
 		<VRow justify="space-around">
 			<!-- Games -->
-			<VCard>
-				<VCardTitle>Current Games</VCardTitle>
-				<VCardSubtitle>Playing</VCardSubtitle>
-				<VList>
-					<template v-for="game in playingGames" :key="game.id">
-						<VListItem>
-							<span class="item-title">{{ game.title }}</span>
-							<VIcon @click="editEntry(game, 'Game')">mdi-pencil</VIcon>
-						</VListItem>
-					</template>
-					<VDivider v-if="isThereGamesReplaying"></VDivider>
-					<VCardSubtitle v-if="isThereGamesReplaying">Replaying</VCardSubtitle>
-					<template v-for="game in replayingGames" :key="game.id">
-						<VListItem>
-							<span class="item-title">{{ game.title }}</span>
-							<VIcon @click="editEntry(game, 'Game')">mdi-pencil</VIcon>
-						</VListItem>
-					</template>
-				</VList>
-			</VCard>
-			<!-- TV -->
-			<VCard>
-				<VCardTitle>Current Television</VCardTitle>
-				<VCardSubtitle>Watching</VCardSubtitle>
-				<VList>
-					<template v-for="tv in watchingTV" :key="tv.id">
-						<VListItem>
-							<span class="item-title">{{ tv.title }}</span>
-							<VIcon @click="editEntry(tv, 'TV')">mdi-pencil</VIcon>
-						</VListItem>
-					</template>
-					<VDivider v-if="isThereTVRewatching"></VDivider>
-					<VCardSubtitle v-if="isThereTVRewatching">Rewatching</VCardSubtitle>
-					<template v-for="tv in rewatchingTV" :key="tv.id">
-						<VListItem>
-							<span class="item-title">{{ tv.title }}</span>
-							<VIcon @click="editEntry(tv, 'TV')">mdi-pencil</VIcon>
-						</VListItem>
-					</template>
-				</VList>
-			</VCard>
-			<!-- Books -->
-			<VCard>
-				<VCardTitle>Current Books</VCardTitle>
-				<VCardSubtitle>Reading</VCardSubtitle>
-				<VList>
-					<template v-for="book in readingBooks" :key="book.id">
-						<VListItem>
-							<span class="item-title">{{ book.title }}</span>
-						</VListItem>
-					</template>
-					<VDivider v-if="isThereBooksRereading"></VDivider>
-					<VCardSubtitle v-if="isThereBooksRereading">Rereading</VCardSubtitle>
-					<template v-for="book in rereadingBooks" :key="book.id">
-						<VListItem>
-							<span class="item-title">{{ book.title }}</span>
-						</VListItem>
-					</template>
-				</VList>
-			</VCard>
+			<VCol>
+				<VCard>
+					<VCardTitle>Current Games</VCardTitle>
+					<VCardSubtitle>Playing</VCardSubtitle>
+					<VList>
+						<template v-for="game in playingGames" :key="game.id">
+							<VListItem>
+								<VRow class="now-playing-item" justify="space-between">
+									<VCol tag="div" cols="auto"
+										><span class="item-title">{{ game.title }}</span></VCol
+									>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(game, 'Game')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+						<VDivider v-if="isThereGamesReplaying"></VDivider>
+						<VCardSubtitle v-if="isThereGamesReplaying">Replaying</VCardSubtitle>
+						<template v-for="game in replayingGames" :key="game.id">
+							<VListItem>
+								<VRow class="now-playing-item" justify="space-between">
+									<VCol tag="div" cols="auto"
+										><span class="item-title">{{ game.title }}</span></VCol
+									>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(game, 'Game')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+					</VList>
+				</VCard>
+			</VCol>
+			<VCol>
+				<!-- TV -->
+				<VCard>
+					<VCardTitle>Current Television</VCardTitle>
+					<VCardSubtitle>Watching</VCardSubtitle>
+					<VList>
+						<template v-for="tv in watchingTV" :key="tv.id">
+							<VListItem>
+								<VRow class="now-playing-item" justify="space-between">
+									<VCol tag="div" cols="auto">
+										<span class="item-title">{{ tv.title }}</span>
+									</VCol>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(tv, 'TV')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+						<VDivider v-if="isThereTVRewatching"></VDivider>
+						<VCardSubtitle v-if="isThereTVRewatching">Rewatching</VCardSubtitle>
+						<template v-for="tv in rewatchingTV" :key="tv.id">
+							<VListItem>
+								<VRow class="now-playing-item" justify="space-between">
+									<VCol tag="div" cols="auto">
+										<span class="item-title">{{ tv.title }}</span>
+									</VCol>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(tv, 'TV')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+					</VList>
+				</VCard>
+			</VCol>
+			<VCol>
+				<!-- Books -->
+				<VCard>
+					<VCardTitle>Current Books</VCardTitle>
+					<VCardSubtitle>Reading</VCardSubtitle>
+					<VList>
+						<template v-for="book in readingBooks" :key="book.id">
+							<VListItem>
+								<VRow justify="space-between">
+									<VCol tag="div" cols="auto">
+										<span class="item-title">{{ book.title }}</span>
+									</VCol>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(book, 'Book')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+						<VDivider v-if="isThereBooksRereading"></VDivider>
+						<VCardSubtitle v-if="isThereBooksRereading">Rereading</VCardSubtitle>
+						<template v-for="book in rereadingBooks" :key="book.id">
+							<VListItem>
+								<VRow justify="space-between">
+									<VCol tag="div" cols="auto">
+										<span class="item-title">{{ book.title }}</span>
+									</VCol>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(book, 'Book')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+					</VList>
+				</VCard>
+			</VCol>
 		</VRow>
 		<VDialog v-model="showEditDialog">
 			<!-- Because there are multiple different types of edit dialogs and only one needs to be rendered at a time, we use a dynamic component -->

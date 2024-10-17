@@ -5,7 +5,6 @@ import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
 import Log from '../../types/Log.ts';
 import { ref } from 'vue';
-import * as repl from 'node:repl';
 
 const bookStatus = Object.values(BookStatus);
 
@@ -69,7 +68,7 @@ function replaceNA(event: Event) {
 }
 
 async function addBook() {
-	const id = await appDatabase.books.add({
+	await appDatabase.books.add({
 		title: logModel.value.title,
 		audiobook: logModel.value.audiobook,
 		series: logModel.value.series,
@@ -86,7 +85,7 @@ async function addBook() {
 }
 
 async function updateBook(key: number) {
-	const id = await appDatabase.books.update(key, {
+	await appDatabase.books.update(key, {
 		title: logModel.value.title,
 		audiobook: logModel.value.audiobook,
 		series: logModel.value.series,

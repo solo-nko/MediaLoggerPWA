@@ -11,7 +11,6 @@ const tabs = ref(settingsStore.defaultDBScreen);
 
 <template>
 	<VTabs id="tab-bar" v-model="tabs" align-tabs="center">
-		<!--	<VTabs id="tab-bar" v-model="currentTab" align-tabs="center">-->
 		<VTab value="game">Game</VTab>
 		<VTab value="tv">TV Series</VTab>
 		<VTab value="movie">Movie</VTab>

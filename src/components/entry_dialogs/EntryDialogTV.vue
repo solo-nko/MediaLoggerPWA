@@ -56,7 +56,7 @@ function saveEntry(editOrAdd: 'edit' | 'add') {
 }
 
 async function addTV() {
-	const id = await appDatabase.television.add({
+	await appDatabase.television.add({
 		title: logModel.value.title,
 		season: logModel.value.season,
 		episode: logModel.value.episode,
@@ -67,11 +67,12 @@ async function addTV() {
 		dateModified: Log.dateToString(DateTime.now())
 	});
 	resetFields();
+	saveEntry('add')
 	closeEntry();
 }
 
 async function updateTV(key: number) {
-	const id = await appDatabase.television.update(key, {
+	await appDatabase.television.update(key, {
 		title: logModel.value.title,
 		season: logModel.value.season,
 		episode: logModel.value.episode,
@@ -80,6 +81,7 @@ async function updateTV(key: number) {
 		impression: logModel.value.impression,
 		dateModified: logModel.value.dateModified
 	});
+	saveEntry('edit')
 	closeEntry();
 }
 </script>
