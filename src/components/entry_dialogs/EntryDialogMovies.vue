@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { appDatabase } from '../database/db.ts';
+import { appDatabase } from '../../database/db.ts';
 import { DateTime } from 'luxon';
-import QuillEditor from './QuillEditor.vue';
-import Log from '../types/Log.ts';
+import QuillEditor from '../QuillEditor.vue';
+import Log from '../../types/Log.ts';
 import { ref } from 'vue';
-import { TVStatus } from '../types/TVStatus.ts';
+import * as repl from 'node:repl';
 
-const tvStatus = Object.values(TVStatus);
 const emits = defineEmits(['close-entry', 'save-entry']);
 
 const props = withDefaults(
@@ -18,12 +17,10 @@ const props = withDefaults(
 	{
 		entry: {
 			title: null,
-			season: null,
-			episode: null,
-			status: null,
+			series: 'N/A',
 			rating: null,
 			impression: null,
-			dateModified: DateTime.now().toISODate()
+			dateModified: null
 		},
 		editEntry: true,
 		closeButton: true
@@ -32,9 +29,7 @@ const props = withDefaults(
 
 const logModel = ref({
 	title: props.entry.title,
-	season: props.entry.season,
-	episode: props.entry.episode,
-	status: props.entry.status,
+	series: props.entry.series,
 	rating: props.entry.rating,
 	impression: props.entry.impression,
 	dateModified: props.entry.dateModified
@@ -51,56 +46,60 @@ function closeEntry(): void {
 }
 
 function saveEntry(editOrAdd: 'edit' | 'add') {
-	if (editOrAdd === 'edit') emits('save-entry', editOrAdd);
-	else emits('save-entry', editOrAdd);
+	emits('save-entry', editOrAdd);
 }
 
-async function addTV() {
-	const id = await appDatabase.television.add({
+function clearNA(event: Event) {
+	const inputElement = event.target as HTMLInputElement;
+	if (inputElement.value == 'N/A') logModel.value.series = '';
+}
+
+function replaceNA(event: Event) {
+	const inputElement = event.target as HTMLInputElement;
+	if (inputElement.value == '') logModel.value.series = 'N/A';
+}
+
+async function addMovie() {
+	const id = await appDatabase.movies.add({
 		title: logModel.value.title,
-		season: logModel.value.season,
-		episode: logModel.value.episode,
-		status: logModel.value.status,
+		series: logModel.value.series,
 		rating: logModel.value.rating,
 		impression: logModel.value.impression,
 		dateCreated: Log.dateToString(DateTime.now()),
 		dateModified: Log.dateToString(DateTime.now())
 	});
 	resetFields();
+	saveEntry('add');
 	closeEntry();
 }
 
-async function updateTV(key: number) {
-	const id = await appDatabase.television.update(key, {
+async function updateMovie(key: number) {
+	const id = await appDatabase.books.update(key, {
 		title: logModel.value.title,
-		season: logModel.value.season,
-		episode: logModel.value.episode,
-		status: logModel.value.status,
+		series: logModel.value.series,
 		rating: logModel.value.rating,
 		impression: logModel.value.impression,
 		dateModified: logModel.value.dateModified
 	});
+	saveEntry('edit');
 	closeEntry();
 }
 </script>
 
 <template>
 	<VCard id="card">
-		<VCardTitle>Add New TV Series</VCardTitle>
+		<VCardTitle>Add New Movie</VCardTitle>
 		<VContainer>
 			<VRow>
 				<VTextField label="Title" v-model="logModel.title"></VTextField>
 			</VRow>
 			<VRow>
-				<VCol class="pl-0" cols="3">
-					<VTextField label="Season" v-model="logModel.season" type="number"></VTextField>
-				</VCol>
-				<VCol cols="3">
-					<VTextField label="Episode" v-model="logModel.episode" type="number"></VTextField>
-				</VCol>
-				<VCol class="pr-0" cols="6">
-					<VAutocomplete label="Status" :items="tvStatus" v-model="logModel.status"></VAutocomplete>
-				</VCol>
+				<VTextField
+					label="Series"
+					v-model="logModel.series"
+					@focus="clearNA($event)"
+					@blur="replaceNA($event)"
+				></VTextField>
 			</VRow>
 			<VRow>
 				<div id="rating-container">
@@ -128,14 +127,14 @@ async function updateTV(key: number) {
 			</VRow>
 		</VContainer>
 		<VCardActions>
-			<VBtn @click="props.editEntry ? updateTV(props.entry.id) : addTV()">Save</VBtn>
+			<VBtn @click="props.editEntry ? updateMovie(props.entry.id) : addMovie()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
 		</VCardActions>
 	</VCard>
 </template>
 
 <style scoped>
-/* Used this internal class to access the VCard component styling because the #card id wasn't working */
+/* Used this internal class to access the VCard component styling because the #card id wasn't working*/
 /*noinspection CssUnusedSymbol*/
 .v-card {
 	padding: 1rem 3rem;

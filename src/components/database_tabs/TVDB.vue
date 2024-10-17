@@ -5,7 +5,7 @@ import { appDatabase } from '../../database/db.ts';
 import { ref } from 'vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import TVLog from '../../types/TVLog.ts';
-import EntryDialogTV from '../EntryDialogTV.vue';
+import EntryDialogTV from '../entry_dialogs/EntryDialogTV.vue';
 import { cantBeUndone } from '../../config/Messages.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608

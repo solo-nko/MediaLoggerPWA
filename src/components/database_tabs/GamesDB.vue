@@ -3,7 +3,7 @@ import { liveQuery } from 'dexie';
 import { useObservable, from } from '@vueuse/rxjs';
 import { appDatabase } from '../../database/db.ts';
 import { ref } from 'vue';
-import EntryDialogGames from '../EntryDialogGames.vue';
+import EntryDialogGames from '../entry_dialogs/EntryDialogGames.vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import GameLog from '../../types/GameLog.ts';
 import { cantBeUndone } from '../../config/Messages.ts';

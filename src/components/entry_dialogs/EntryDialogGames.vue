@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { appDatabase } from '../database/db.ts';
-import { GameStatus } from '../types/GameStatus.ts';
+import { appDatabase } from '../../database/db.ts';
+import { GameStatus } from '../../types/GameStatus.ts';
 import { DateTime } from 'luxon';
-import QuillEditor from './QuillEditor.vue';
-import Log from '../types/Log.ts';
+import QuillEditor from '../QuillEditor.vue';
+import Log from '../../types/Log.ts';
 import { ref } from 'vue';
 
 const gameStatus = Object.values(GameStatus);

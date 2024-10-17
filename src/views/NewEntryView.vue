@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import EntryDialogGames from '../components/EntryDialogGames.vue';
-import EntryDialogTV from '../components/EntryDialogTV.vue';
+import EntryDialogGames from '../components/entry_dialogs/EntryDialogGames.vue';
+import EntryDialogTV from '../components/entry_dialogs/EntryDialogTV.vue';
+import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
+import EntryDialogMovies from '../components/entry_dialogs/EntryDialogMovies.vue';
 import { computed, ref } from 'vue';
 import { entryAddSuccess, entryEditSuccess } from '../config/Messages.ts';
-import EntryDialogBooks from '../components/EntryDialogBooks.vue';
 import { settingsStore } from '../stores/settings.ts';
 
 // for use with dynamic component solution
@@ -59,7 +60,12 @@ const saveMessage = computed(() => {
 			></EntryDialogTV>
 		</VTabsWindowItem>
 		<VTabsWindowItem value="movie">
-			<h2>Movie Entry</h2>
+			<EntryDialogMovies
+				v-if="tabs == 'movie'"
+				:edit-entry="false"
+				:close-button="false"
+				@save-entry="configureSaveMessage"
+			></EntryDialogMovies>
 		</VTabsWindowItem>
 		<VTabsWindowItem value="book">
 			<EntryDialogBooks
@@ -74,10 +80,6 @@ const saveMessage = computed(() => {
 </template>
 
 <style scoped>
-#tab-bar {
-	width: 100%;
-}
-
 #entry-form {
 	margin-top: 0;
 	width: 70%;

@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import EntryDialogGames from '../components/EntryDialogGames.vue';
+import EntryDialogGames from '../components/entry_dialogs/EntryDialogGames.vue';
 import { appDatabase } from '../database/db.ts';
 import { from, useObservable } from '@vueuse/rxjs';
 import GameLog from '../types/GameLog.ts';
 import { liveQuery } from 'dexie';
 import TVLog from '../types/TVLog.ts';
 import BookLog from '../types/BookLog.ts';
-import EntryDialogTV from '../components/EntryDialogTV.vue';
-import EntryDialogBooks from '../components/EntryDialogBooks.vue';
+import EntryDialogTV from '../components/entry_dialogs/EntryDialogTV.vue';
+import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
 
 // keep an eye on this void typing. might be problematic
 const currentGames = useObservable<GameLog[] | void>(

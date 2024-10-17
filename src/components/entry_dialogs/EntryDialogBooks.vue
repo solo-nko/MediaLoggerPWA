@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { appDatabase } from '../database/db.ts';
-import { BookStatus } from '../types/BookStatus.ts';
+import { appDatabase } from '../../database/db.ts';
+import { BookStatus } from '../../types/BookStatus.ts';
 import { DateTime } from 'luxon';
-import QuillEditor from './QuillEditor.vue';
-import Log from '../types/Log.ts';
+import QuillEditor from '../QuillEditor.vue';
+import Log from '../../types/Log.ts';
 import { ref } from 'vue';
+import * as repl from 'node:repl';
 
 const bookStatus = Object.values(BookStatus);
 
@@ -57,6 +58,16 @@ function saveEntry(editOrAdd: 'edit' | 'add') {
 	emits('save-entry', editOrAdd);
 }
 
+function clearNA(event: Event) {
+	const inputElement = event.target as HTMLInputElement;
+	if (inputElement.value == 'N/A') logModel.value.series = '';
+}
+
+function replaceNA(event: Event) {
+	const inputElement = event.target as HTMLInputElement;
+	if (inputElement.value == '') logModel.value.series = 'N/A';
+}
+
 async function addBook() {
 	const id = await appDatabase.books.add({
 		title: logModel.value.title,
@@ -102,8 +113,12 @@ async function updateBook(key: number) {
 					<VCheckbox label="Audiobook" v-model="logModel.audiobook"></VCheckbox>
 				</VCol>
 				<VCol cols="7">
-					<!--			TODO: clear N/A on focus-->
-					<VTextField label="Series" v-model="logModel.series"></VTextField>
+					<VTextField
+						label="Series"
+						v-model="logModel.series"
+						@focus="clearNA($event)"
+						@blur="replaceNA($event)"
+					></VTextField>
 				</VCol>
 				<VCol class="pr-0" cols="3">
 					<VAutocomplete
