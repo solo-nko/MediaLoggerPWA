@@ -120,11 +120,13 @@ function editEntry(entryInfo, dialogType = 'Game') {
 <template>
 	<VContainer height="100%">
 		<VRow id="intro-text">
-			<h1>Welcome to the Media Logger!</h1>
-			<p>
-				This app allows you to keep track of your ongoing media. You can input games, movies,
-				television/anime, and books.
-			</p>
+			<VCol>
+				<h1>Welcome to the Media Logger!</h1>
+				<p>
+					This app allows you to keep track of your ongoing media. You can input games, movies,
+					television/anime, and books.
+				</p>
+			</VCol>
 		</VRow>
 		<VRow justify="space-around">
 			<!-- Games -->

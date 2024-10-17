@@ -67,7 +67,7 @@ async function addTV() {
 		dateModified: Log.dateToString(DateTime.now())
 	});
 	resetFields();
-	saveEntry('add')
+	saveEntry('add');
 	closeEntry();
 }
 
@@ -81,7 +81,7 @@ async function updateTV(key: number) {
 		impression: logModel.value.impression,
 		dateModified: logModel.value.dateModified
 	});
-	saveEntry('edit')
+	saveEntry('edit');
 	closeEntry();
 }
 </script>
