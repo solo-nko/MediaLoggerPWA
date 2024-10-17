@@ -1,29 +1,25 @@
 <script setup lang="ts">
-import { appDatabase } from '../database/db.ts';
-import { GameStatus } from '../types/GameStatus.ts';
+import { appDatabase } from '../../database/db.ts';
 import { DateTime } from 'luxon';
-import QuillEditor from './QuillEditor.vue';
-import Log from '../types/Log.ts';
+import QuillEditor from '../QuillEditor.vue';
+import Log from '../../types/Log.ts';
 import { ref } from 'vue';
 
-const gameStatus = Object.values(GameStatus);
 const emits = defineEmits(['close-entry', 'save-entry']);
 
 const props = withDefaults(
 	defineProps<{
-		gameEntry?;
+		entry?;
 		editEntry?: boolean;
 		closeButton?: boolean;
 	}>(),
 	{
-		gameEntry: {
+		entry: {
 			title: null,
-			platform: null,
-			status: null,
-			progress: null,
+			series: 'N/A',
 			rating: null,
 			impression: null,
-			dateModified: DateTime.now().toISODate()
+			dateModified: null
 		},
 		editEntry: true,
 		closeButton: true
@@ -31,30 +27,17 @@ const props = withDefaults(
 );
 
 const logModel = ref({
-	title: props.gameEntry.title,
-	platform: props.gameEntry.platform,
-	status: props.gameEntry.status,
-	progress: props.gameEntry.progress,
-	rating: props.gameEntry.rating,
-	impression: props.gameEntry.impression,
-	dateModified: props.gameEntry.dateModified
+	title: props.entry.title,
+	series: props.entry.series,
+	rating: props.entry.rating,
+	impression: props.entry.impression,
+	dateModified: props.entry.dateModified
 });
-
-/*
-* 	title: null,
-		platform: null,
-		status: null,
-		progress: null,
-		rating: null,
-		impression: null,
-		modifiedDate: null
-* */
 
 function resetFields() {
 	for (const key in logModel.value) {
 		logModel.value[key] = null;
 	}
-	// TODO: reset quill editor contents
 }
 
 function closeEntry(): void {
@@ -65,12 +48,20 @@ function saveEntry(editOrAdd: 'edit' | 'add') {
 	emits('save-entry', editOrAdd);
 }
 
-async function addGame() {
-	const id = await appDatabase.games.add({
+function clearNA(event: Event) {
+	const inputElement = event.target as HTMLInputElement;
+	if (inputElement.value == 'N/A') logModel.value.series = '';
+}
+
+function replaceNA(event: Event) {
+	const inputElement = event.target as HTMLInputElement;
+	if (inputElement.value == '') logModel.value.series = 'N/A';
+}
+
+async function addMovie() {
+	await appDatabase.movies.add({
 		title: logModel.value.title,
-		platform: logModel.value.platform,
-		status: logModel.value.status,
-		progress: logModel.value.progress,
+		series: logModel.value.series,
 		rating: logModel.value.rating,
 		impression: logModel.value.impression,
 		dateCreated: Log.dateToString(DateTime.now()),
@@ -81,12 +72,10 @@ async function addGame() {
 	closeEntry();
 }
 
-async function updateGame(key: number) {
-	const id = await appDatabase.games.update(key, {
+async function updateMovie(key: number) {
+	await appDatabase.books.update(key, {
 		title: logModel.value.title,
-		platform: logModel.value.platform,
-		status: logModel.value.status,
-		progress: logModel.value.progress,
+		series: logModel.value.series,
 		rating: logModel.value.rating,
 		impression: logModel.value.impression,
 		dateModified: logModel.value.dateModified
@@ -98,22 +87,18 @@ async function updateGame(key: number) {
 
 <template>
 	<VCard id="card">
-		<VCardTitle>Add New Game</VCardTitle>
+		<VCardTitle>Add New Movie</VCardTitle>
 		<VContainer>
 			<VRow>
 				<VTextField label="Title" v-model="logModel.title"></VTextField>
 			</VRow>
 			<VRow>
-				<VCol class="pl-0">
-					<VTextField label="Platform" v-model="logModel.platform"></VTextField>
-				</VCol>
-				<VCol class="pr-0">
-					<VAutocomplete
-						label="Status"
-						:items="gameStatus"
-						v-model="logModel.status"
-					></VAutocomplete>
-				</VCol>
+				<VTextField
+					label="Series"
+					v-model="logModel.series"
+					@focus="clearNA($event)"
+					@blur="replaceNA($event)"
+				></VTextField>
 			</VRow>
 			<VRow>
 				<div id="rating-container">
@@ -129,9 +114,6 @@ async function updateGame(key: number) {
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
 			</VRow>
-			<VRow>
-				<VTextarea label="Progress" v-model="logModel.progress" rows="2" no-resize></VTextarea>
-			</VRow>
 			<VRow class="pb-4">
 				<QuillEditor v-model="logModel.impression"></QuillEditor>
 			</VRow>
@@ -144,7 +126,7 @@ async function updateGame(key: number) {
 			</VRow>
 		</VContainer>
 		<VCardActions>
-			<VBtn @click="props.editEntry ? updateGame(props.gameEntry.id) : addGame()">Save</VBtn>
+			<VBtn @click="props.editEntry ? updateMovie(props.entry.id) : addMovie()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
 		</VCardActions>
 	</VCard>
@@ -152,6 +134,7 @@ async function updateGame(key: number) {
 
 <style scoped>
 /* Used this internal class to access the VCard component styling because the #card id wasn't working*/
+/*noinspection CssUnusedSymbol*/
 .v-card {
 	padding: 1rem 3rem;
 }

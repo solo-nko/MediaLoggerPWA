@@ -1,93 +1,248 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import EntryDialogGames from '../components/EntryDialogGames.vue';
+import { computed, ref } from 'vue';
+import EntryDialogGames from '../components/entry_dialogs/EntryDialogGames.vue';
 import { appDatabase } from '../database/db.ts';
 import { from, useObservable } from '@vueuse/rxjs';
 import GameLog from '../types/GameLog.ts';
 import { liveQuery } from 'dexie';
 import TVLog from '../types/TVLog.ts';
 import BookLog from '../types/BookLog.ts';
+import EntryDialogTV from '../components/entry_dialogs/EntryDialogTV.vue';
+import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
 
-const currentGames = useObservable<GameLog[]>(
-	from(liveQuery(() => appDatabase.games.where('status').anyOf(['Playing', 'Replaying']).toArray()))
-);
-
-const currentTV = useObservable<TVLog[]>(
+// keep an eye on this void typing. might be problematic
+const currentGames = useObservable<GameLog[] | void>(
 	from(
 		liveQuery(() =>
-			appDatabase.television.where('status').anyOf(['Watching', 'Rewatching']).toArray()
+			appDatabase.games
+				.where('status')
+				.anyOf(['Playing', 'Replaying'])
+				.toArray()
+				.then((promisedArray) => {
+					playingGames.value = promisedArray.filter((game) => {
+						return game.status == 'Playing';
+					});
+					replayingGames.value = promisedArray.filter((game) => {
+						return game.status == 'Replaying';
+					});
+				})
 		)
 	)
 );
 
-const currentBooks = useObservable<BookLog[]>(
-	from(liveQuery(() => appDatabase.books.where('status').anyOf(['Reading', 'Rereading']).toArray()))
+const playingGames = ref<GameLog[]>();
+const isThereGamesPlaying = computed(() => {
+	if (playingGames.value) return playingGames.value.length > 0;
+	else return false;
+});
+const replayingGames = ref<GameLog[]>();
+const isThereGamesReplaying = computed(() => {
+	if (replayingGames.value) return replayingGames.value.length > 0;
+	else return false;
+});
+
+const currentTV = useObservable<TVLog[] | void>(
+	from(
+		liveQuery(() =>
+			appDatabase.television
+				.where('status')
+				.anyOf(['Watching', 'Rewatching'])
+				.toArray()
+				.then((promisedArray) => {
+					watchingTV.value = promisedArray.filter((tv) => {
+						return tv.status == 'Watching';
+					});
+					rewatchingTV.value = promisedArray.filter((tv) => {
+						return tv.status == 'Rewatching';
+					});
+				})
+		)
+	)
 );
 
-const showDialog = ref(false);
+const watchingTV = ref<TVLog[]>();
+const isThereTVWatching = computed(() => {
+	if (watchingTV.value) return watchingTV.value.length > 0;
+	else return false;
+});
+const rewatchingTV = ref<TVLog[]>();
+const isThereTVRewatching = computed(() => {
+	if (rewatchingTV.value) return rewatchingTV.value.length > 0;
+	else return false;
+});
+
+const currentBooks = useObservable<BookLog[] | void>(
+	from(
+		liveQuery(() =>
+			appDatabase.books
+				.where('status')
+				.anyOf(['Reading', 'Rereading'])
+				.toArray()
+				.then((promisedArray) => {
+					readingBooks.value = promisedArray.filter((book) => {
+						return book.status == 'Reading';
+					});
+					rereadingBooks.value = promisedArray.filter((book) => {
+						return book.status == 'Rereading';
+					});
+				})
+		)
+	)
+);
+
+const readingBooks = ref<BookLog[]>([]);
+const isThereBooksReading = computed(() => {
+	if (readingBooks.value) return readingBooks.value.length > 0;
+	else return false;
+});
+const rereadingBooks = ref<BookLog[]>([]);
+const isThereBooksRereading = computed(() => {
+	if (rereadingBooks.value) return rereadingBooks.value.length > 0;
+	else return false;
+});
+
+const entryDetails = ref();
+const showEditDialog = ref(false);
+const whichDialog = ref('Game');
+const dialogs = {
+	Game: EntryDialogGames,
+	TV: EntryDialogTV,
+	Book: EntryDialogBooks
+};
+
+function editEntry(entryInfo, dialogType = 'Game') {
+	whichDialog.value = dialogType;
+	showEditDialog.value = true;
+	entryDetails.value = entryInfo;
+}
 </script>
 
 <template>
-	<h1>Welcome to the Media Logger!</h1>
-	<VContainer>
-		<VRow justify="space-around">
-			<VCard>
-				<VCardTitle>Current Games</VCardTitle>
-				<VCardSubtitle>Playing</VCardSubtitle>
-				<VList>
-					<template v-for="game in currentGames" :key="game.id">
-						<VListItem v-if="game.status === 'Playing'">
-							<span class="item-title">{{ game.title }}</span>
-						</VListItem>
-					</template>
-					<VDivider></VDivider>
-					<VCardSubtitle>Replaying</VCardSubtitle>
-					<template v-for="game in currentGames" :key="game.id">
-						<VListItem v-if="game.status === 'Replaying'">
-							<span class="item-title">{{ game.title }}</span>
-						</VListItem>
-					</template>
-				</VList>
-			</VCard>
-			<VCard>
-				<VCardTitle>Current Television</VCardTitle>
-				<VCardSubtitle>Watching</VCardSubtitle>
-				<VList>
-					<template v-for="tv in currentTV" :key="tv.id">
-						<VListItem v-if="tv.status === 'Watching'">
-							<span class="item-title">{{ tv.title }}</span>
-						</VListItem>
-					</template>
-					<VDivider></VDivider>
-					<VCardSubtitle>Rewatching</VCardSubtitle>
-					<template v-for="tv in currentTV" :key="tv.id">
-						<VListItem v-if="tv.status === 'Rewatching'">
-							<span class="item-title">{{ tv.title }}</span>
-						</VListItem>
-					</template>
-				</VList>
-			</VCard>
-			<VCard>
-				<VCardTitle>Current Books</VCardTitle>
-				<VCardSubtitle>Reading</VCardSubtitle>
-				<VList>
-					<template v-for="book in currentBooks" :key="book.id">
-						<VListItem v-if="book.status === 'Reading'">
-							<span class="item-title">{{ book.title }}</span>
-						</VListItem>
-					</template>
-					<VDivider></VDivider>
-					<VCardSubtitle>Rereading</VCardSubtitle>
-					<template v-for="book in currentBooks" :key="book.id">
-						<VListItem v-if="book.status === 'Rereading'">
-							<span class="item-title">{{ book.title }}</span>
-						</VListItem>
-					</template>
-				</VList>
-			</VCard>
+	<VContainer height="100%">
+		<VRow id="intro-text">
+			<VCol>
+				<h1>Welcome to the Media Logger!</h1>
+				<p>
+					This app allows you to keep track of your ongoing media. You can input games, movies,
+					television/anime, and books.
+				</p>
+			</VCol>
 		</VRow>
-		<VDialog v-model="showDialog">
-			<EntryDialogGames @close-entry="showDialog = false"></EntryDialogGames>
+		<VRow justify="space-around">
+			<!-- Games -->
+			<VCol>
+				<VCard>
+					<VCardTitle>Current Games</VCardTitle>
+					<VCardSubtitle>Playing</VCardSubtitle>
+					<VList>
+						<template v-for="game in playingGames" :key="game.id">
+							<VListItem>
+								<VRow class="now-playing-item" justify="space-between">
+									<VCol tag="div" cols="auto"
+										><span class="item-title">{{ game.title }}</span></VCol
+									>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(game, 'Game')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+						<VDivider v-if="isThereGamesReplaying"></VDivider>
+						<VCardSubtitle v-if="isThereGamesReplaying">Replaying</VCardSubtitle>
+						<template v-for="game in replayingGames" :key="game.id">
+							<VListItem>
+								<VRow class="now-playing-item" justify="space-between">
+									<VCol tag="div" cols="auto"
+										><span class="item-title">{{ game.title }}</span></VCol
+									>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(game, 'Game')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+					</VList>
+				</VCard>
+			</VCol>
+			<VCol>
+				<!-- TV -->
+				<VCard>
+					<VCardTitle>Current Television</VCardTitle>
+					<VCardSubtitle>Watching</VCardSubtitle>
+					<VList>
+						<template v-for="tv in watchingTV" :key="tv.id">
+							<VListItem>
+								<VRow class="now-playing-item" justify="space-between">
+									<VCol tag="div" cols="auto">
+										<span class="item-title">{{ tv.title }}</span>
+									</VCol>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(tv, 'TV')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+						<VDivider v-if="isThereTVRewatching"></VDivider>
+						<VCardSubtitle v-if="isThereTVRewatching">Rewatching</VCardSubtitle>
+						<template v-for="tv in rewatchingTV" :key="tv.id">
+							<VListItem>
+								<VRow class="now-playing-item" justify="space-between">
+									<VCol tag="div" cols="auto">
+										<span class="item-title">{{ tv.title }}</span>
+									</VCol>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(tv, 'TV')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+					</VList>
+				</VCard>
+			</VCol>
+			<VCol>
+				<!-- Books -->
+				<VCard>
+					<VCardTitle>Current Books</VCardTitle>
+					<VCardSubtitle>Reading</VCardSubtitle>
+					<VList>
+						<template v-for="book in readingBooks" :key="book.id">
+							<VListItem>
+								<VRow justify="space-between">
+									<VCol tag="div" cols="auto">
+										<span class="item-title">{{ book.title }}</span>
+									</VCol>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(book, 'Book')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+						<VDivider v-if="isThereBooksRereading"></VDivider>
+						<VCardSubtitle v-if="isThereBooksRereading">Rereading</VCardSubtitle>
+						<template v-for="book in rereadingBooks" :key="book.id">
+							<VListItem>
+								<VRow justify="space-between">
+									<VCol tag="div" cols="auto">
+										<span class="item-title">{{ book.title }}</span>
+									</VCol>
+									<VCol tag="div" cols="auto">
+										<VIcon @click="editEntry(book, 'Book')">mdi-pencil</VIcon>
+									</VCol>
+								</VRow>
+							</VListItem>
+						</template>
+					</VList>
+				</VCard>
+			</VCol>
+		</VRow>
+		<VDialog v-model="showEditDialog">
+			<!-- Because there are multiple different types of edit dialogs and only one needs to be rendered at a time, we use a dynamic component -->
+			<Component
+				:is="dialogs[whichDialog]"
+				@close-entry="showEditDialog = false"
+				:entry="entryDetails"
+				:edit-entry="true"
+			></Component>
 		</VDialog>
 	</VContainer>
 </template>
@@ -95,5 +250,12 @@ const showDialog = ref(false);
 <style scoped>
 .item-title {
 	font-weight: bold;
+}
+
+#intro-text {
+	justify-content: center;
+	text-align: center;
+	width: 100%;
+	margin: 1rem 0;
 }
 </style>

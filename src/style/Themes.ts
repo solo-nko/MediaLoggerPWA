@@ -1,14 +1,15 @@
 import { type ThemeDefinition } from 'vuetify';
 
-const normalLightTheme: ThemeDefinition = {
+export const standardLightTheme: ThemeDefinition = {
 	dark: false,
 	colors: {
-		background: '#051842',
+		background: '#ffffff',
 		surface: '#FFFFFF',
-		primary: '#0a81ce',
+		primary: '#3793e1',
 		secondary: '#03DAC6',
-		accent: '#00BCD4',
-		text: '#000000',
+		accent: '#eccb5b',
+		text: '#08275d',
+		textOnColor: '#f6f9ff',
 		error: '#B00020',
 		info: '#2196F3',
 		success: '#4CAF50',
@@ -16,7 +17,7 @@ const normalLightTheme: ThemeDefinition = {
 	}
 };
 
-const normalDarkTheme: ThemeDefinition = {
+export const standardDarkTheme: ThemeDefinition = {
 	dark: true,
 	colors: {
 		background: '#051842',
@@ -31,5 +32,3 @@ const normalDarkTheme: ThemeDefinition = {
 		warning: '#FB8C00'
 	}
 };
-
-export const Themes: ThemeDefinition[] = [normalDarkTheme, normalLightTheme];

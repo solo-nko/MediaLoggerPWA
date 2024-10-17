@@ -58,11 +58,11 @@ This project was built with the following major technologies:
 * ~~Allow importing of database~~
 * Add ability to set platforms for games
 * ~~Add TV support~~
-* Add Movie support
-* Add Book support
+* ~~Add Movie support~~
+* ~~Add Book support~~
 
 ## Things to investigate
 
 * ~~Export data to local file, and import data from local file~~
 * Cloud sync (specifically between desktop and mobile)
-  * Considering Firebase Azure Cosmos DB or Dexie Cloud for this
+  * Considering Firebase, Azure Cosmos DB or Dexie Cloud for this

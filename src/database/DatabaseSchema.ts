@@ -19,7 +19,7 @@ export default class DatabaseSchema extends Dexie {
 				'++id, title, platform, status, progress, impression, rating, dateCreated, dateModified',
 			television:
 				'++id, title, season, episode, status, impression, rating, dateCreated, dateModified',
-			movies: '++id, title, impression, rating, dateCreated, dateModified',
+			movies: '++id, title, series, impression, rating, dateCreated, dateModified',
 			books:
 				'++id, title, audiobook, series, progress, status, impression, rating, dateCreated, dateModified'
 		});

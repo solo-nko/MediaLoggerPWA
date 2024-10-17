@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { appDatabase } from '../database/db.ts';
-import { BookStatus } from '../types/BookStatus.ts';
+import { appDatabase } from '../../database/db.ts';
+import { BookStatus } from '../../types/BookStatus.ts';
 import { DateTime } from 'luxon';
-import QuillEditor from './QuillEditor.vue';
-import Log from '../types/Log.ts';
+import QuillEditor from '../QuillEditor.vue';
+import Log from '../../types/Log.ts';
 import { ref } from 'vue';
 
 const bookStatus = Object.values(BookStatus);
@@ -12,12 +12,12 @@ const emits = defineEmits(['close-entry', 'save-entry']);
 
 const props = withDefaults(
 	defineProps<{
-		bookEntry?;
+		entry?;
 		editEntry?: boolean;
 		closeButton?: boolean;
 	}>(),
 	{
-		bookEntry: {
+		entry: {
 			title: null,
 			audiobook: false,
 			series: 'N/A',
@@ -33,14 +33,14 @@ const props = withDefaults(
 );
 
 const logModel = ref({
-	title: props.bookEntry.title,
-	audiobook: props.bookEntry.audiobook,
-	status: props.bookEntry.status,
-	series: props.bookEntry.series,
-	progress: props.bookEntry.progress,
-	rating: props.bookEntry.rating,
-	impression: props.bookEntry.impression,
-	dateModified: props.bookEntry.dateModified
+	title: props.entry.title,
+	audiobook: props.entry.audiobook,
+	status: props.entry.status,
+	series: props.entry.series,
+	progress: props.entry.progress,
+	rating: props.entry.rating,
+	impression: props.entry.impression,
+	dateModified: props.entry.dateModified
 });
 
 function resetFields() {
@@ -57,8 +57,18 @@ function saveEntry(editOrAdd: 'edit' | 'add') {
 	emits('save-entry', editOrAdd);
 }
 
+function clearNA(event: Event) {
+	const inputElement = event.target as HTMLInputElement;
+	if (inputElement.value == 'N/A') logModel.value.series = '';
+}
+
+function replaceNA(event: Event) {
+	const inputElement = event.target as HTMLInputElement;
+	if (inputElement.value == '') logModel.value.series = 'N/A';
+}
+
 async function addBook() {
-	const id = await appDatabase.books.add({
+	await appDatabase.books.add({
 		title: logModel.value.title,
 		audiobook: logModel.value.audiobook,
 		series: logModel.value.series,
@@ -75,7 +85,7 @@ async function addBook() {
 }
 
 async function updateBook(key: number) {
-	const id = await appDatabase.books.update(key, {
+	await appDatabase.books.update(key, {
 		title: logModel.value.title,
 		audiobook: logModel.value.audiobook,
 		series: logModel.value.series,
@@ -102,7 +112,12 @@ async function updateBook(key: number) {
 					<VCheckbox label="Audiobook" v-model="logModel.audiobook"></VCheckbox>
 				</VCol>
 				<VCol cols="7">
-					<VTextField label="Series" v-model="logModel.series"></VTextField>
+					<VTextField
+						label="Series"
+						v-model="logModel.series"
+						@focus="clearNA($event)"
+						@blur="replaceNA($event)"
+					></VTextField>
 				</VCol>
 				<VCol class="pr-0" cols="3">
 					<VAutocomplete
@@ -141,7 +156,7 @@ async function updateBook(key: number) {
 			</VRow>
 		</VContainer>
 		<VCardActions>
-			<VBtn @click="props.editEntry ? updateBook(props.bookEntry.id) : addBook()">Save</VBtn>
+			<VBtn @click="props.editEntry ? updateBook(props.entry.id) : addBook()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
 		</VCardActions>
 	</VCard>
@@ -149,6 +164,7 @@ async function updateBook(key: number) {
 
 <style scoped>
 /* Used this internal class to access the VCard component styling because the #card id wasn't working*/
+/*noinspection CssUnusedSymbol*/
 .v-card {
 	padding: 1rem 3rem;
 }
