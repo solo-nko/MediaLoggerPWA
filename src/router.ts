@@ -31,10 +31,10 @@ export const router = createRouter({
 			path: '/settings',
 			name: 'Settings',
 			component: SettingsView
+		},
+		{
+			path: '/:other(.*)',
+			redirect: '/home'
 		}
-		// {
-		// 	path: '/:other(.*)',
-		// 	redirect: '/home'
-		// }
 	]
 });
