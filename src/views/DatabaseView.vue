@@ -7,6 +7,9 @@ import { settingsStore } from '../stores/settings.ts';
 import MoviesDB from '../components/database_tabs/MoviesDB.vue';
 
 const tabs = ref(settingsStore.defaultDBScreen);
+
+// this links each of the "items-per-page" in each tab to a single value
+const itemPerPageParent = ref(10);
 </script>
 
 <template>
@@ -18,16 +21,16 @@ const tabs = ref(settingsStore.defaultDBScreen);
 	</VTabs>
 	<VTabsWindow id="list-view" v-model="tabs" class="">
 		<VTabsWindowItem value="game">
-			<GamesDB></GamesDB>
+			<GamesDB v-model:items-per-page="itemPerPageParent"></GamesDB>
 		</VTabsWindowItem>
 		<VTabsWindowItem value="tv">
-			<TVDB></TVDB>
+			<TVDB v-model:items-per-page="itemPerPageParent"></TVDB>
 		</VTabsWindowItem>
 		<VTabsWindowItem value="movie">
-			<MoviesDB></MoviesDB>
+			<MoviesDB v-model:items-per-page="itemPerPageParent"></MoviesDB>
 		</VTabsWindowItem>
 		<VTabsWindowItem value="book">
-			<BooksDB></BooksDB>
+			<BooksDB v-model:items-per-page="itemPerPageParent"></BooksDB>
 		</VTabsWindowItem>
 	</VTabsWindow>
 </template>

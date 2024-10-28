@@ -7,10 +7,11 @@ import ConfirmDialog from '../ConfirmDialog.vue';
 import MovieLog from '../../types/MovieLog.ts';
 import EntryDialogMovies from '../entry_dialogs/EntryDialogMovies.vue';
 import { cantBeUndone } from '../../config/Messages.ts';
+import { itemsPerPageOptions } from '../../config/Utils.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const movies = useObservable<MovieLog[]>(from(liveQuery(() => appDatabase.movies.toArray())));
-
+const itemsPerPageChild = defineModel('itemsPerPage', itemsPerPageOptions);
 const movieHeaders = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Date Created', value: 'dateCreated' },
@@ -39,7 +40,7 @@ async function deleteEntry() {
 </script>
 
 <template>
-	<VDataTable :headers="movieHeaders" :items="movies" items-per-page="10">
+	<VDataTable :headers="movieHeaders" :items="movies" v-model:items-per-page="itemsPerPageChild">
 		<template v-slot:item.actions="{ item }">
 			<VIcon @click="editEntry(item)">mdi-pencil</VIcon>
 			<VIcon @click="deleteEntryConfirmation(item)">mdi-delete</VIcon>

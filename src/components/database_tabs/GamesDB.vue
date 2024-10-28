@@ -7,10 +7,11 @@ import EntryDialogGames from '../entry_dialogs/EntryDialogGames.vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import GameLog from '../../types/GameLog.ts';
 import { cantBeUndone } from '../../config/Messages.ts';
+import { itemsPerPageOptions } from '../../config/Utils.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const games = useObservable<GameLog[]>(from(liveQuery(() => appDatabase.games.toArray())));
-
+const itemsPerPageChild = defineModel('itemsPerPage', itemsPerPageOptions);
 const gameHeaders = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Platform', value: 'platform' },
@@ -41,7 +42,7 @@ async function deleteEntry() {
 </script>
 
 <template>
-	<VDataTable :headers="gameHeaders" :items="games" items-per-page="10">
+	<VDataTable :headers="gameHeaders" :items="games" v-model:items-per-page="itemsPerPageChild">
 		<template v-slot:item.actions="{ item }">
 			<VIcon @click="editEntry(item)">mdi-pencil</VIcon>
 			<VIcon @click="deleteEntryConfirmation(item)">mdi-delete</VIcon>
