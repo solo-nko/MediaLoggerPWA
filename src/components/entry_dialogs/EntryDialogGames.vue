@@ -5,9 +5,12 @@ import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
 import Log from '../../types/Log.ts';
 import { ref } from 'vue';
+import { noBlankTitle } from '../../config/Messages.ts';
 
 const gameStatus = Object.values(GameStatus);
 const emits = defineEmits(['close-entry', 'save-entry']);
+const quill = ref(null);
+const showSaveWarning = ref(false);
 
 const props = withDefaults(
 	defineProps<{
@@ -44,7 +47,7 @@ function resetFields() {
 	for (const key in logModel.value) {
 		logModel.value[key] = null;
 	}
-	// TODO: reset quill editor contents
+	if (quill.value) quill.value.clearEditor();
 }
 
 function closeEntry(): void {
@@ -55,7 +58,18 @@ function saveEntry(editOrAdd: 'edit' | 'add') {
 	emits('save-entry', editOrAdd);
 }
 
+function fieldsOk(): boolean {
+	if (!logModel.value.title) {
+		showSaveWarning.value = true;
+		return false;
+	} else {
+		showSaveWarning.value = false;
+		return true;
+	}
+}
+
 async function addGame() {
+	if (!fieldsOk()) return;
 	await appDatabase.games.add({
 		title: logModel.value.title,
 		platform: logModel.value.platform,
@@ -72,6 +86,7 @@ async function addGame() {
 }
 
 async function updateGame(key: number) {
+	if (!fieldsOk()) return;
 	await appDatabase.games.update(key, {
 		title: logModel.value.title,
 		platform: logModel.value.platform,
@@ -82,7 +97,7 @@ async function updateGame(key: number) {
 		dateModified: logModel.value.dateModified
 	});
 	saveEntry('edit');
-	// TODO: validate fields before saving, namely for blanks
+
 	closeEntry();
 }
 </script>
@@ -124,7 +139,7 @@ async function updateGame(key: number) {
 				<VTextarea label="Progress" v-model="logModel.progress" rows="2" no-resize></VTextarea>
 			</VRow>
 			<VRow class="pb-4">
-				<QuillEditor v-model="logModel.impression"></QuillEditor>
+				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
 			<VRow>
 				<VTextField
@@ -137,6 +152,7 @@ async function updateGame(key: number) {
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateGame(props.entry.id) : addGame()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
+			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
 </template>

@@ -5,10 +5,12 @@ import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
 import Log from '../../types/Log.ts';
 import { ref } from 'vue';
+import { noBlankTitle } from '../../config/Messages.ts';
 
 const bookStatus = Object.values(BookStatus);
-
 const emits = defineEmits(['close-entry', 'save-entry']);
+const quill = ref(null);
+const showSaveWarning = ref(false);
 
 const props = withDefaults(
 	defineProps<{
@@ -47,6 +49,7 @@ function resetFields() {
 	for (const key in logModel.value) {
 		logModel.value[key] = null;
 	}
+	if (quill.value) quill.value.clearEditor();
 }
 
 function closeEntry(): void {
@@ -67,7 +70,19 @@ function replaceNA(event: Event) {
 	if (inputElement.value == '') logModel.value.series = 'N/A';
 }
 
+// TODO consider making this shared instead of repeating it everywhere. same for the add and update functions maybe
+function fieldsOk(): boolean {
+	if (!logModel.value.title) {
+		showSaveWarning.value = true;
+		return false;
+	} else {
+		showSaveWarning.value = false;
+		return true;
+	}
+}
+
 async function addBook() {
+	if (!fieldsOk()) return;
 	await appDatabase.books.add({
 		title: logModel.value.title,
 		audiobook: logModel.value.audiobook,
@@ -85,6 +100,7 @@ async function addBook() {
 }
 
 async function updateBook(key: number) {
+	if (!fieldsOk()) return;
 	await appDatabase.books.update(key, {
 		title: logModel.value.title,
 		audiobook: logModel.value.audiobook,
@@ -145,7 +161,7 @@ async function updateBook(key: number) {
 				<VTextarea label="Progress" v-model="logModel.progress" rows="2" no-resize></VTextarea>
 			</VRow>
 			<VRow class="pb-4">
-				<QuillEditor v-model="logModel.impression"></QuillEditor>
+				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
 			<VRow>
 				<VTextField
@@ -158,6 +174,7 @@ async function updateBook(key: number) {
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateBook(props.entry.id) : addBook()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
+			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
 </template>

@@ -5,9 +5,12 @@ import QuillEditor from '../QuillEditor.vue';
 import Log from '../../types/Log.ts';
 import { ref } from 'vue';
 import { TVStatus } from '../../types/TVStatus.ts';
+import { noBlankTitle } from '../../config/Messages.ts';
 
 const tvStatus = Object.values(TVStatus);
 const emits = defineEmits(['close-entry', 'save-entry']);
+const quill = ref(null);
+const showSaveWarning = ref(false);
 
 const props = withDefaults(
 	defineProps<{
@@ -44,6 +47,7 @@ function resetFields() {
 	for (const key in logModel.value) {
 		logModel.value[key] = null;
 	}
+	if (quill.value) quill.value.clearEditor();
 }
 
 function closeEntry(): void {
@@ -55,7 +59,18 @@ function saveEntry(editOrAdd: 'edit' | 'add') {
 	else emits('save-entry', editOrAdd);
 }
 
+function fieldsOk(): boolean {
+	if (!logModel.value.title) {
+		showSaveWarning.value = true;
+		return false;
+	} else {
+		showSaveWarning.value = false;
+		return true;
+	}
+}
+
 async function addTV() {
+	if (!fieldsOk()) return;
 	await appDatabase.television.add({
 		title: logModel.value.title,
 		season: logModel.value.season,
@@ -72,6 +87,7 @@ async function addTV() {
 }
 
 async function updateTV(key: number) {
+	if (!fieldsOk()) return;
 	await appDatabase.television.update(key, {
 		title: logModel.value.title,
 		season: logModel.value.season,
@@ -119,7 +135,7 @@ async function updateTV(key: number) {
 				</div>
 			</VRow>
 			<VRow class="pb-4">
-				<QuillEditor v-model="logModel.impression"></QuillEditor>
+				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
 			<VRow>
 				<VTextField
@@ -132,6 +148,7 @@ async function updateTV(key: number) {
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateTV(props.entry.id) : addTV()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
+			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
 </template>

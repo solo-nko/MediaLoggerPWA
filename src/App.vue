@@ -33,6 +33,7 @@ import { RouterView } from 'vue-router';
 
 <style scoped>
 #content-area {
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

@@ -26,6 +26,14 @@ onMounted(() => {
 		emits('content-change');
 	});
 });
+
+function clearEditor() {
+	if (quill != null) {
+		quill.setContents([{ insert: '\n' }]);
+	}
+}
+
+defineExpose({ clearEditor });
 </script>
 
 <template>

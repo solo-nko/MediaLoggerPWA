@@ -4,8 +4,11 @@ import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
 import Log from '../../types/Log.ts';
 import { ref } from 'vue';
+import { noBlankTitle } from '../../config/Messages.ts';
 
 const emits = defineEmits(['close-entry', 'save-entry']);
+const quill = ref(null);
+const showSaveWarning = ref(false);
 
 const props = withDefaults(
 	defineProps<{
@@ -38,6 +41,7 @@ function resetFields() {
 	for (const key in logModel.value) {
 		logModel.value[key] = null;
 	}
+	if (quill.value) quill.value.clearEditor();
 }
 
 function closeEntry(): void {
@@ -58,7 +62,18 @@ function replaceNA(event: Event) {
 	if (inputElement.value == '') logModel.value.series = 'N/A';
 }
 
+function fieldsOk(): boolean {
+	if (!logModel.value.title) {
+		showSaveWarning.value = true;
+		return false;
+	} else {
+		showSaveWarning.value = false;
+		return true;
+	}
+}
+
 async function addMovie() {
+	if (!fieldsOk()) return;
 	await appDatabase.movies.add({
 		title: logModel.value.title,
 		series: logModel.value.series,
@@ -73,6 +88,7 @@ async function addMovie() {
 }
 
 async function updateMovie(key: number) {
+	if (!fieldsOk()) return;
 	await appDatabase.books.update(key, {
 		title: logModel.value.title,
 		series: logModel.value.series,
@@ -115,7 +131,7 @@ async function updateMovie(key: number) {
 				</div>
 			</VRow>
 			<VRow class="pb-4">
-				<QuillEditor v-model="logModel.impression"></QuillEditor>
+				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
 			<VRow>
 				<VTextField
@@ -128,6 +144,7 @@ async function updateMovie(key: number) {
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateMovie(props.entry.id) : addMovie()">Save</VBtn>
 			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
+			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
 </template>

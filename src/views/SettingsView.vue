@@ -4,7 +4,7 @@ import AppearanceSettings from '../components/settings/AppearanceSettings.vue';
 import GeneralSettings from '../components/settings/GeneralSettings.vue';
 import { computed, ref } from 'vue';
 
-const currentTab = ref('ImportExport');
+const currentTab = ref('GeneralSettings');
 const settingsTabs = {
 	ImportExport,
 	AppearanceSettings,
@@ -39,7 +39,6 @@ const iconType = computed(() => {
 					<VIcon>{{ iconType }}</VIcon>
 				</VFab>
 			</VCol>
-
 			<VCol>
 				<Component :is="settingsTabs[currentTab]"></Component>
 			</VCol>
