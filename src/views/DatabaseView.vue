@@ -5,7 +5,8 @@ import TVDB from '../components/database_tabs/TVDB.vue';
 import BooksDB from '../components/database_tabs/BooksDB.vue';
 import { settingsStore } from '../stores/settings.ts';
 import MoviesDB from '../components/database_tabs/MoviesDB.vue';
-
+// TODO revisit available sort headers
+// TODO add searchbox
 const tabs = ref(settingsStore.defaultDBScreen);
 
 // this links each of the "items-per-page" in each tab to a single value
@@ -36,7 +37,4 @@ const itemPerPageParent = ref(10);
 </template>
 
 <style scoped>
-#list-view {
-	width: 80%;
-}
 </style>

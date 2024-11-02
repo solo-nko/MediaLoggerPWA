@@ -14,7 +14,7 @@ const settingsTabs = {
 const showSettingsDrawer = ref(true);
 
 const iconType = computed(() => {
-	return showSettingsDrawer.value ? 'mdi-chevron-double-left' : 'mdi-chevron-double-right';
+	return showSettingsDrawer.value ? '$chevronLeft' : '$chevronRight';
 });
 </script>
 
@@ -36,7 +36,7 @@ const iconType = computed(() => {
 		<VRow class="settings">
 			<VCol cols="1" align-self="end">
 				<VFab @click="showSettingsDrawer = !showSettingsDrawer" order="-2">
-					<VIcon>{{ iconType }}</VIcon>
+					<VIcon :icon="iconType"></VIcon>
 				</VFab>
 			</VCol>
 			<VCol>

@@ -44,8 +44,8 @@ async function deleteEntry() {
 <template>
 	<VDataTable :headers="bookHeaders" :items="books" v-model:items-per-page="itemsPerPageChild">
 		<template v-slot:item.actions="{ item }">
-			<VIcon @click="editEntry(item)">mdi-pencil</VIcon>
-			<VIcon @click="deleteEntryConfirmation(item)">mdi-delete</VIcon>
+			<VIcon @click="editEntry(item)" icon="pencil"></VIcon>
+			<VIcon @click="deleteEntryConfirmation(item)" icon="$trash"></VIcon>
 		</template>
 	</VDataTable>
 	<VDialog id="entry-form" v-model="showEditDialog">

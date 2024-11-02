@@ -128,21 +128,22 @@ function editEntry(entryInfo, dialogType = 'Game') {
 				</p>
 			</VCol>
 		</VRow>
+		<VDivider id="divider" thickness="3" color="accent" opacity="1"></VDivider>
 		<VRow justify="space-around">
 			<!-- Games -->
 			<VCol>
-				<VCard>
+				<VCard class="dashboard-card">
 					<VCardTitle>Current Games</VCardTitle>
 					<VCardSubtitle>Playing</VCardSubtitle>
 					<VList>
 						<template v-for="game in playingGames" :key="game.id">
 							<VListItem>
 								<VRow class="now-playing-item" justify="space-between">
-									<VCol tag="div" cols="auto"
-										><span class="item-title">{{ game.title }}</span></VCol
-									>
+									<VCol tag="div" cols="auto" class="item-title">
+										<span>{{ game.title }}</span>
+									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(game, 'Game')">mdi-pencil</VIcon>
+										<VIcon @click="editEntry(game, 'Game')" icon="$pencil"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -152,11 +153,11 @@ function editEntry(entryInfo, dialogType = 'Game') {
 						<template v-for="game in replayingGames" :key="game.id">
 							<VListItem>
 								<VRow class="now-playing-item" justify="space-between">
-									<VCol tag="div" cols="auto"
-										><span class="item-title">{{ game.title }}</span></VCol
-									>
+									<VCol tag="div" cols="auto" class="item-title">
+										<span>{{ game.title }}</span>
+									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(game, 'Game')">mdi-pencil</VIcon>
+										<VIcon @click="editEntry(game, 'Game')" icon="$pencil"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -173,11 +174,11 @@ function editEntry(entryInfo, dialogType = 'Game') {
 						<template v-for="tv in watchingTV" :key="tv.id">
 							<VListItem>
 								<VRow class="now-playing-item" justify="space-between">
-									<VCol tag="div" cols="auto">
-										<span class="item-title">{{ tv.title }}</span>
+									<VCol tag="div" cols="auto" class="item-title">
+										<span>{{ tv.title }}</span>
 									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(tv, 'TV')">mdi-pencil</VIcon>
+										<VIcon @click="editEntry(tv, 'TV')" icon="$pencil"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -187,11 +188,11 @@ function editEntry(entryInfo, dialogType = 'Game') {
 						<template v-for="tv in rewatchingTV" :key="tv.id">
 							<VListItem>
 								<VRow class="now-playing-item" justify="space-between">
-									<VCol tag="div" cols="auto">
-										<span class="item-title">{{ tv.title }}</span>
+									<VCol tag="div" cols="auto" class="item-title">
+										<span>{{ tv.title }}</span>
 									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(tv, 'TV')">mdi-pencil</VIcon>
+										<VIcon @click="editEntry(tv, 'TV')" icon="$pencil"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -208,11 +209,11 @@ function editEntry(entryInfo, dialogType = 'Game') {
 						<template v-for="book in readingBooks" :key="book.id">
 							<VListItem>
 								<VRow justify="space-between">
-									<VCol tag="div" cols="auto">
-										<span class="item-title">{{ book.title }}</span>
+									<VCol tag="div" cols="auto" class="item-title">
+										<span>{{ book.title }}</span>
 									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(book, 'Book')">mdi-pencil</VIcon>
+										<VIcon @click="editEntry(book, 'Book')" icon="$pencil"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -222,11 +223,11 @@ function editEntry(entryInfo, dialogType = 'Game') {
 						<template v-for="book in rereadingBooks" :key="book.id">
 							<VListItem>
 								<VRow justify="space-between">
-									<VCol tag="div" cols="auto">
-										<span class="item-title">{{ book.title }}</span>
+									<VCol tag="div" cols="auto" class="item-title">
+										<span>{{ book.title }}</span>
 									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(book, 'Book')">mdi-pencil</VIcon>
+										<VIcon @click="editEntry(book, 'Book')" icon="$pencil"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -248,14 +249,24 @@ function editEntry(entryInfo, dialogType = 'Game') {
 </template>
 
 <style scoped>
-.item-title {
-	font-weight: bold;
-}
-
 #intro-text {
 	justify-content: center;
 	text-align: center;
 	width: 100%;
+}
+
+#divider {
 	margin: 1rem 0;
 }
+
+.item-title {
+	flex-shrink: 1;
+	font-weight: bold;
+}
+
+.now-playing-item {
+	flex-wrap: nowrap;
+}
+
+
 </style>

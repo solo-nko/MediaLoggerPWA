@@ -4,30 +4,24 @@ import { RouterView } from 'vue-router';
 
 <template>
 	<VApp>
-		<VContainer>
-			<VRow>
-				<VAppBar color="primary">
-					<VAppBarTitle>Media Logger</VAppBarTitle>
-				</VAppBar>
-			</VRow>
-			<VRow>
-				<VMain id="content-area">
-					<RouterView v-slot="{ Component }">
-						<KeepAlive>
-							<Component :is="Component"></Component>
-						</KeepAlive>
-					</RouterView>
-				</VMain>
-			</VRow>
-			<VRow>
-				<VBottomNavigation grow bg-color="primary" color="textOnColor" order="-1" tag="footer">
-					<VBtn :to="{ name: 'Home' }">Home</VBtn>
-					<VBtn :to="{ name: 'Entry' }">Entry</VBtn>
-					<VBtn :to="{ name: 'Database' }">Log</VBtn>
-					<VBtn :to="{ name: 'Settings' }">Settings</VBtn>
-				</VBottomNavigation>
-			</VRow>
-		</VContainer>
+		<VAppBar color="primary">
+			<VAppBarTitle>Media Logger</VAppBarTitle>
+		</VAppBar>
+		<VMain id="content-area">
+			<VContainer>
+				<RouterView v-slot="{ Component }">
+					<KeepAlive>
+						<Component :is="Component"></Component>
+					</KeepAlive>
+				</RouterView>
+			</VContainer>
+		</VMain>
+		<VBottomNavigation grow bg-color="primary" color="textOnColor" order="-1" tag="footer">
+			<VBtn :to="{ name: 'Home' }" ><VIcon icon="$home"></VIcon>Home</VBtn>
+			<VBtn :to="{ name: 'Entry' }"><VIcon icon="$add"></VIcon> Entry</VBtn>
+			<VBtn :to="{ name: 'Database' }"><VIcon icon="$table"></VIcon>Log</VBtn>
+			<VBtn :to="{ name: 'Settings' }"><VIcon icon="$settings"></VIcon>Settings</VBtn>
+		</VBottomNavigation>
 	</VApp>
 </template>
 
