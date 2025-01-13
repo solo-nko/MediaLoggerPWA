@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import ImportExport from '../components/settings/ImportExport.vue';
+import DatabaseSettings from '../components/settings/DatabaseSettings.vue';
 import AppearanceSettings from '../components/settings/AppearanceSettings.vue';
 import GeneralSettings from '../components/settings/GeneralSettings.vue';
 import { computed, ref } from 'vue';
 
 const currentTab = ref('GeneralSettings');
 const settingsTabs = {
-	ImportExport,
+	DatabaseSettings,
 	AppearanceSettings,
 	GeneralSettings
 };
@@ -25,7 +25,7 @@ const iconType = computed(() => {
 		</VListItem>
 		<VDivider color="primary"></VDivider>
 		<VListItem link @click="currentTab = 'GeneralSettings'">General</VListItem>
-		<VListItem link @click="currentTab = 'ImportExport'">Import / Export Database</VListItem>
+		<VListItem link @click="currentTab = 'DatabaseSettings'">Import / Export Database</VListItem>
 		<VListItem link @click="currentTab = 'AppearanceSettings'">Appearance</VListItem>
 		<VListItem>Games Master Settings</VListItem>
 		<VListItem>Television Master Settings</VListItem>

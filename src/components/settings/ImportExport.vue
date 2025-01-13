@@ -53,14 +53,13 @@ async function importDatabase(file: Blob) {
 
 <template>
 	<div id="flex-container">
-		<VLabel>Import Database</VLabel>
+		<VLabel>Import Database from JSON</VLabel>
 		<VFileInput
 			label="Place database file here..."
 			accept=".json"
 			v-model="importedFile"
 		></VFileInput>
 		<VBtn @click="showDBImportConfirm = true">Import database</VBtn>
-		<VDivider></VDivider>
 		<VBtn @click="exportDatabase">Export database</VBtn>
 		<VDialog v-model="showDBImportConfirm">
 			<ConfirmDialog
