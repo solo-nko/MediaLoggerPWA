@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { axiosInstance } from '../../config/Utils.ts';
-import { appDatabase } from '../../database/db.ts';
+import { axiosInstance, overwriteDatabase, progressCallback } from '../../config/Utils.ts';
 import { ref } from 'vue';
-import { peakImportFile } from 'dexie-export-import';
+import { appDatabase } from '../../database/db.ts';
 
 const syncCode = ref(localStorage.getItem('syncCode'));
 const lastSyncDate = ref(localStorage.getItem('lastSyncDate'));
@@ -21,18 +20,10 @@ async function SyncFromCloud() {
 			// convert to blob
 			const pulledDB = new Blob([JSON.stringify(response.data.IndexedDB)]);
 			console.log(pulledDB instanceof Blob);
-			// TODO this is copied straight from the local import, so let's turn this into a function and use it for both
-			const importMetadata = await peakImportFile(pulledDB);
-			if (importMetadata.formatName != 'dexie') throw new Error('Invalid format');
-			console.log('Database name:', importMetadata.data.databaseName);
-			console.log('Database version:', importMetadata.data.databaseVersion);
-			console.log(
-				'Tables:',
-				importMetadata.data.tables.map((t) => `${t.name} (${t.rowCount} rows)`).join('\n\t')
-			);
-			await appDatabase.import(pulledDB, { clearTablesBeforeImport: true });
-
-			console.log('Import successful.');
+			const importSuccess = await overwriteDatabase(pulledDB);
+			if (importSuccess) {
+				console.log('Import successful.');
+			}
 		}
 	} else {
 		showCloudSyncMsg.value = true;

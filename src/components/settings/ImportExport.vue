@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import 'dexie-export-import';
 import { saveAs } from 'file-saver';
-
 import { appDatabase } from '../../database/db.ts';
-import { peakImportFile } from 'dexie-export-import';
 import { ref } from 'vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
+import { overwriteDatabase, progressCallback } from '../../config/Utils.ts';
+import { DateTime } from 'luxon';
 
 const importedFile = ref<File>();
 const showDBImportSuccess = ref(false);
@@ -37,16 +37,7 @@ async function importDatabase(file: Blob) {
 		showDBImportFailure.value = true;
 		return;
 	}
-	const importMetadata = await peakImportFile(file);
-	if (importMetadata.formatName != 'dexie') throw new Error('Invalid format');
-	console.log('Database name:', importMetadata.data.databaseName);
-	console.log('Database version:', importMetadata.data.databaseVersion);
-	console.log(
-		'Tables:',
-		importMetadata.data.tables.map((t) => `${t.name} (${t.rowCount} rows)`).join('\n\t')
-	);
-	await appDatabase.import(file, { clearTablesBeforeImport: true });
-	showDBImportSuccess.value = true;
+	showDBImportSuccess.value = await overwriteDatabase(file);
 	importedFile.value = undefined;
 }
 </script>
