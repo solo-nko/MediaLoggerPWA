@@ -15,15 +15,6 @@ const showDBImportConfirm = ref(false);
 const importWarningMessage =
 	'Importing a new database will clear the existing one. This cannot be undone!';
 
-function progressCallback({ totalRows, completedRows }): boolean {
-	try {
-		console.log(`Progress: ${completedRows} / ${totalRows} rows completed`);
-		return true;
-	} catch (error) {
-		return false;
-	}
-}
-
 async function exportDatabase() {
 	const blob = await appDatabase.export({ prettyJson: true, progressCallback });
 	const fileName = 'database.json';
@@ -45,25 +36,26 @@ async function importDatabase(file: Blob) {
 <template>
 	<div id="flex-container">
 		<VLabel>Import Database from JSON</VLabel>
+		<p>You can use the Export Database button to download your entire media log as a small JSON file. You can then later import it from this file. To protect the integrity of your media log, it is strongly recommended to avoid directly editing the JSON file.</p>
 		<VFileInput
+			v-model="importedFile"
 			label="Place database file here..."
 			accept=".json"
-			v-model="importedFile"
 		></VFileInput>
-		<VBtn @click="showDBImportConfirm = true">Import database</VBtn>
-		<VBtn @click="exportDatabase">Export database</VBtn>
+		<VBtn @click="exportDatabase">Export database to file</VBtn>
+		<VBtn @click="showDBImportConfirm = true">Import database from file</VBtn>
 		<VDialog v-model="showDBImportConfirm">
 			<ConfirmDialog
+				:message="importWarningMessage"
 				@confirm="importDatabase(importedFile)"
 				@cancel="showDBImportConfirm = false"
-				:message="importWarningMessage"
 			></ConfirmDialog>
 		</VDialog>
-		<VSnackbar timeout="5000" v-model="showDBImportSuccess"
+		<VSnackbar v-model="showDBImportSuccess" timeout="5000"
 			>Database successfully imported!
 			<VBtn @click="showDBImportSuccess = false">Close</VBtn>
 		</VSnackbar>
-		<VSnackbar timeout="5000" v-model="showDBImportFailure">{{ DBImportFailureMsg }}</VSnackbar>
+		<VSnackbar v-model="showDBImportFailure" timeout="5000">{{ DBImportFailureMsg }}</VSnackbar>
 	</div>
 </template>
 

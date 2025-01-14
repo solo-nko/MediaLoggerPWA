@@ -5,7 +5,14 @@ import CloudSync from './CloudSync.vue';
 
 <template>
 	<ImportExport></ImportExport>
+	<VDivider id="divider"></VDivider>
 	<CloudSync></CloudSync>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+#divider {
+	margin: 2rem 0;
+}
+
+</style>
