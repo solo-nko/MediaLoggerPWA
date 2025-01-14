@@ -16,9 +16,10 @@ const importWarningMessage =
 	'Importing a new database will clear the existing one. This cannot be undone!';
 
 async function exportDatabase() {
-	const blob = await appDatabase.export({ prettyJson: true, progressCallback });
-	const fileName = 'database.json';
-	saveAs(blob, fileName);
+	const exportBlob = await appDatabase.export({ prettyJson: true, progressCallback });
+	const timeString = DateTime.now().toFormat('yyyyLLdd_HHmmss');
+	const fileName = `database${timeString}.json`;
+	saveAs(exportBlob, fileName);
 }
 
 async function importDatabase(file: Blob) {
