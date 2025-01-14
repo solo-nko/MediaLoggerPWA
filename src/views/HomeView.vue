@@ -267,6 +267,4 @@ function editEntry(entryInfo, dialogType = 'Game') {
 .now-playing-item {
 	flex-wrap: nowrap;
 }
-
-
 </style>

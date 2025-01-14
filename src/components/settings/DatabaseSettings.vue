@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import ImportExport from './ImportExport.vue';
 import CloudSync from './CloudSync.vue';
-
 </script>
 
 <template>
@@ -9,6 +8,4 @@ import CloudSync from './CloudSync.vue';
 	<CloudSync></CloudSync>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
