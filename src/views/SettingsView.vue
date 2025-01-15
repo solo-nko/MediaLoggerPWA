@@ -35,7 +35,7 @@ const iconType = computed(() => {
 	<VContainer height="100%">
 		<VRow class="settings">
 			<VCol cols="1" align-self="end">
-				<VFab @click="showSettingsDrawer = !showSettingsDrawer" order="-2">
+				<VFab order="-2" @click="showSettingsDrawer = !showSettingsDrawer">
 					<VIcon :icon="iconType"></VIcon>
 				</VFab>
 			</VCol>

@@ -106,12 +106,12 @@ async function updateMovie(key: number) {
 		<VCardTitle>Add New Movie</VCardTitle>
 		<VContainer>
 			<VRow>
-				<VTextField label="Title" v-model="logModel.title"></VTextField>
+				<VTextField v-model="logModel.title" label="Title"></VTextField>
 			</VRow>
 			<VRow>
 				<VTextField
-					label="Series"
 					v-model="logModel.series"
+					label="Series"
 					@focus="clearNA($event)"
 					@blur="replaceNA($event)"
 				></VTextField>
@@ -120,12 +120,12 @@ async function updateMovie(key: number) {
 				<div id="rating-container">
 					<VLabel id="rating-label">Rating</VLabel>
 					<VSlider
+						v-model="logModel.rating"
 						min="1"
 						max="10"
 						step="1"
 						thumb-label
 						show-ticks="always"
-						v-model="logModel.rating"
 					></VSlider>
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
@@ -135,15 +135,15 @@ async function updateMovie(key: number) {
 			</VRow>
 			<VRow>
 				<VTextField
+					v-model="logModel.dateModified"
 					label="Date Updated (if applicable)"
 					type="date"
-					v-model="logModel.dateModified"
 				></VTextField>
 			</VRow>
 		</VContainer>
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateMovie(props.entry.id) : addMovie()">Save</VBtn>
-			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
+			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
 			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>

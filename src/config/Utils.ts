@@ -13,7 +13,10 @@ const axiosInstance = axios.create({
 async function overwriteDatabase(dbToImport: Blob) {
 	try {
 		const importMetadata = await peakImportFile(dbToImport);
-		if (importMetadata.formatName != 'dexie') throw new Error('Invalid format');
+		if (importMetadata.formatName != 'dexie') {
+			console.log('function overwriteDatabase: Invalid format.');
+			return;
+		}
 		console.log('Database name:', importMetadata.data.databaseName);
 		console.log('Database version:', importMetadata.data.databaseVersion);
 		console.log(
@@ -21,10 +24,10 @@ async function overwriteDatabase(dbToImport: Blob) {
 			importMetadata.data.tables.map((t) => `${t.name} (${t.rowCount} rows)`).join('\n\t')
 		);
 		await appDatabase.import(dbToImport, { clearTablesBeforeImport: true });
-		return true
+		return true;
 	} catch (error) {
 		console.error(`function importDatabase: ${error}`);
-		return false
+		return false;
 	}
 }
 
@@ -37,4 +40,4 @@ function progressCallback({ totalRows, completedRows }): boolean {
 	}
 }
 
-export { itemsPerPageOptions, axiosInstance, overwriteDatabase, progressCallback};
+export { itemsPerPageOptions, axiosInstance, overwriteDatabase, progressCallback };

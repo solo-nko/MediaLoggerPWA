@@ -107,29 +107,29 @@ async function updateTV(key: number) {
 		<VCardTitle>Add New TV Series</VCardTitle>
 		<VContainer>
 			<VRow>
-				<VTextField label="Title" v-model="logModel.title"></VTextField>
+				<VTextField v-model="logModel.title" label="Title"></VTextField>
 			</VRow>
 			<VRow>
 				<VCol class="pl-0" cols="3">
-					<VTextField label="Season" v-model="logModel.season" type="number"></VTextField>
+					<VTextField v-model="logModel.season" label="Season" type="number"></VTextField>
 				</VCol>
 				<VCol cols="3">
-					<VTextField label="Episode" v-model="logModel.episode" type="number"></VTextField>
+					<VTextField v-model="logModel.episode" label="Episode" type="number"></VTextField>
 				</VCol>
 				<VCol class="pr-0" cols="6">
-					<VAutocomplete label="Status" :items="tvStatus" v-model="logModel.status"></VAutocomplete>
+					<VAutocomplete v-model="logModel.status" label="Status" :items="tvStatus"></VAutocomplete>
 				</VCol>
 			</VRow>
 			<VRow>
 				<div id="rating-container">
 					<VLabel id="rating-label">Rating</VLabel>
 					<VSlider
+						v-model="logModel.rating"
 						min="1"
 						max="10"
 						step="1"
 						thumb-label
 						show-ticks="always"
-						v-model="logModel.rating"
 					></VSlider>
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
@@ -139,15 +139,15 @@ async function updateTV(key: number) {
 			</VRow>
 			<VRow>
 				<VTextField
+					v-model="logModel.dateModified"
 					label="Date Updated (if applicable)"
 					type="date"
-					v-model="logModel.dateModified"
 				></VTextField>
 			</VRow>
 		</VContainer>
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateTV(props.entry.id) : addTV()">Save</VBtn>
-			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
+			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
 			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>

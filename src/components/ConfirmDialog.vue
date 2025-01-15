@@ -1,6 +1,8 @@
 <script setup lang="ts">
 defineEmits(['confirm', 'cancel']);
-const props = defineProps(['message']);
+const props = defineProps<{
+	message: string
+}>();
 </script>
 
 <template>

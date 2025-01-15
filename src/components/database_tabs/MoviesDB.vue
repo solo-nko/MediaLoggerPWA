@@ -40,24 +40,24 @@ async function deleteEntry() {
 </script>
 
 <template>
-	<VDataTable :headers="movieHeaders" :items="movies" v-model:items-per-page="itemsPerPageChild">
+	<VDataTable v-model:items-per-page="itemsPerPageChild" :headers="movieHeaders" :items="movies">
 		<template v-slot:item.actions="{ item }">
-			<VIcon @click="editEntry(item)" icon="$pencil"></VIcon>
-			<VIcon @click="deleteEntryConfirmation(item)" icon="$trash"></VIcon>
+			<VIcon icon="$pencil" @click="editEntry(item)"></VIcon>
+			<VIcon icon="$trash" @click="deleteEntryConfirmation(item)"></VIcon>
 		</template>
 	</VDataTable>
 	<VDialog id="entry-form" v-model="showEditDialog">
 		<EntryDialogMovies
-			@close-entry="showEditDialog = false"
 			:entry="entryDetails"
 			:edit-entry="true"
+			@close-entry="showEditDialog = false"
 		></EntryDialogMovies>
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">
 		<ConfirmDialog
+			:message="cantBeUndone"
 			@confirm="deleteEntry"
 			@cancel="showDeleteDialog = false"
-			:message="cantBeUndone"
 		></ConfirmDialog>
 	</VDialog>
 </template>

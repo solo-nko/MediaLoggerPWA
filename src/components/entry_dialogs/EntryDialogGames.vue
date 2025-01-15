@@ -107,17 +107,17 @@ async function updateGame(key: number) {
 		<VCardTitle>Add New Game</VCardTitle>
 		<VContainer>
 			<VRow>
-				<VTextField label="Title" v-model="logModel.title"></VTextField>
+				<VTextField v-model="logModel.title" label="Title"></VTextField>
 			</VRow>
 			<VRow>
 				<VCol class="pl-0">
-					<VTextField label="Platform" v-model="logModel.platform"></VTextField>
+					<VTextField v-model="logModel.platform" label="Platform"></VTextField>
 				</VCol>
 				<VCol class="pr-0">
 					<VAutocomplete
+						v-model="logModel.status"
 						label="Status"
 						:items="gameStatus"
-						v-model="logModel.status"
 					></VAutocomplete>
 				</VCol>
 			</VRow>
@@ -125,33 +125,34 @@ async function updateGame(key: number) {
 				<div id="rating-container">
 					<VLabel id="rating-label">Rating</VLabel>
 					<VSlider
+						v-model="logModel.rating"
 						min="1"
 						max="10"
 						step="1"
 						thumb-label
 						show-ticks="always"
-						v-model="logModel.rating"
 					></VSlider>
+					<!--	TODO: decide whether to use this-->
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
 			</VRow>
 			<VRow>
-				<VTextarea label="Progress" v-model="logModel.progress" rows="2" no-resize></VTextarea>
+				<VTextarea v-model="logModel.progress" label="Progress" rows="2" no-resize></VTextarea>
 			</VRow>
 			<VRow class="pb-4">
 				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
 			<VRow>
 				<VTextField
+					v-model="logModel.dateModified"
 					label="Date Updated (if applicable)"
 					type="date"
-					v-model="logModel.dateModified"
 				></VTextField>
 			</VRow>
 		</VContainer>
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateGame(props.entry.id) : addGame()">Save</VBtn>
-			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
+			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
 			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
