@@ -118,28 +118,28 @@ async function updateBook(key: number) {
 
 <template>
 	<VCard id="card">
-		<VCardTitle>Add New Book</VCardTitle>
+		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} Book</VCardTitle>
 		<VContainer>
 			<VRow>
-				<VTextField label="Title" v-model="logModel.title"></VTextField>
+				<VTextField v-model="logModel.title" label="Title"></VTextField>
 			</VRow>
 			<VRow>
 				<VCol class="pl-0" cols="2">
-					<VCheckbox label="Audiobook" v-model="logModel.audiobook"></VCheckbox>
+					<VCheckbox v-model="logModel.audiobook" label="Audiobook"></VCheckbox>
 				</VCol>
 				<VCol cols="7">
 					<VTextField
-						label="Series"
 						v-model="logModel.series"
+						label="Series"
 						@focus="clearNA($event)"
 						@blur="replaceNA($event)"
 					></VTextField>
 				</VCol>
 				<VCol class="pr-0" cols="3">
 					<VAutocomplete
+						v-model="logModel.status"
 						label="Status"
 						:items="bookStatus"
-						v-model="logModel.status"
 					></VAutocomplete>
 				</VCol>
 			</VRow>
@@ -147,33 +147,33 @@ async function updateBook(key: number) {
 				<div id="rating-container">
 					<VLabel id="rating-label">Rating</VLabel>
 					<VSlider
+						v-model="logModel.rating"
 						min="1"
 						max="10"
 						step="1"
 						thumb-label
 						show-ticks="always"
-						v-model="logModel.rating"
 					></VSlider>
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
 			</VRow>
 			<VRow>
-				<VTextarea label="Progress" v-model="logModel.progress" rows="2" no-resize></VTextarea>
+				<VTextarea v-model="logModel.progress" label="Progress" rows="2" no-resize></VTextarea>
 			</VRow>
 			<VRow class="pb-4">
 				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
 			<VRow>
 				<VTextField
+					v-model="logModel.dateModified"
 					label="Date Updated (if applicable)"
 					type="date"
-					v-model="logModel.dateModified"
 				></VTextField>
 			</VRow>
 		</VContainer>
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateBook(props.entry.id) : addBook()">Save</VBtn>
-			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
+			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
 			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>

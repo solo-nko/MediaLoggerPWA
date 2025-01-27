@@ -1,8 +1,7 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
-import './style/style.scss'
-
+import './style/style.scss';
 
 // vuetify
 import 'vuetify/styles';
@@ -22,7 +21,7 @@ import {
 	mdiPencil,
 	mdiDelete,
 	mdiChevronDoubleLeft,
-	mdiChevronDoubleRight,
+	mdiChevronDoubleRight
 } from '@mdi/js';
 
 import { router } from './router.ts';
@@ -40,7 +39,7 @@ const vuetify = createVuetify({
 			pencil: mdiPencil,
 			trash: mdiDelete,
 			chevronLeft: mdiChevronDoubleLeft,
-			chevronRight: mdiChevronDoubleRight,
+			chevronRight: mdiChevronDoubleRight
 		},
 		sets: {
 			mdi
