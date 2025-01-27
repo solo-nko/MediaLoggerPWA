@@ -43,6 +43,7 @@ async function deleteEntry() {
 
 <template>
 	<VDataTable v-model:items-per-page="itemsPerPageChild" :headers="tvHeaders" :items="tvSeries">
+		<!--	eslint-disable vue/valid-v-slot -->
 		<template v-slot:item.actions="{ item }">
 			<VIcon icon="$pencil" @click="editEntry(item)"></VIcon>
 			<VIcon icon="$trash" @click="deleteEntryConfirmation(item)"></VIcon>

@@ -8,7 +8,8 @@ let quill: Quill | null = null;
 const emits = defineEmits(['content-change']);
 
 // this should only ever be a string, not a Delta
-const editorContent = defineModel();
+// TODO: test for issues here
+const editorContent = defineModel<string>();
 
 // Quill can't be called until the DOM finishes rendering, otherwise you'll get an error
 onMounted(() => {
@@ -20,6 +21,7 @@ onMounted(() => {
 	if (editorContent.value && typeof editorContent.value === 'string') {
 		quill.setContents(Log.impressionFromString(editorContent.value));
 	}
+	/* eslint-disable */
 	quill.on('text-change', (delta, oldDelta, source) => {
 		// send changes typed into the editor up to the parent
 		editorContent.value = Log.impressionToString(quill.getContents());

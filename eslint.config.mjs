@@ -20,7 +20,7 @@ export default tsEslint.config(
 			}
 		},
 		rules: {
-			"@typescript-eslint/no-unused-vars": ["warn"],
+			"@typescript-eslint/no-unused-vars": ['off'],
 			"no-unused-vars": ['warn'],
 			"vue/v-slot-style": ["warn", {
 				"named": "longform"
