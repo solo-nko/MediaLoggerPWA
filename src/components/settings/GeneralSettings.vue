@@ -7,7 +7,7 @@ import { settingsStore } from '../../stores/settings.ts';
 	<VContainer>
 		<VRow>
 			<VCol>
-				<VRadioGroup label="Default database screen" v-model="settingsStore.defaultDBScreen">
+				<VRadioGroup v-model="settingsStore.defaultDBScreen" label="Default database screen">
 					<VRadio label="Games" value="game"></VRadio>
 					<VRadio label="TV" value="tv"></VRadio>
 					<VRadio label="Movies" value="movie"></VRadio>
@@ -15,7 +15,7 @@ import { settingsStore } from '../../stores/settings.ts';
 				</VRadioGroup>
 			</VCol>
 			<VCol>
-				<VRadioGroup label="Default log entry screen" v-model="settingsStore.defaultEntryScreen">
+				<VRadioGroup v-model="settingsStore.defaultEntryScreen" label="Default log entry screen">
 					<VRadio label="Games" value="game"></VRadio>
 					<VRadio label="TV" value="tv"></VRadio>
 					<VRadio label="Movies" value="movie"></VRadio>

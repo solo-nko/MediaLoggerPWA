@@ -143,7 +143,7 @@ function editEntry(entryInfo, dialogType = 'Game') {
 										<span>{{ game.title }}</span>
 									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(game, 'Game')" icon="$pencil"></VIcon>
+										<VIcon icon="$pencil" @click="editEntry(game, 'Game')"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -157,7 +157,7 @@ function editEntry(entryInfo, dialogType = 'Game') {
 										<span>{{ game.title }}</span>
 									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(game, 'Game')" icon="$pencil"></VIcon>
+										<VIcon icon="$pencil" @click="editEntry(game, 'Game')"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -178,7 +178,7 @@ function editEntry(entryInfo, dialogType = 'Game') {
 										<span>{{ tv.title }}</span>
 									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(tv, 'TV')" icon="$pencil"></VIcon>
+										<VIcon icon="$pencil" @click="editEntry(tv, 'TV')"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -192,7 +192,7 @@ function editEntry(entryInfo, dialogType = 'Game') {
 										<span>{{ tv.title }}</span>
 									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(tv, 'TV')" icon="$pencil"></VIcon>
+										<VIcon icon="$pencil" @click="editEntry(tv, 'TV')"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -213,7 +213,7 @@ function editEntry(entryInfo, dialogType = 'Game') {
 										<span>{{ book.title }}</span>
 									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(book, 'Book')" icon="$pencil"></VIcon>
+										<VIcon icon="$pencil" @click="editEntry(book, 'Book')"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -227,7 +227,7 @@ function editEntry(entryInfo, dialogType = 'Game') {
 										<span>{{ book.title }}</span>
 									</VCol>
 									<VCol tag="div" cols="auto">
-										<VIcon @click="editEntry(book, 'Book')" icon="$pencil"></VIcon>
+										<VIcon icon="$pencil" @click="editEntry(book, 'Book')"></VIcon>
 									</VCol>
 								</VRow>
 							</VListItem>
@@ -240,9 +240,9 @@ function editEntry(entryInfo, dialogType = 'Game') {
 			<!-- Because there are multiple different types of edit dialogs and only one needs to be rendered at a time, we use a dynamic component -->
 			<Component
 				:is="dialogs[whichDialog]"
-				@close-entry="showEditDialog = false"
 				:entry="entryDetails"
 				:edit-entry="true"
+				@close-entry="showEditDialog = false"
 			></Component>
 		</VDialog>
 	</VContainer>
@@ -267,6 +267,4 @@ function editEntry(entryInfo, dialogType = 'Game') {
 .now-playing-item {
 	flex-wrap: nowrap;
 }
-
-
 </style>

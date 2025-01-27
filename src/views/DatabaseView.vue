@@ -36,5 +36,4 @@ const itemPerPageParent = ref(10);
 	</VTabsWindow>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
