@@ -9,8 +9,8 @@ This is an application being developed to gain a better understanding of progres
 * Progressive app which can be installed for local use with compatible browsers.
   * On PC this means Edge or Chrome.
 * Uses your browser's IndexedDB for data storage, meaning none of your data leaves your machine. It's all stored locally.
-  * In the future, you may be able to opt into cloud synchronization.
-* Supports games and tv series. Support for movies and books is also planned.
+  * Optionally, you may choose to back up your data to an Azure-based cloud database, to keep it conveniently updated across multiple devices.
+* Supports games, TV series, movies, and books.
 * View, edit, and sort through your database.
   * Search is also being considered.
 * Export your database to a small JSON file as a backup. You can later import it back in.
@@ -47,6 +47,8 @@ This project was built with the following major technologies:
 * DexieJs
 * QuillJs
 
+Cloud functionality uses a separately-developed ExpressJS server hosted on Microsoft Azure, with data stored on Azure Cosmos DB.
+
 ## To-Do
 * Create themes
   * Color-code items by status
@@ -64,5 +66,4 @@ This project was built with the following major technologies:
 ## Things to investigate
 
 * ~~Export data to local file, and import data from local file~~
-* Cloud sync (specifically between desktop and mobile)
-  * Considering Firebase, Azure Cosmos DB or Dexie Cloud for this
+* ~~Cloud sync (specifically between desktop and mobile)~~
