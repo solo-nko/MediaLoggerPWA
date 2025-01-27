@@ -10,9 +10,7 @@ import CloudSync from './CloudSync.vue';
 </template>
 
 <style scoped>
-
 #divider {
 	margin: 2rem 0;
 }
-
 </style>

@@ -3,7 +3,6 @@ import { peakImportFile } from 'dexie-export-import';
 import { appDatabase } from '../database/db.ts';
 
 const itemsPerPageOptions = { type: Number, default: 10 };
-// TODO change to production URL
 const serverURL = 'https://medialoggerapiexpress-bra0h0atbybshucr.japanwest-01.azurewebsites.net';
 
 /**

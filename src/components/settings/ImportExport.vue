@@ -37,9 +37,11 @@ async function importDatabase(file: Blob) {
 <template>
 	<div id="container-import-export">
 		<VLabel>Import Database from JSON</VLabel>
-		<p>You can use the Export Database button to download your entire media log as a small JSON file. You can then later
-			import it from this file. To protect the integrity of your media log, it is strongly recommended to avoid directly
-			editing the JSON file.</p>
+		<p>
+			You can use the Export Database button to download your entire media log as a small JSON file.
+			You can then later import it from this file. To protect the integrity of your media log, it is
+			strongly recommended to avoid directly editing the JSON file.
+		</p>
 		<VFileInput
 			v-model="importedFile"
 			label="Place database file here..."
@@ -57,7 +59,7 @@ async function importDatabase(file: Blob) {
 			></ConfirmDialog>
 		</VDialog>
 		<VSnackbar v-model="showDBImportSuccess" timeout="5000"
-		>Database successfully imported!
+			>Database successfully imported!
 			<VBtn @click="showDBImportSuccess = false">Close</VBtn>
 		</VSnackbar>
 		<VSnackbar v-model="showDBImportFailure" timeout="5000">{{ DBImportFailureMsg }}</VSnackbar>

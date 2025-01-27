@@ -17,10 +17,10 @@ const showCloudSyncMsg = ref(false);
 const snackBarTimeout = ref(4000);
 const dateStampLoading = ref(false);
 // returns true if empty, or a string if not six characters
-const syncCodeCharLimit = (value:string) => {
-	if (!value) return true
+const syncCodeCharLimit = (value: string) => {
+	if (!value) return true;
 	return value.length == 6 || 'Sync Code must be 6 characters.';
-}
+};
 
 function triggerSnackBar(message: string): void {
 	cloudSyncMsg.value = message;
@@ -59,20 +59,31 @@ async function SyncToCloud() {
 		} else if (response.status == 201) {
 			updateCodeAndDate(response);
 			triggerSnackBar('Sync Code not found! A new one has been issued.');
+		} else if (response.status == 503) {
+			triggerSnackBar("The server isn't responding right now. Please try again later.");
+		} else {
+			triggerSnackBar('A server error has occurred. Please try again later.');
 		}
-	} else { // else if no sync code present, this will be considered a POST request
+	} else {
+		// else if no sync code present, this will be considered a POST request
 		const response = await axiosInstance.post(`/logs/`, convertedBlob);
 		if (response.status === 201) {
 			updateCodeAndDate(response);
 			triggerSnackBar('Cloud backup successful! A Sync Code has been issued.');
+		} else if (response.status == 503) {
+			triggerSnackBar("The server isn't responding right now. Please try again later.");
 		} else {
-			// TODO if server encounters issue
-			console.log(response);
+			triggerSnackBar('A server error has occurred. Please try again later.');
 		}
+	}
+	// make sure loading status goes away
+	if (dateStampLoading.value) {
+		dateStampLoading.value = false;
 	}
 }
 
 async function SyncFromCloud() {
+	// if sync code is valid
 	if (syncCode.value !== null && syncCode.value.length == 6) {
 		try {
 			const response = await axiosInstance.get(`/logs/${syncCode.value}`);
@@ -99,16 +110,19 @@ async function SyncFromCloud() {
 	<div id="container-cloud-sync">
 		<VLabel class="label-cloud-sync">Cloud Import/Export</VLabel>
 		<p>
-			Synchronise your database to the cloud! Here's how it works: <br> When you back up your database for the first
-			time, it will be issued a unique "sync code" by the server. You can enter this sync code on other devices and
-			press
-			Restore in order to synchronize your database. Please note that databases are deleted from the server after 30
-			days of inactivity. If your database is deleted, you will need to upload it again and receive a new sync code in
-			order to resume using the cloud.
+			Synchronise your database to the cloud! Here's how it works: <br />
+			When you back up your database for the first time, it will be issued a unique "sync code" by
+			the server. You can enter this sync code on other devices and press Restore in order to
+			synchronize your database. Please note that databases are deleted from the server after 30
+			days of inactivity. If your database is deleted, you will need to upload it again and receive
+			a new sync code in order to resume using the cloud.
 		</p>
-		<VTextField v-model="syncCode" label="Sync Code" :rules="[syncCodeCharLimit]" clearable></VTextField>
-
-		<!--	TODO add maxlength attribute later -->
+		<VTextField
+			v-model="syncCode"
+			label="Sync Code"
+			:rules="[syncCodeCharLimit]"
+			clearable
+		></VTextField>
 		<div class="button-row">
 			<VBtn @click="SyncToCloud">Cloud Backup</VBtn>
 			<VBtn @click="SyncFromCloud">Cloud Restore</VBtn>
@@ -122,7 +136,6 @@ async function SyncFromCloud() {
 </template>
 
 <style scoped>
-
 #container-cloud-sync {
 	display: flex;
 	flex-direction: column;
