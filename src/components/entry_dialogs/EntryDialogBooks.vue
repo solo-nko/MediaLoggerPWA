@@ -118,7 +118,7 @@ async function updateBook(key: number) {
 
 <template>
 	<VCard id="card">
-		<VCardTitle>Add New Book</VCardTitle>
+		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} Book</VCardTitle>
 		<VContainer>
 			<VRow>
 				<VTextField v-model="logModel.title" label="Title"></VTextField>

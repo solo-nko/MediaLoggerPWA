@@ -103,7 +103,7 @@ async function updateMovie(key: number) {
 
 <template>
 	<VCard id="card">
-		<VCardTitle>Add New Movie</VCardTitle>
+		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} Movie</VCardTitle>
 		<VContainer>
 			<VRow>
 				<VTextField v-model="logModel.title" label="Title"></VTextField>

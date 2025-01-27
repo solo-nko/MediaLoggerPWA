@@ -104,7 +104,7 @@ async function updateTV(key: number) {
 
 <template>
 	<VCard id="card">
-		<VCardTitle>Add New TV Series</VCardTitle>
+		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} TV Series</VCardTitle>
 		<VContainer>
 			<VRow>
 				<VTextField v-model="logModel.title" label="Title"></VTextField>
