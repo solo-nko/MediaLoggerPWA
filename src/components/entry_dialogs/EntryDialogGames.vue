@@ -5,9 +5,12 @@ import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
 import Log from '../../types/Log.ts';
 import { ref } from 'vue';
+import { noBlankTitle } from '../../config/Messages.ts';
 
 const gameStatus = Object.values(GameStatus);
 const emits = defineEmits(['close-entry', 'save-entry']);
+const quill = ref(null);
+const showSaveWarning = ref(false);
 
 const props = withDefaults(
 	defineProps<{
@@ -44,7 +47,7 @@ function resetFields() {
 	for (const key in logModel.value) {
 		logModel.value[key] = null;
 	}
-	// TODO: reset quill editor contents
+	if (quill.value) quill.value.clearEditor();
 }
 
 function closeEntry(): void {
@@ -55,7 +58,18 @@ function saveEntry(editOrAdd: 'edit' | 'add') {
 	emits('save-entry', editOrAdd);
 }
 
+function fieldsOk(): boolean {
+	if (!logModel.value.title) {
+		showSaveWarning.value = true;
+		return false;
+	} else {
+		showSaveWarning.value = false;
+		return true;
+	}
+}
+
 async function addGame() {
+	if (!fieldsOk()) return;
 	await appDatabase.games.add({
 		title: logModel.value.title,
 		platform: logModel.value.platform,
@@ -72,6 +86,7 @@ async function addGame() {
 }
 
 async function updateGame(key: number) {
+	if (!fieldsOk()) return;
 	await appDatabase.games.update(key, {
 		title: logModel.value.title,
 		platform: logModel.value.platform,
@@ -82,27 +97,27 @@ async function updateGame(key: number) {
 		dateModified: logModel.value.dateModified
 	});
 	saveEntry('edit');
-	// TODO: validate fields before saving, namely for blanks
+
 	closeEntry();
 }
 </script>
 
 <template>
 	<VCard id="card">
-		<VCardTitle>Add New Game</VCardTitle>
+		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} Game</VCardTitle>
 		<VContainer>
 			<VRow>
-				<VTextField label="Title" v-model="logModel.title"></VTextField>
+				<VTextField v-model="logModel.title" label="Title"></VTextField>
 			</VRow>
 			<VRow>
 				<VCol class="pl-0">
-					<VTextField label="Platform" v-model="logModel.platform"></VTextField>
+					<VTextField v-model="logModel.platform" label="Platform"></VTextField>
 				</VCol>
 				<VCol class="pr-0">
 					<VAutocomplete
+						v-model="logModel.status"
 						label="Status"
 						:items="gameStatus"
-						v-model="logModel.status"
 					></VAutocomplete>
 				</VCol>
 			</VRow>
@@ -110,33 +125,35 @@ async function updateGame(key: number) {
 				<div id="rating-container">
 					<VLabel id="rating-label">Rating</VLabel>
 					<VSlider
+						v-model="logModel.rating"
 						min="1"
 						max="10"
 						step="1"
 						thumb-label
 						show-ticks="always"
-						v-model="logModel.rating"
 					></VSlider>
+					<!--	TODO: decide whether to use this-->
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
 			</VRow>
 			<VRow>
-				<VTextarea label="Progress" v-model="logModel.progress" rows="2" no-resize></VTextarea>
+				<VTextarea v-model="logModel.progress" label="Progress" rows="2" no-resize></VTextarea>
 			</VRow>
 			<VRow class="pb-4">
-				<QuillEditor v-model="logModel.impression"></QuillEditor>
+				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
 			<VRow>
 				<VTextField
+					v-model="logModel.dateModified"
 					label="Date Updated (if applicable)"
 					type="date"
-					v-model="logModel.dateModified"
 				></VTextField>
 			</VRow>
 		</VContainer>
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateGame(props.entry.id) : addGame()">Save</VBtn>
-			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
+			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
+			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
 </template>

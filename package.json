@@ -7,10 +7,12 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "lint": "eslint"
   },
   "dependencies": {
     "@vueuse/rxjs": "^11.0.3",
+    "axios": "^1.7.9",
     "dexie": "^4.0.8",
     "dexie-export-import": "^4.1.2",
     "file-saver": "^2.0.5",
@@ -23,15 +25,20 @@
     "vuetify": "^3.7.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.18.0",
     "@mdi/font": "^7.4.47",
+    "@mdi/js": "^7.4.47",
     "@types/file-saver": "^2.0.7",
     "@types/luxon": "^3.4.2",
     "@vite-pwa/assets-generator": "^0.2.4",
     "@vitejs/plugin-vue": "^5.0.4",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-vue": "^9.32.0",
     "prettier": "^3.3.3",
     "sass-embedded": "^1.79.4",
     "sass-loader": "^16.0.2",
     "typescript": "^5.2.2",
+    "typescript-eslint": "^8.20.0",
     "vite": "^5.2.10",
     "vite-plugin-pwa": "^0.20.5",
     "vue-tsc": "^2.0.16",

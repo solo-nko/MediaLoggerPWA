@@ -5,9 +5,12 @@ import QuillEditor from '../QuillEditor.vue';
 import Log from '../../types/Log.ts';
 import { ref } from 'vue';
 import { TVStatus } from '../../types/TVStatus.ts';
+import { noBlankTitle } from '../../config/Messages.ts';
 
 const tvStatus = Object.values(TVStatus);
 const emits = defineEmits(['close-entry', 'save-entry']);
+const quill = ref(null);
+const showSaveWarning = ref(false);
 
 const props = withDefaults(
 	defineProps<{
@@ -44,6 +47,7 @@ function resetFields() {
 	for (const key in logModel.value) {
 		logModel.value[key] = null;
 	}
+	if (quill.value) quill.value.clearEditor();
 }
 
 function closeEntry(): void {
@@ -55,7 +59,18 @@ function saveEntry(editOrAdd: 'edit' | 'add') {
 	else emits('save-entry', editOrAdd);
 }
 
+function fieldsOk(): boolean {
+	if (!logModel.value.title) {
+		showSaveWarning.value = true;
+		return false;
+	} else {
+		showSaveWarning.value = false;
+		return true;
+	}
+}
+
 async function addTV() {
+	if (!fieldsOk()) return;
 	await appDatabase.television.add({
 		title: logModel.value.title,
 		season: logModel.value.season,
@@ -72,6 +87,7 @@ async function addTV() {
 }
 
 async function updateTV(key: number) {
+	if (!fieldsOk()) return;
 	await appDatabase.television.update(key, {
 		title: logModel.value.title,
 		season: logModel.value.season,
@@ -88,50 +104,51 @@ async function updateTV(key: number) {
 
 <template>
 	<VCard id="card">
-		<VCardTitle>Add New TV Series</VCardTitle>
+		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} TV Series</VCardTitle>
 		<VContainer>
 			<VRow>
-				<VTextField label="Title" v-model="logModel.title"></VTextField>
+				<VTextField v-model="logModel.title" label="Title"></VTextField>
 			</VRow>
 			<VRow>
 				<VCol class="pl-0" cols="3">
-					<VTextField label="Season" v-model="logModel.season" type="number"></VTextField>
+					<VTextField v-model="logModel.season" label="Season" type="number"></VTextField>
 				</VCol>
 				<VCol cols="3">
-					<VTextField label="Episode" v-model="logModel.episode" type="number"></VTextField>
+					<VTextField v-model="logModel.episode" label="Episode" type="number"></VTextField>
 				</VCol>
 				<VCol class="pr-0" cols="6">
-					<VAutocomplete label="Status" :items="tvStatus" v-model="logModel.status"></VAutocomplete>
+					<VAutocomplete v-model="logModel.status" label="Status" :items="tvStatus"></VAutocomplete>
 				</VCol>
 			</VRow>
 			<VRow>
 				<div id="rating-container">
 					<VLabel id="rating-label">Rating</VLabel>
 					<VSlider
+						v-model="logModel.rating"
 						min="1"
 						max="10"
 						step="1"
 						thumb-label
 						show-ticks="always"
-						v-model="logModel.rating"
 					></VSlider>
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
 			</VRow>
 			<VRow class="pb-4">
-				<QuillEditor v-model="logModel.impression"></QuillEditor>
+				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
 			<VRow>
 				<VTextField
+					v-model="logModel.dateModified"
 					label="Date Updated (if applicable)"
 					type="date"
-					v-model="logModel.dateModified"
 				></VTextField>
 			</VRow>
 		</VContainer>
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateTV(props.entry.id) : addTV()">Save</VBtn>
-			<VBtn @click="closeEntry()" v-if="closeButton">Close</VBtn>
+			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
+			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
 </template>

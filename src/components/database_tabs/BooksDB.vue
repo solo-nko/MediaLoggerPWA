@@ -7,10 +7,11 @@ import ConfirmDialog from '../ConfirmDialog.vue';
 import EntryDialogBooks from '../entry_dialogs/EntryDialogBooks.vue';
 import BookLog from '../../types/BookLog.ts';
 import { cantBeUndone } from '../../config/Messages.ts';
+import { itemsPerPageOptions } from '../../config/Utils.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const books = useObservable<BookLog[]>(from(liveQuery(() => appDatabase.books.toArray())));
-
+const itemsPerPageChild = defineModel('itemsPerPage', itemsPerPageOptions);
 const bookHeaders = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Series', value: 'series' },
@@ -41,25 +42,25 @@ async function deleteEntry() {
 </script>
 
 <template>
-	<!--	TODO export items per page to external variable so it links with all of them. This is customizable on the screen though so careful-->
-	<VDataTable :headers="bookHeaders" :items="books" items-per-page="10">
+	<VDataTable v-model:items-per-page="itemsPerPageChild" :headers="bookHeaders" :items="books">
+		<!--	eslint-disable vue/valid-v-slot -->
 		<template v-slot:item.actions="{ item }">
-			<VIcon @click="editEntry(item)">mdi-pencil</VIcon>
-			<VIcon @click="deleteEntryConfirmation(item)">mdi-delete</VIcon>
+			<VIcon icon="pencil" @click="editEntry(item)"></VIcon>
+			<VIcon icon="$trash" @click="deleteEntryConfirmation(item)"></VIcon>
 		</template>
 	</VDataTable>
 	<VDialog id="entry-form" v-model="showEditDialog">
 		<EntryDialogBooks
-			@close-entry="showEditDialog = false"
 			:entry="entryDetails"
 			:edit-entry="true"
+			@close-entry="showEditDialog = false"
 		></EntryDialogBooks>
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">
 		<ConfirmDialog
+			:message="cantBeUndone"
 			@confirm="deleteEntry"
 			@cancel="showDeleteDialog = false"
-			:message="cantBeUndone"
 		></ConfirmDialog>
 	</VDialog>
 </template>

@@ -7,10 +7,11 @@ import ConfirmDialog from '../ConfirmDialog.vue';
 import TVLog from '../../types/TVLog.ts';
 import EntryDialogTV from '../entry_dialogs/EntryDialogTV.vue';
 import { cantBeUndone } from '../../config/Messages.ts';
+import { itemsPerPageOptions } from '../../config/Utils.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const tvSeries = useObservable<TVLog[]>(from(liveQuery(() => appDatabase.television.toArray())));
-
+const itemsPerPageChild = defineModel('itemsPerPage', itemsPerPageOptions);
 const tvHeaders = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Episode', value: 'episode' },
@@ -41,24 +42,25 @@ async function deleteEntry() {
 </script>
 
 <template>
-	<VDataTable :headers="tvHeaders" :items="tvSeries" items-per-page="10">
+	<VDataTable v-model:items-per-page="itemsPerPageChild" :headers="tvHeaders" :items="tvSeries">
+		<!--	eslint-disable vue/valid-v-slot -->
 		<template v-slot:item.actions="{ item }">
-			<VIcon @click="editEntry(item)">mdi-pencil</VIcon>
-			<VIcon @click="deleteEntryConfirmation(item)">mdi-delete</VIcon>
+			<VIcon icon="$pencil" @click="editEntry(item)"></VIcon>
+			<VIcon icon="$trash" @click="deleteEntryConfirmation(item)"></VIcon>
 		</template>
 	</VDataTable>
 	<VDialog id="entry-form" v-model="showEditDialog">
 		<EntryDialogTV
-			@close-entry="showEditDialog = false"
 			:entry="entryDetails"
 			:edit-entry="true"
+			@close-entry="showEditDialog = false"
 		></EntryDialogTV>
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">
 		<ConfirmDialog
-			@confirm="deleteEntry"
-			@cancel="showDeleteDialog = false"
 			:message="cantBeUndone"
+			@cancel="showDeleteDialog = false"
+			@confirm="deleteEntry"
 		></ConfirmDialog>
 	</VDialog>
 </template>
