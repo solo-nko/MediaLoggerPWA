@@ -4,12 +4,19 @@ import { appDatabase } from '../database/db.ts';
 
 const itemsPerPageOptions = { type: Number, default: 10 };
 // TODO change to production URL
-const serverURL = 'http://localhost:3050';
+const serverURL = 'https://medialoggerapiexpress-bra0h0atbybshucr.japanwest-01.azurewebsites.net';
 
+/**
+ * axios object with the base URL preconfigured
+ */
 const axiosInstance = axios.create({
 	baseURL: serverURL
 });
 
+/**
+ * Receives a media log database as a blob parameter and replaces the current one in the browser's IndexedDB with it.
+ * @param dbToImport Incoming media log database
+ */
 async function overwriteDatabase(dbToImport: Blob) {
 	try {
 		const importMetadata = await peakImportFile(dbToImport);
@@ -31,11 +38,17 @@ async function overwriteDatabase(dbToImport: Blob) {
 	}
 }
 
+/**
+ * Logs database write progress
+ * @param totalRows
+ * @param completedRows
+ */
 function progressCallback({ totalRows, completedRows }): boolean {
 	try {
 		console.log(`Progress: ${completedRows} / ${totalRows} rows completed`);
 		return true;
 	} catch (error) {
+		console.log(error);
 		return false;
 	}
 }
