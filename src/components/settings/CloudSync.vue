@@ -16,6 +16,8 @@ const cloudSyncMsg = ref('');
 const showCloudSyncMsg = ref(false);
 const snackBarTimeout = ref(4000);
 const dateStampLoading = ref(false);
+const loadingOperation = ref(false);
+
 // returns true if empty, or a string if not six characters
 const syncCodeCharLimit = (value: string) => {
 	if (!value) return true;
@@ -25,10 +27,12 @@ const syncCodeCharLimit = (value: string) => {
 function triggerSnackBar(message: string): void {
 	cloudSyncMsg.value = message;
 	showCloudSyncMsg.value = true;
+	loadingOperation.value = false;
 }
 
 async function SyncToCloud() {
 	dateStampLoading.value = true;
+	loadingOperation.value = true;
 	// export media log as blob
 	const exportBlob = await appDatabase.export({ prettyJson: true, progressCallback });
 	// create JSON from blob, so the server can parse it correctly
@@ -83,6 +87,7 @@ async function SyncToCloud() {
 }
 
 async function SyncFromCloud() {
+	loadingOperation.value = true;
 	// if sync code is valid
 	if (syncCode.value !== null && syncCode.value.length == 6) {
 		try {
@@ -111,21 +116,27 @@ async function SyncFromCloud() {
 		<VLabel class="label-cloud-sync">Cloud Import/Export</VLabel>
 		<p>
 			Synchronise your media log to the cloud! Here's how it works: <br />
-			When you back up your log for the first time, it will be issued a unique "Sync Code" by
-			the server. You can enter this Sync Code on other devices and press Restore in order to
-			download your media log. Please note that media logs are deleted from the server after 30
-			days of inactivity. If your log is deleted, you will need to upload it again (with the Cloud Backup button) and receive
-			a new Sync Code in order to resume using the cloud.
+			When you back up your log for the first time, it will be issued a unique "Sync Code" by the
+			server. You can enter this Sync Code on other devices and press Restore in order to download
+			your media log. Please note that media logs are deleted from the server after 30 days of
+			inactivity. If your log is deleted, you will need to upload it again (with the Cloud Backup
+			button) and receive a new Sync Code in order to resume using the cloud.
 		</p>
 		<VTextField
 			v-model="syncCode"
 			label="Sync Code"
 			:rules="[syncCodeCharLimit]"
 			clearable
+			variant="filled"
 		></VTextField>
 		<div class="button-row">
-			<VBtn @click="SyncToCloud">Cloud Backup</VBtn>
-			<VBtn @click="SyncFromCloud">Cloud Restore</VBtn>
+			<!--			TODO come back to loading button -->
+			<VBtn :disabled="loadingOperation" :loading="loadingOperation" @click="SyncToCloud"
+				>Cloud Backup</VBtn
+			>
+			<VBtn :disabled="loadingOperation" :loading="loadingOperation" @click="SyncFromCloud"
+				>Cloud Restore</VBtn
+			>
 		</div>
 		<VSkeletonLoader id="backup-stamp" type="text" :loading="dateStampLoading">
 			<VLabel>Last Backup: {{ lastSyncDateFormatted }}</VLabel>
