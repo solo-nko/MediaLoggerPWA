@@ -130,7 +130,6 @@ async function SyncFromCloud() {
 			variant="filled"
 		></VTextField>
 		<div class="button-row">
-			<!--			TODO come back to loading button -->
 			<VBtn :disabled="loadingOperation" :loading="loadingOperation" @click="SyncToCloud"
 				>Cloud Backup</VBtn
 			>

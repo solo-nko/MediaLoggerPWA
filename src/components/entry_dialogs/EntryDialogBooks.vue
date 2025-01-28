@@ -71,7 +71,6 @@ function replaceNA(event: Event) {
 	if (inputElement.value == '') logModel.value.series = 'N/A';
 }
 
-// TODO consider making this shared instead of repeating it everywhere. same for the add and update functions maybe
 function fieldsOk(): boolean {
 	if (!logModel.value.title) {
 		showSaveWarning.value = true;
@@ -80,6 +79,10 @@ function fieldsOk(): boolean {
 		showSaveWarning.value = false;
 		return true;
 	}
+}
+
+function setToToday() {
+	logModel.value.dateModified = DateTime.now().toISODate();
 }
 
 async function addBook() {
@@ -164,12 +167,13 @@ async function updateBook(key: number) {
 			<VRow class="pb-4">
 				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
-			<VRow>
+			<VRow align="center">
 				<VTextField
 					v-model="logModel.dateModified"
 					label="Date Updated (if applicable)"
 					type="date"
 				></VTextField>
+				<VBtn class="today-btn" flat @click="setToToday">Today</VBtn>
 			</VRow>
 		</VContainer>
 		<VCardActions>

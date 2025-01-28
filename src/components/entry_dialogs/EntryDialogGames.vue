@@ -69,6 +69,10 @@ function fieldsOk(): boolean {
 	}
 }
 
+function setToToday() {
+	logModel.value.dateModified = DateTime.now().toISODate();
+}
+
 async function addGame() {
 	if (!fieldsOk()) return;
 	await appDatabase.games.add({
@@ -143,12 +147,13 @@ async function updateGame(key: number) {
 			<VRow class="pb-4">
 				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
-			<VRow>
+			<VRow align="center">
 				<VTextField
 					v-model="logModel.dateModified"
 					label="Date Updated (if applicable)"
 					type="date"
 				></VTextField>
+				<VBtn class="today-btn" flat @click="setToToday">Today</VBtn>
 			</VRow>
 		</VContainer>
 		<VCardActions>
