@@ -110,12 +110,12 @@ async function SyncFromCloud() {
 	<div id="container-cloud-sync">
 		<VLabel class="label-cloud-sync">Cloud Import/Export</VLabel>
 		<p>
-			Synchronise your database to the cloud! Here's how it works: <br />
-			When you back up your database for the first time, it will be issued a unique "sync code" by
-			the server. You can enter this sync code on other devices and press Restore in order to
-			synchronize your database. Please note that databases are deleted from the server after 30
-			days of inactivity. If your database is deleted, you will need to upload it again and receive
-			a new sync code in order to resume using the cloud.
+			Synchronise your media log to the cloud! Here's how it works: <br />
+			When you back up your log for the first time, it will be issued a unique "Sync Code" by
+			the server. You can enter this Sync Code on other devices and press Restore in order to
+			download your media log. Please note that media logs are deleted from the server after 30
+			days of inactivity. If your log is deleted, you will need to upload it again (with the Cloud Backup button) and receive
+			a new Sync Code in order to resume using the cloud.
 		</p>
 		<VTextField
 			v-model="syncCode"

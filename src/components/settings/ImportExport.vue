@@ -36,9 +36,9 @@ async function importDatabase(file: Blob) {
 
 <template>
 	<div id="container-import-export">
-		<VLabel>Import Database from JSON</VLabel>
+		<VLabel>Import Media Log from JSON</VLabel>
 		<p>
-			You can use the Export Database button to download your entire media log as a small JSON file.
+			You can use the Export Media Log button to download your entire media log as a small JSON file.
 			You can then later import it from this file. To protect the integrity of your media log, it is
 			strongly recommended to avoid directly editing the JSON file.
 		</p>
@@ -48,8 +48,8 @@ async function importDatabase(file: Blob) {
 			accept=".json"
 		></VFileInput>
 		<div class="button-row">
-			<VBtn @click="exportDatabase">Export database to file</VBtn>
-			<VBtn @click="showDBImportConfirm = true">Import database from file</VBtn>
+			<VBtn @click="exportDatabase">Export Media Log to file</VBtn>
+			<VBtn @click="showDBImportConfirm = true">Import Media Log from file</VBtn>
 		</div>
 		<VDialog v-model="showDBImportConfirm">
 			<ConfirmDialog
