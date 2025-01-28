@@ -4,9 +4,9 @@ import { useObservable, from } from '@vueuse/rxjs';
 import { appDatabase } from '../../database/db.ts';
 import { ref } from 'vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
-import TVLog from '../../types/TVLog.ts';
+import TVLog from '../../database/models/TVLog.ts';
 import EntryDialogTV from '../entry_dialogs/EntryDialogTV.vue';
-import { cantBeUndone } from '../../config/Messages.ts';
+import { Messages } from '../../config/Messages.ts';
 import { itemsPerPageOptions } from '../../config/Utils.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
@@ -58,7 +58,7 @@ async function deleteEntry() {
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">
 		<ConfirmDialog
-			:message="cantBeUndone"
+			:message="Messages.cantBeUndone"
 			@cancel="showDeleteDialog = false"
 			@confirm="deleteEntry"
 		></ConfirmDialog>

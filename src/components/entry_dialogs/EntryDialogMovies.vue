@@ -2,9 +2,10 @@
 import { appDatabase } from '../../database/db.ts';
 import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
-import Log from '../../types/Log.ts';
+import Log from '../../database/models/Log.ts';
 import { ref } from 'vue';
-import { noBlankTitle } from '../../config/Messages.ts';
+import { Messages } from '../../config/Messages.ts';
+import IMovieLog from '../../types/IMovieLog.ts';
 
 const emits = defineEmits(['close-entry', 'save-entry']);
 const quill = ref(null);
@@ -29,7 +30,7 @@ const props = withDefaults(
 	}
 );
 
-const logModel = ref({
+const logModel = ref<IMovieLog>({
 	title: props.entry.title,
 	series: props.entry.series,
 	rating: props.entry.rating,
@@ -144,7 +145,7 @@ async function updateMovie(key: number) {
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateMovie(props.entry.id) : addMovie()">Save</VBtn>
 			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
-			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
+			<div v-show="showSaveWarning" class="save-warning">{{ Messages.noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
 </template>

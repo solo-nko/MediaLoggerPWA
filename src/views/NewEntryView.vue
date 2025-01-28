@@ -4,7 +4,7 @@ import EntryDialogTV from '../components/entry_dialogs/EntryDialogTV.vue';
 import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
 import EntryDialogMovies from '../components/entry_dialogs/EntryDialogMovies.vue';
 import { computed, ref } from 'vue';
-import { entryAddSuccess, entryEditSuccess } from '../config/Messages.ts';
+import { Messages } from '../config/Messages.ts';
 import { settingsStore } from '../stores/settings.ts';
 
 // for use with dynamic component solution
@@ -25,8 +25,8 @@ function configureSaveMessage(which) {
 }
 
 const saveMessage = computed(() => {
-	if (addOrEdit.value === 'add') return entryAddSuccess;
-	else return entryEditSuccess;
+	if (addOrEdit.value === 'add') return Messages.entryAddSuccess;
+	return Messages.entryEditSuccess;
 });
 </script>
 

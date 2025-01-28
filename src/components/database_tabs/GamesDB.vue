@@ -5,8 +5,8 @@ import { appDatabase } from '../../database/db.ts';
 import { ref } from 'vue';
 import EntryDialogGames from '../entry_dialogs/EntryDialogGames.vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
-import GameLog from '../../types/GameLog.ts';
-import { cantBeUndone } from '../../config/Messages.ts';
+import GameLog from '../../database/models/GameLog.ts';
+import { Messages } from '../../config/Messages.ts';
 import { itemsPerPageOptions } from '../../config/Utils.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
@@ -58,7 +58,7 @@ async function deleteEntry() {
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">
 		<ConfirmDialog
-			:message="cantBeUndone"
+			:message="Messages.cantBeUndone"
 			@confirm="deleteEntry"
 			@cancel="showDeleteDialog = false"
 		></ConfirmDialog>

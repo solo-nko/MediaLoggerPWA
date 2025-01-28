@@ -2,7 +2,7 @@
 import { onMounted } from 'vue';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
-import Log from '../types/Log.ts';
+import Log from '../database/models/Log.ts';
 // TODO set available text format tools
 let quill: Quill | null = null;
 const emits = defineEmits(['content-change']);

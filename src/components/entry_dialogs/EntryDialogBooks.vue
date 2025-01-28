@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { appDatabase } from '../../database/db.ts';
-import { BookStatus } from '../../types/BookStatus.ts';
+import { BookStatus } from '../../database/models/BookStatus.ts';
 import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
-import Log from '../../types/Log.ts';
+import Log from '../../database/models/Log.ts';
 import { ref } from 'vue';
-import { noBlankTitle } from '../../config/Messages.ts';
+import { Messages } from '../../config/Messages.ts';
+import IBookLog from '../../types/IBookLog.ts';
 
 const bookStatus = Object.values(BookStatus);
 const emits = defineEmits(['close-entry', 'save-entry']);
@@ -34,7 +35,7 @@ const props = withDefaults(
 	}
 );
 
-const logModel = ref({
+const logModel = ref<IBookLog>({
 	title: props.entry.title,
 	audiobook: props.entry.audiobook,
 	status: props.entry.status,
@@ -174,7 +175,7 @@ async function updateBook(key: number) {
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateBook(props.entry.id) : addBook()">Save</VBtn>
 			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
-			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
+			<div v-show="showSaveWarning" class="save-warning">{{ Messages.noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
 </template>

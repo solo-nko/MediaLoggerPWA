@@ -5,9 +5,9 @@ import { appDatabase } from '../../database/db.ts';
 import { ref } from 'vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import EntryDialogBooks from '../entry_dialogs/EntryDialogBooks.vue';
-import BookLog from '../../types/BookLog.ts';
-import { cantBeUndone } from '../../config/Messages.ts';
+import BookLog from '../../database/models/BookLog.ts';
 import { itemsPerPageOptions } from '../../config/Utils.ts';
+import { Messages } from '../../config/Messages.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const books = useObservable<BookLog[]>(from(liveQuery(() => appDatabase.books.toArray())));
@@ -58,7 +58,7 @@ async function deleteEntry() {
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">
 		<ConfirmDialog
-			:message="cantBeUndone"
+			:message="Messages.cantBeUndone"
 			@confirm="deleteEntry"
 			@cancel="showDeleteDialog = false"
 		></ConfirmDialog>

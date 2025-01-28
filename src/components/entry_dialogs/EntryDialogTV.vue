@@ -2,10 +2,11 @@
 import { appDatabase } from '../../database/db.ts';
 import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
-import Log from '../../types/Log.ts';
+import Log from '../../database/models/Log.ts';
 import { ref } from 'vue';
-import { TVStatus } from '../../types/TVStatus.ts';
-import { noBlankTitle } from '../../config/Messages.ts';
+import { TVStatus } from '../../database/models/TVStatus.ts';
+import { Messages } from '../../config/Messages.ts';
+import ITVLog from '../../types/ITVLog.ts';
 
 const tvStatus = Object.values(TVStatus);
 const emits = defineEmits(['close-entry', 'save-entry']);
@@ -33,7 +34,7 @@ const props = withDefaults(
 	}
 );
 
-const logModel = ref({
+const logModel = ref<ITVLog>({
 	title: props.entry.title,
 	season: props.entry.season,
 	episode: props.entry.episode,
@@ -111,10 +112,10 @@ async function updateTV(key: number) {
 			</VRow>
 			<VRow>
 				<VCol class="pl-0" cols="3">
-					<VTextField v-model="logModel.season" label="Season" type="number"></VTextField>
+					<VTextField v-model.number="logModel.season" label="Season" type="number"></VTextField>
 				</VCol>
 				<VCol cols="3">
-					<VTextField v-model="logModel.episode" label="Episode" type="number"></VTextField>
+					<VTextField v-model.number="logModel.episode" label="Episode" type="number"></VTextField>
 				</VCol>
 				<VCol class="pr-0" cols="6">
 					<VAutocomplete v-model="logModel.status" label="Status" :items="tvStatus"></VAutocomplete>
@@ -148,7 +149,7 @@ async function updateTV(key: number) {
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateTV(props.entry.id) : addTV()">Save</VBtn>
 			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
-			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
+			<div v-show="showSaveWarning" class="save-warning">{{ Messages.noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
 </template>
