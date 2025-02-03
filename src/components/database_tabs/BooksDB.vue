@@ -6,31 +6,37 @@ import { ref } from 'vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import EntryDialogBooks from '../entry_dialogs/EntryDialogBooks.vue';
 import BookLog from '../../database/models/BookLog.ts';
-import { itemsPerPageOptions } from '../../config/Utils.ts';
 import { Messages } from '../../config/Messages.ts';
+import {
+	itemsPerPageOptions,
+	sortHeaders,
+	sortLogByCreated,
+	sortLogByUpdated
+} from '../../config/Utils.ts';
+import IHeaderItem from '../../types/IHeaderItem.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const books = useObservable<BookLog[]>(from(liveQuery(() => appDatabase.books.toArray())));
 const itemsPerPageChild = defineModel('itemsPerPage', itemsPerPageOptions);
-const bookHeaders = [
+const bookHeaders: IHeaderItem[] = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Series', value: 'series' },
 	{ title: 'Status', value: 'status', key: 'status' },
-	{ title: 'Date Created', value: 'dateCreated' },
-	{ title: 'Date Updated', value: 'dateModified' },
+	{ title: 'Date Created', value: 'dateCreated', sortable: true, sortRaw: sortLogByCreated },
+	{ title: 'Date Updated', value: 'dateModified', sortable: true, sortRaw: sortLogByUpdated },
 	{ title: 'Actions', value: 'actions', key: 'actions', sortable: false }
 ];
 
 const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
-const entryDetails = ref();
+const entryDetails = ref<BookLog>();
 
-function editEntry(entryInfo) {
+function editEntry(entryInfo: BookLog) {
 	showEditDialog.value = true;
 	entryDetails.value = entryInfo;
 }
 
-function deleteEntryConfirmation(entryInfo) {
+function deleteEntryConfirmation(entryInfo: BookLog) {
 	showDeleteDialog.value = true;
 	entryDetails.value = entryInfo;
 }
@@ -42,7 +48,12 @@ async function deleteEntry() {
 </script>
 
 <template>
-	<VDataTable v-model:items-per-page="itemsPerPageChild" :headers="bookHeaders" :items="books">
+	<VDataTable
+		v-model:items-per-page="itemsPerPageChild"
+		:headers="bookHeaders"
+		:items="books"
+		:sort-by="sortHeaders"
+	>
 		<!--	eslint-disable vue/valid-v-slot -->
 		<template v-slot:item.actions="{ item }">
 			<VIcon icon="$pencil" @click="editEntry(item)"></VIcon>

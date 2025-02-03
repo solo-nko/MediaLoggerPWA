@@ -7,30 +7,36 @@ import EntryDialogGames from '../entry_dialogs/EntryDialogGames.vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import GameLog from '../../database/models/GameLog.ts';
 import { Messages } from '../../config/Messages.ts';
-import { itemsPerPageOptions } from '../../config/Utils.ts';
+import {
+	itemsPerPageOptions,
+	sortHeaders,
+	sortLogByCreated,
+	sortLogByUpdated
+} from '../../config/Utils.ts';
+import IHeaderItem from '../../types/IHeaderItem.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const games = useObservable<GameLog[]>(from(liveQuery(() => appDatabase.games.toArray())));
 const itemsPerPageChild = defineModel('itemsPerPage', itemsPerPageOptions);
-const gameHeaders = [
+const gameHeaders: IHeaderItem[] = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Platform', value: 'platform' },
 	{ title: 'Status', value: 'status', key: 'status' },
-	{ title: 'Date Created', value: 'dateCreated' },
-	{ title: 'Date Updated', value: 'dateModified' },
+	{ title: 'Date Created', value: 'dateCreated', sortable: true, sortRaw: sortLogByCreated },
+	{ title: 'Date Updated', value: 'dateModified', sortable: true, sortRaw: sortLogByUpdated },
 	{ title: 'Actions', value: 'actions', key: 'actions', sortable: false }
 ];
 
 const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
-const entryDetails = ref();
+const entryDetails = ref<GameLog>();
 
-function editEntry(entryInfo) {
+function editEntry(entryInfo: GameLog) {
 	showEditDialog.value = true;
 	entryDetails.value = entryInfo;
 }
 
-function deleteEntryConfirmation(entryInfo) {
+function deleteEntryConfirmation(entryInfo: GameLog) {
 	showDeleteDialog.value = true;
 	entryDetails.value = entryInfo;
 }
@@ -42,7 +48,12 @@ async function deleteEntry() {
 </script>
 
 <template>
-	<VDataTable v-model:items-per-page="itemsPerPageChild" :headers="gameHeaders" :items="games">
+	<VDataTable
+		v-model:items-per-page="itemsPerPageChild"
+		:headers="gameHeaders"
+		:items="games"
+		:sort-by="sortHeaders"
+	>
 		<!--	eslint-disable vue/valid-v-slot -->
 		<template v-slot:item.actions="{ item }">
 			<VIcon icon="$pencil" @click="editEntry(item)"></VIcon>

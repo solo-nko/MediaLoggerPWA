@@ -102,7 +102,6 @@ async function updateGame(key: number) {
 		dateModified: logModel.value.dateModified
 	});
 	saveEntry('edit');
-
 	closeEntry();
 }
 </script>
@@ -128,7 +127,7 @@ async function updateGame(key: number) {
 			</VRow>
 			<VRow>
 				<div id="rating-container">
-					<VLabel id="rating-label">Rating</VLabel>
+					<VLabel id="rating-label">Rating ({{ logModel.rating ? logModel.rating : 1 }}/10)</VLabel>
 					<VSlider
 						v-model="logModel.rating"
 						min="1"
@@ -136,6 +135,7 @@ async function updateGame(key: number) {
 						step="1"
 						thumb-label
 						show-ticks="always"
+						color="primary"
 					></VSlider>
 					<!--	TODO: decide whether to use this-->
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->

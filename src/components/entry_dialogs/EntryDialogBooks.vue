@@ -149,7 +149,7 @@ async function updateBook(key: number) {
 			</VRow>
 			<VRow>
 				<div id="rating-container">
-					<VLabel id="rating-label">Rating</VLabel>
+					<VLabel id="rating-label">Rating ({{ logModel.rating ? logModel.rating : 1 }}/10)</VLabel>
 					<VSlider
 						v-model="logModel.rating"
 						min="1"
@@ -157,6 +157,7 @@ async function updateBook(key: number) {
 						step="1"
 						thumb-label
 						show-ticks="always"
+						color="primary"
 					></VSlider>
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
