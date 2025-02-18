@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { appDatabase } from '../../database/db.ts';
-import { BookStatus } from '../../types/BookStatus.ts';
+import { BookStatus } from '../../database/models/BookStatus.ts';
 import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
-import Log from '../../types/Log.ts';
+import Log from '../../database/models/Log.ts';
 import { ref } from 'vue';
-import { noBlankTitle } from '../../config/Messages.ts';
+import { Messages } from '../../config/Messages.ts';
+import IBookLog from '../../types/IBookLog.ts';
 
 const bookStatus = Object.values(BookStatus);
 const emits = defineEmits(['close-entry', 'save-entry']);
@@ -34,7 +35,7 @@ const props = withDefaults(
 	}
 );
 
-const logModel = ref({
+const logModel = ref<IBookLog>({
 	title: props.entry.title,
 	audiobook: props.entry.audiobook,
 	status: props.entry.status,
@@ -70,7 +71,6 @@ function replaceNA(event: Event) {
 	if (inputElement.value == '') logModel.value.series = 'N/A';
 }
 
-// TODO consider making this shared instead of repeating it everywhere. same for the add and update functions maybe
 function fieldsOk(): boolean {
 	if (!logModel.value.title) {
 		showSaveWarning.value = true;
@@ -79,6 +79,10 @@ function fieldsOk(): boolean {
 		showSaveWarning.value = false;
 		return true;
 	}
+}
+
+function setToToday() {
+	logModel.value.dateModified = DateTime.now().toISODate();
 }
 
 async function addBook() {
@@ -145,7 +149,7 @@ async function updateBook(key: number) {
 			</VRow>
 			<VRow>
 				<div id="rating-container">
-					<VLabel id="rating-label">Rating</VLabel>
+					<VLabel id="rating-label">Rating ({{ logModel.rating ? logModel.rating : 1 }}/10)</VLabel>
 					<VSlider
 						v-model="logModel.rating"
 						min="1"
@@ -153,6 +157,7 @@ async function updateBook(key: number) {
 						step="1"
 						thumb-label
 						show-ticks="always"
+						color="primary"
 					></VSlider>
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
@@ -163,18 +168,19 @@ async function updateBook(key: number) {
 			<VRow class="pb-4">
 				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
-			<VRow>
+			<VRow align="center">
 				<VTextField
 					v-model="logModel.dateModified"
 					label="Date Updated (if applicable)"
 					type="date"
 				></VTextField>
+				<VBtn class="today-btn" flat @click="setToToday">Today</VBtn>
 			</VRow>
 		</VContainer>
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateBook(props.entry.id) : addBook()">Save</VBtn>
 			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
-			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
+			<div v-show="showSaveWarning" class="save-warning">{{ Messages.noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
 </template>

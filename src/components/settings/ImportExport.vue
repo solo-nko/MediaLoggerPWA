@@ -14,33 +14,39 @@ const DBImportFailureMsg = ref('');
 const showDBImportConfirm = ref(false);
 const importWarningMessage =
 	'Importing a new database will clear the existing one. This cannot be undone!';
+const loadingOperation = ref(false);
 
 async function exportDatabase() {
+	loadingOperation.value = true;
 	const exportBlob = await appDatabase.export({ prettyJson: true, progressCallback });
 	const timeString = DateTime.now().toFormat('yyyyLLdd_HHmmss');
 	const fileName = `database${timeString}.json`;
 	saveAs(exportBlob, fileName);
+	loadingOperation.value = false;
 }
 
 async function importDatabase(file: Blob) {
+	loadingOperation.value = true;
 	showDBImportConfirm.value = false;
 	if (!file) {
 		DBImportFailureMsg.value = 'Import failed! No file was provided.';
 		showDBImportFailure.value = true;
+		loadingOperation.value = false;
 		return;
 	}
 	showDBImportSuccess.value = await overwriteDatabase(file);
 	importedFile.value = undefined;
+	loadingOperation.value = false;
 }
 </script>
 
 <template>
 	<div id="container-import-export">
-		<VLabel>Import Database from JSON</VLabel>
+		<VLabel>Import Media Log from JSON</VLabel>
 		<p>
-			You can use the Export Database button to download your entire media log as a small JSON file.
-			You can then later import it from this file. To protect the integrity of your media log, it is
-			strongly recommended to avoid directly editing the JSON file.
+			You can use the Export Media Log button to download your entire media log as a small JSON
+			file. You can then later import it from this file. To protect the integrity of your media log,
+			it is strongly recommended to avoid directly editing the JSON file.
 		</p>
 		<VFileInput
 			v-model="importedFile"
@@ -48,8 +54,15 @@ async function importDatabase(file: Blob) {
 			accept=".json"
 		></VFileInput>
 		<div class="button-row">
-			<VBtn @click="exportDatabase">Export database to file</VBtn>
-			<VBtn @click="showDBImportConfirm = true">Import database from file</VBtn>
+			<VBtn :loading="loadingOperation" :disabled="loadingOperation" @click="exportDatabase"
+				>Export Media Log to file</VBtn
+			>
+			<VBtn
+				:loading="loadingOperation"
+				:disabled="loadingOperation"
+				@click="showDBImportConfirm = true"
+				>Import Media Log from file</VBtn
+			>
 		</div>
 		<VDialog v-model="showDBImportConfirm">
 			<ConfirmDialog

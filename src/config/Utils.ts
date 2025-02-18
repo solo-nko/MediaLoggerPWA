@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { peakImportFile } from 'dexie-export-import';
 import { appDatabase } from '../database/db.ts';
+import Log from '../database/models/Log.ts';
+import { ref } from 'vue';
+import ISortItem from '../types/ISortItem.ts';
 
 const itemsPerPageOptions = { type: Number, default: 10 };
 const serverURL = 'https://medialoggerapiexpress-bra0h0atbybshucr.japanwest-01.azurewebsites.net';
@@ -52,4 +55,27 @@ function progressCallback({ totalRows, completedRows }): boolean {
 	}
 }
 
-export { itemsPerPageOptions, axiosInstance, overwriteDatabase, progressCallback };
+const sortLogByUpdated = (a: Log, b: Log) => {
+	return (
+		Log.dateFromString(<string>a.dateModified).toMillis() -
+		Log.dateFromString(<string>b.dateModified).toMillis()
+	);
+};
+const sortLogByCreated = (a: Log, b: Log) => {
+	return (
+		Log.dateFromString(<string>a.dateCreated).toMillis() -
+		Log.dateFromString(<string>b.dateCreated).toMillis()
+	);
+};
+
+const sortHeaders = ref<ISortItem[]>([{ key: 'dateModified', order: 'desc' }]);
+
+export {
+	itemsPerPageOptions,
+	axiosInstance,
+	overwriteDatabase,
+	progressCallback,
+	sortLogByCreated,
+	sortLogByUpdated,
+	sortHeaders
+};

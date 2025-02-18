@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import DatabaseSchema from '../database/DatabaseSchema.ts';
+import DatabaseSchema from '../DatabaseSchema.ts';
 import { Entity } from 'dexie';
 import { Delta } from 'quill/core';
 
@@ -26,5 +26,25 @@ export default class Log extends Entity<DatabaseSchema> {
 
 	static impressionFromString(impressionString: string) {
 		return new Delta(JSON.parse(impressionString));
+	}
+
+	static sortDate(
+		inputArray: Log[],
+		sortHeader: 'dateCreated' | 'dateModified' = 'dateModified',
+		descending = true
+	) {
+		const workArray = [...inputArray];
+		const isStringDate = workArray.every((logItem) => {
+			return typeof logItem[sortHeader] === 'string';
+		});
+		workArray.sort((a, b) => {
+			if (isStringDate) {
+				const aAsDate = this.dateFromString(<string>a[sortHeader]);
+				const bAsDate = this.dateFromString(<string>b[sortHeader]);
+				if (descending) return bAsDate.toMillis() - aAsDate.toMillis();
+				return aAsDate.toMillis() - bAsDate.toMillis();
+			}
+		});
+		return workArray;
 	}
 }

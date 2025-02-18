@@ -3,10 +3,10 @@ import { computed, ref } from 'vue';
 import EntryDialogGames from '../components/entry_dialogs/EntryDialogGames.vue';
 import { appDatabase } from '../database/db.ts';
 import { from, useObservable } from '@vueuse/rxjs';
-import GameLog from '../types/GameLog.ts';
+import GameLog from '../database/models/GameLog.ts';
 import { liveQuery } from 'dexie';
-import TVLog from '../types/TVLog.ts';
-import BookLog from '../types/BookLog.ts';
+import TVLog from '../database/models/TVLog.ts';
+import BookLog from '../database/models/BookLog.ts';
 import EntryDialogTV from '../components/entry_dialogs/EntryDialogTV.vue';
 import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
 

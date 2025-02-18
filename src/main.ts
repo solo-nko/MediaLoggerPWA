@@ -28,6 +28,17 @@ import { router } from './router.ts';
 
 const pinia = createPinia();
 const vuetify = createVuetify({
+	defaults: {
+		VTextField: {
+			variant: 'outlined'
+		},
+		VAutocomplete: {
+			variant: 'outlined'
+		},
+		VTextarea: {
+			variant: 'outlined'
+		}
+	},
 	icons: {
 		defaultSet: 'mdi',
 		aliases: {

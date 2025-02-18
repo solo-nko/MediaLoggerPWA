@@ -2,9 +2,10 @@
 import { appDatabase } from '../../database/db.ts';
 import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
-import Log from '../../types/Log.ts';
+import Log from '../../database/models/Log.ts';
 import { ref } from 'vue';
-import { noBlankTitle } from '../../config/Messages.ts';
+import { Messages } from '../../config/Messages.ts';
+import IMovieLog from '../../types/IMovieLog.ts';
 
 const emits = defineEmits(['close-entry', 'save-entry']);
 const quill = ref(null);
@@ -29,7 +30,7 @@ const props = withDefaults(
 	}
 );
 
-const logModel = ref({
+const logModel = ref<IMovieLog>({
 	title: props.entry.title,
 	series: props.entry.series,
 	rating: props.entry.rating,
@@ -70,6 +71,10 @@ function fieldsOk(): boolean {
 		showSaveWarning.value = false;
 		return true;
 	}
+}
+
+function setToToday() {
+	logModel.value.dateModified = DateTime.now().toISODate();
 }
 
 async function addMovie() {
@@ -118,7 +123,7 @@ async function updateMovie(key: number) {
 			</VRow>
 			<VRow>
 				<div id="rating-container">
-					<VLabel id="rating-label">Rating</VLabel>
+					<VLabel id="rating-label">Rating ({{ logModel.rating ? logModel.rating : 1 }}/10)</VLabel>
 					<VSlider
 						v-model="logModel.rating"
 						min="1"
@@ -126,6 +131,7 @@ async function updateMovie(key: number) {
 						step="1"
 						thumb-label
 						show-ticks="always"
+						color="primary"
 					></VSlider>
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
@@ -133,18 +139,19 @@ async function updateMovie(key: number) {
 			<VRow class="pb-4">
 				<QuillEditor ref="quill" v-model="logModel.impression"></QuillEditor>
 			</VRow>
-			<VRow>
+			<VRow align="center">
 				<VTextField
 					v-model="logModel.dateModified"
 					label="Date Updated (if applicable)"
 					type="date"
 				></VTextField>
+				<VBtn class="today-btn" flat @click="setToToday">Today</VBtn>
 			</VRow>
 		</VContainer>
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateMovie(props.entry.id) : addMovie()">Save</VBtn>
 			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
-			<div v-show="showSaveWarning" class="save-warning">{{ noBlankTitle }}</div>
+			<div v-show="showSaveWarning" class="save-warning">{{ Messages.noBlankTitle }}</div>
 		</VCardActions>
 	</VCard>
 </template>

@@ -1,6 +1,6 @@
-const entryEditSuccess = 'Entry successfully edited!';
-const entryAddSuccess = 'Entry successfully added!';
-const cantBeUndone = 'This action cannot be undone.';
-const noBlankTitle = 'Please enter a title.';
-
-export { entryEditSuccess, entryAddSuccess, cantBeUndone, noBlankTitle };
+export const Messages = {
+	entryEditSuccess: 'Entry successfully edited!',
+	entryAddSuccess: 'Entry successfully added!',
+	cantBeUndone: 'This action cannot be undone.',
+	noBlankTitle: 'Please enter a title.'
+};
