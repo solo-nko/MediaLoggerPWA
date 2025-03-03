@@ -12,6 +12,7 @@ export default tsEslint.config(
 			...vueEslint.configs['flat/recommended']
 		],
 		files: ['**/*.{ts,vue}'],
+		ignores: ['**/.storybook/stories/**'],
 		languageOptions: {
 			ecmaVersion: 'latest',
 			sourceType: 'module',
@@ -20,11 +21,11 @@ export default tsEslint.config(
 			}
 		},
 		rules: {
-			"@typescript-eslint/no-unused-vars": ['off'],
-			"no-unused-vars": ['warn'],
-			"vue/v-slot-style": ["warn", {
-				"named": "longform"
-			}],
+			'@typescript-eslint/no-unused-vars': ['off'],
+			'no-unused-vars': ['warn'],
+			'vue/v-slot-style': ['warn', {
+				'named': 'longform'
+			}]
 		}
 	},
 	prettierEslint

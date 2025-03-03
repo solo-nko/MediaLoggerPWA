@@ -15,7 +15,7 @@ export default defineConfig({
 
     manifest: {
       name: 'Media Tracker Progressive',
-      short_name: 'media-tracker-progressive',
+      short_name: 'Media Tracker',
       description: 'A web app for logging media consumption',
       theme_color: '#ffffff',
     },
