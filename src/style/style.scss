@@ -1,4 +1,9 @@
+// vuetify generates custom root CSS variables for each theme color, keyed to rgba() format
 .save-warning {
-	color: red;
+	color: rgba(var(--v-theme-error));
 	margin: auto;
+}
+
+.text-standard {
+	color: rgba(var(--v-theme-text));
 }

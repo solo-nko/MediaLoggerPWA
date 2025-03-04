@@ -8,13 +8,12 @@ import {
 	mdiHome,
 	mdiPencil,
 	mdiPlus,
-	mdiTable
+	mdiTable,
+	mdiThemeLightDark
 } from '@mdi/js';
 import { standardDarkTheme, standardLightTheme } from '../src/style/Themes';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
-import 'vuetify/styles';
-
+// import 'vuetify/styles';
+import '../src/style/vuetifyOverrides.scss';
 
 const vuetify = createVuetify({
 	defaults: {
@@ -39,7 +38,8 @@ const vuetify = createVuetify({
 			pencil: mdiPencil,
 			trash: mdiDelete,
 			chevronLeft: mdiChevronDoubleLeft,
-			chevronRight: mdiChevronDoubleRight
+			chevronRight: mdiChevronDoubleRight,
+			themeSwitch: mdiThemeLightDark
 		},
 		sets: {
 			mdi
@@ -52,8 +52,6 @@ const vuetify = createVuetify({
 			dark1: standardDarkTheme
 		}
 	},
-	components,
-	directives
 });
 
-export default vuetify
+export default vuetify;

@@ -1,6 +1,10 @@
 .save-warning {
-	color: red;
+	color: rgba(var(--v-theme-error));
 	margin: auto;
+}
+
+.text-standard {
+	color: rgba(var(--v-theme-text));
 }
 
 /*# sourceMappingURL=style.css.map */
