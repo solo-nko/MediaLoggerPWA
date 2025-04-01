@@ -9,6 +9,7 @@ import TVLog from '../database/models/TVLog.ts';
 import BookLog from '../database/models/BookLog.ts';
 import EntryDialogTV from '../components/entry_dialogs/EntryDialogTV.vue';
 import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
+import { reverseSortLogByUpdated } from '../config/Utils.ts';
 
 // keep an eye on this void typing. might be problematic
 const currentGames = useObservable<GameLog[] | void>(
@@ -19,11 +20,19 @@ const currentGames = useObservable<GameLog[] | void>(
 				.anyOf(['Playing', 'Replaying'])
 				.toArray()
 				.then((promisedArray) => {
+					// populate currently playing
 					playingGames.value = promisedArray.filter((game) => {
 						return game.status == 'Playing';
 					});
+					// sort by last updated
+					playingGames.value.sort((a: GameLog, b: GameLog) => {
+						return reverseSortLogByUpdated(a, b);
+					});
 					replayingGames.value = promisedArray.filter((game) => {
 						return game.status == 'Replaying';
+					});
+					replayingGames.value.sort((a: GameLog, b: GameLog) => {
+						return reverseSortLogByUpdated(a, b);
 					});
 				})
 		)
@@ -52,8 +61,15 @@ const currentTV = useObservable<TVLog[] | void>(
 					watchingTV.value = promisedArray.filter((tv) => {
 						return tv.status == 'Watching';
 					});
+					// sort by last updated
+					watchingTV.value.sort((a: TVLog, b: TVLog) => {
+						return reverseSortLogByUpdated(a, b);
+					});
 					rewatchingTV.value = promisedArray.filter((tv) => {
 						return tv.status == 'Rewatching';
+					});
+					rewatchingTV.value.sort((a: TVLog, b: TVLog) => {
+						return reverseSortLogByUpdated(a, b);
 					});
 				})
 		)
@@ -82,8 +98,15 @@ const currentBooks = useObservable<BookLog[] | void>(
 					readingBooks.value = promisedArray.filter((book) => {
 						return book.status == 'Reading';
 					});
+					// sort by last updated
+					readingBooks.value.sort((a: BookLog, b: BookLog) => {
+						return reverseSortLogByUpdated(a, b);
+					});
 					rereadingBooks.value = promisedArray.filter((book) => {
 						return book.status == 'Rereading';
+					});
+					rereadingBooks.value.sort((a: BookLog, b: BookLog) => {
+						return reverseSortLogByUpdated(a, b);
 					});
 				})
 		)
@@ -132,7 +155,7 @@ function editEntry(entryInfo, dialogType = 'Game') {
 		<VRow justify="space-around">
 			<!-- Games -->
 			<VCol>
-				<VCard class="dashboard-card">
+				<VCard>
 					<VCardTitle>Current Games</VCardTitle>
 					<VCardSubtitle>Playing</VCardSubtitle>
 					<VList>
@@ -205,7 +228,7 @@ function editEntry(entryInfo, dialogType = 'Game') {
 				<VCard>
 					<VCardTitle>Current Books</VCardTitle>
 					<VCardSubtitle>Reading</VCardSubtitle>
-					<VList>
+					<VList class="list">
 						<template v-for="book in readingBooks" :key="book.id">
 							<VListItem>
 								<VRow justify="space-between">
