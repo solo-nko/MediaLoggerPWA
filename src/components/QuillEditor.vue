@@ -3,11 +3,16 @@ import { onMounted } from 'vue';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import Log from '../database/models/Log.ts';
-// TODO set available text format tools
+
 let quill: Quill | null = null;
+const toolbarOptions = [
+	['bold', 'italic', 'underline'],
+	[{ list: 'ordered' }, { list: 'bullet' }],
+	['link', 'clean']
+];
 const emits = defineEmits(['content-change']);
 
-// this should only ever be a string, not a Delta
+// this should only ever be a string, not a Deltay
 // TODO: test for issues here
 const editorContent = defineModel<string>();
 
@@ -15,7 +20,10 @@ const editorContent = defineModel<string>();
 onMounted(() => {
 	quill = new Quill('#editor', {
 		placeholder: 'Thoughts so far',
-		theme: 'snow'
+		theme: 'snow',
+		modules: {
+			toolbar: toolbarOptions
+		}
 	});
 	// if there is already content loaded from the database, use that
 	if (editorContent.value && typeof editorContent.value === 'string') {
@@ -45,8 +53,55 @@ defineExpose({ clearEditor });
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 #editor-wrapper {
 	height: 100%;
 	width: 100%;
 }
+
+#editor {
+	font-family: 'Roboto', sans-serif;
+}
+
+/*
+https://github.com/vuejs/rfcs/blob/master/active-rfcs/0023-scoped-styles-changes.md#deep-selectors
+*/
+::v-deep(.ql-editor) {
+	background-color: rgba(var(--v-theme-surface));
+}
+
+/*
+https://stackoverflow.com/questions/59315115/reactquill-how-to-style-placeholder-attribute
+*/
+::v-deep(.ql-editor.ql-blank::before) {
+	color: rgba(var(--v-theme-placeholderText));
+}
+
+::v-deep(.ql-stroke, .ql-picker-label:hover .ql-stroke) {
+	fill: none;
+	stroke: rgba(var(--v-theme-placeholderText));
+}
+
+::v-deep(.ql-fill) {
+	fill: rgba(var(--v-theme-placeholderText));
+}
+
+/*investigate later*/
+/*
+.ql-active .ql-stroke {
+	fill: none;
+	stroke: red !important;
+}
+
+button:hover .ql-fill,
+.ql-picker-label:hover .ql-fill {
+	fill: red !important;
+	stroke: none;
+}
+
+.ql-active .ql-fill {
+	fill: red !important;
+	stroke: none;
+}*/
 </style>
