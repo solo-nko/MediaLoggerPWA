@@ -157,7 +157,7 @@ async function updateBook(key: number) {
 						step="1"
 						thumb-label
 						show-ticks="always"
-						color="primary"
+						color="accent"
 					></VSlider>
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
