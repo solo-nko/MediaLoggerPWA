@@ -61,6 +61,14 @@ const sortLogByUpdated = (a: Log, b: Log) => {
 		Log.dateFromString(<string>b.dateModified).toMillis()
 	);
 };
+
+const reverseSortLogByUpdated = (a: Log, b: Log) => {
+	return (
+		Log.dateFromString(<string>b.dateModified).toMillis() -
+		Log.dateFromString(<string>a.dateModified).toMillis()
+	);
+};
+
 const sortLogByCreated = (a: Log, b: Log) => {
 	return (
 		Log.dateFromString(<string>a.dateCreated).toMillis() -
@@ -77,5 +85,6 @@ export {
 	progressCallback,
 	sortLogByCreated,
 	sortLogByUpdated,
+	reverseSortLogByUpdated,
 	sortHeaders
 };
