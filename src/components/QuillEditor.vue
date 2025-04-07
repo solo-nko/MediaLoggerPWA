@@ -8,11 +8,12 @@ let quill: Quill | null = null;
 const toolbarOptions = [
 	['bold', 'italic', 'underline'],
 	[{ list: 'ordered' }, { list: 'bullet' }],
+	[{ color: [] }, { background: [] }],
 	['link', 'clean']
 ];
 const emits = defineEmits(['content-change']);
 
-// this should only ever be a string, not a Deltay
+// this should only ever be a string, not a Delta
 // TODO: test for issues here
 const editorContent = defineModel<string>();
 

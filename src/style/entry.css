@@ -1,20 +1,31 @@
 .v-card.entry-card {
-	padding: 1rem 3rem;
+  padding: 1rem 3rem;
 }
 
 @media (max-width: 600px) {
-	.v-card {
-		padding: 1rem 1rem;
-	}
+  .v-card {
+    padding: 1rem 1rem;
+  }
 }
 #rating-container {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 #rating-label {
-	align-self: center;
+  align-self: center;
+}
+
+.ql-toolbar.ql-snow {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.ql-container,
+.ql-editor {
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 /*# sourceMappingURL=entry.css.map */

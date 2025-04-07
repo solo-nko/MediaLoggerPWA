@@ -17,3 +17,14 @@
 #rating-label {
 	align-self: center;
 }
+
+.ql-toolbar.ql-snow {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+.ql-container,
+.ql-editor {
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
