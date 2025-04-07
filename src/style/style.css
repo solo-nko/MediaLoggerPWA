@@ -1,16 +1,16 @@
 .save-warning {
-	color: rgba(var(--v-theme-error));
-	margin: auto;
+  color: rgba(var(--v-theme-error));
+  margin: auto;
 }
 
 .text-standard {
-	color: rgba(var(--v-theme-text));
+  color: rgba(var(--v-theme-text));
 }
 
 @media (min-width: 700px) {
-	.btn-break {
-		display: none;
-	}
+  .btn-break {
+    display: none;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */
