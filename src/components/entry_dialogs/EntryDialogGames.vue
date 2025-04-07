@@ -165,6 +165,5 @@ async function updateGame(key: number) {
 </template>
 
 <style lang="scss">
-@import "../../style/entry";
-
+@use '../../style/entry';
 </style>

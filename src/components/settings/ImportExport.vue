@@ -55,13 +55,14 @@ async function importDatabase(file: Blob) {
 		></VFileInput>
 		<div class="button-row">
 			<VBtn :loading="loadingOperation" :disabled="loadingOperation" @click="exportDatabase"
-				>Export Media <br class="btn-break">Log to file</VBtn
+				>Export Media <br class="btn-break" />Log to file</VBtn
 			>
 			<VBtn
 				:loading="loadingOperation"
 				:disabled="loadingOperation"
 				@click="showDBImportConfirm = true"
-				>Import Media<br class="btn-break"> Log from file</VBtn
+				>Import Media<br class="btn-break" />
+				Log from file</VBtn
 			>
 		</div>
 		<VDialog v-model="showDBImportConfirm">

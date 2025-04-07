@@ -191,6 +191,5 @@ async function updateBook(key: number) {
 </template>
 
 <style lang="scss">
-@import "../../style/entry";
-
+@use '../../style/entry';
 </style>
