@@ -108,7 +108,7 @@ async function updateTV(key: number) {
 </script>
 
 <template>
-	<VCard id="card">
+	<VCard class="entry-card">
 		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} TV Series</VCardTitle>
 		<VContainer>
 			<VRow>
@@ -135,7 +135,7 @@ async function updateTV(key: number) {
 						step="1"
 						thumb-label
 						show-ticks="always"
-						color="primary"
+						color="accent"
 					></VSlider>
 					<!--					<VRating v-model="logModel.rating" length="10" hover active-color="blue"></VRating>-->
 				</div>
@@ -160,21 +160,6 @@ async function updateTV(key: number) {
 	</VCard>
 </template>
 
-<style scoped>
-/* Used this internal class to access the VCard component styling because the #card id wasn't working */
-/*noinspection CssUnusedSymbol*/
-.v-card {
-	padding: 1rem 3rem;
-}
-
-#rating-container {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	/* align-items: center; */
-}
-
-#rating-label {
-	align-self: center;
-}
+<style lang="scss">
+@use '../../style/entry';
 </style>

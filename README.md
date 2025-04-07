@@ -52,6 +52,7 @@ Cloud functionality uses a separately-developed ExpressJS server hosted on Micro
 ## To-Do
 * Create themes
   * Color-code items by status
+* ~~Add dark theme~~
 * ~~Allow deletion of existing entries~~
 * ~~Allow editing of existing entries~~
 * ~~Make installable (installation function seems to have broken at some point)~~
@@ -62,6 +63,8 @@ Cloud functionality uses a separately-developed ExpressJS server hosted on Micro
 * ~~Add TV support~~
 * ~~Add Movie support~~
 * ~~Add Book support~~
+* Add search box to database screen
+* Switch to Azure Functions for backend
 
 ## Things to investigate
 
