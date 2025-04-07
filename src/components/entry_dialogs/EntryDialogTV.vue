@@ -160,21 +160,7 @@ async function updateTV(key: number) {
 	</VCard>
 </template>
 
-<style scoped>
-/* Used this internal class to access the VCard component styling because the #card id wasn't working */
-/*noinspection CssUnusedSymbol*/
-.v-card {
-	padding: 1rem 3rem;
-}
+<style lang="scss">
+@import "../../style/entry";
 
-#rating-container {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	/* align-items: center; */
-}
-
-#rating-label {
-	align-self: center;
-}
 </style>

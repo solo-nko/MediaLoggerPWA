@@ -7,11 +7,13 @@ import Log from '../../database/models/Log.ts';
 import { ref } from 'vue';
 import { Messages } from '../../config/Messages.ts';
 import IBookLog from '../../types/IBookLog.ts';
+import { useDisplay } from 'vuetify';
 
 const bookStatus = Object.values(BookStatus);
 const emits = defineEmits(['close-entry', 'save-entry']);
 const quill = ref(null);
 const showSaveWarning = ref(false);
+const { smAndDown } = useDisplay();
 
 const props = withDefaults(
 	defineProps<{
@@ -127,9 +129,12 @@ async function updateBook(key: number) {
 			<VRow>
 				<VTextField v-model="logModel.title" label="Title"></VTextField>
 			</VRow>
+			<VRow v-if="smAndDown" justify="center" align="center">
+				<VCheckbox v-model="logModel.audiobook" name="audiobook" label="Audiobook"></VCheckbox>
+			</VRow>
 			<VRow>
-				<VCol class="pl-0" cols="2">
-					<VCheckbox v-model="logModel.audiobook" label="Audiobook"></VCheckbox>
+				<VCol v-if="!smAndDown" class="pl-0" cols="2">
+					<VCheckbox v-model="logModel.audiobook" name="audiobook" label="Audiobook"></VCheckbox>
 				</VCol>
 				<VCol cols="7">
 					<VTextField
@@ -139,7 +144,7 @@ async function updateBook(key: number) {
 						@blur="replaceNA($event)"
 					></VTextField>
 				</VCol>
-				<VCol class="pr-0" cols="3">
+				<VCol class="pr-0" :cols="smAndDown ? undefined : 3">
 					<VAutocomplete
 						v-model="logModel.status"
 						label="Status"
@@ -185,21 +190,7 @@ async function updateBook(key: number) {
 	</VCard>
 </template>
 
-<style scoped>
-/* Used this internal class to access the VCard component styling because the #card id wasn't working*/
-/*noinspection CssUnusedSymbol*/
-.v-card {
-	padding: 1rem 3rem;
-}
+<style lang="scss">
+@import "../../style/entry";
 
-#rating-container {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	/* align-items: center; */
-}
-
-#rating-label {
-	align-self: center;
-}
 </style>
