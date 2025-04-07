@@ -18,7 +18,12 @@ export const useThemeStore = defineStore('theme', () => {
 	const themeInstance = useTheme();
 
 	function loadTheme() {
-		themeInstance.global.name.value = localStorageTheme;
+		// if no prior theme has been set, default to lightmode
+		if (!localStorageTheme) {
+			themeInstance.global.name.value = 'light1';
+			localStorage.setItem('theme', themeInstance.global.name.value);
+			// else use set theme
+		} else themeInstance.global.name.value = localStorageTheme;
 		if (themeInstance.global.current.value.dark) lightTheme.value = false;
 		else lightTheme.value = true;
 	}
