@@ -7,3 +7,10 @@
 .text-standard {
 	color: rgba(var(--v-theme-text));
 }
+
+@media (min-width: 700px) {
+	.btn-break {
+		display: none;
+	}
+
+}
