@@ -107,7 +107,7 @@ async function updateGame(key: number) {
 </script>
 
 <template>
-	<VCard id="card">
+	<VCard class="entry-card">
 		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} Game</VCardTitle>
 		<VContainer>
 			<VRow>

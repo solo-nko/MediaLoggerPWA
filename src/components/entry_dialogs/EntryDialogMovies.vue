@@ -107,7 +107,7 @@ async function updateMovie(key: number) {
 </script>
 
 <template>
-	<VCard id="card">
+	<VCard class="entry-card">
 		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} Movie</VCardTitle>
 		<VContainer>
 			<VRow>

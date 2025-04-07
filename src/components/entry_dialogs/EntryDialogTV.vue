@@ -108,7 +108,7 @@ async function updateTV(key: number) {
 </script>
 
 <template>
-	<VCard id="card">
+	<VCard class="entry-card">
 		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} TV Series</VCardTitle>
 		<VContainer>
 			<VRow>
