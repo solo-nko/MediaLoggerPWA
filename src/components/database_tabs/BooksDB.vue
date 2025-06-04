@@ -14,6 +14,7 @@ import {
 	sortLogByUpdated
 } from '../../config/Utils.ts';
 import IHeaderItem from '../../types/IHeaderItem.ts';
+import { useSearchStore } from '../../stores/store.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const books = useObservable<BookLog[]>(from(liveQuery(() => appDatabase.books.toArray())));
@@ -30,6 +31,7 @@ const bookHeaders: IHeaderItem[] = [
 const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
 const entryDetails = ref<BookLog>();
+const search = useSearchStore();
 
 function editEntry(entryInfo: BookLog) {
 	showEditDialog.value = true;
@@ -53,6 +55,7 @@ async function deleteEntry() {
 		:headers="bookHeaders"
 		:items="books"
 		:sort-by="sortHeaders"
+		:search="search.dbSearchValue"
 	>
 		<!--	eslint-disable vue/valid-v-slot -->
 		<template v-slot:item.actions="{ item }">

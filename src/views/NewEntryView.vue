@@ -5,7 +5,7 @@ import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
 import EntryDialogMovies from '../components/entry_dialogs/EntryDialogMovies.vue';
 import { computed, ref } from 'vue';
 import { Messages } from '../config/Messages.ts';
-import { settingsStore } from '../stores/settings.ts';
+import { settingsStore } from '../stores/store.ts';
 
 // for use with dynamic component solution
 /*const currentTab = ref('game');

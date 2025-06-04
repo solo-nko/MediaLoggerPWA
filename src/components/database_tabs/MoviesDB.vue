@@ -14,6 +14,7 @@ import {
 	sortLogByUpdated
 } from '../../config/Utils.ts';
 import IHeaderItem from '../../types/IHeaderItem.ts';
+import { useSearchStore } from '../../stores/store.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const movies = useObservable<MovieLog[]>(from(liveQuery(() => appDatabase.movies.toArray())));
@@ -29,6 +30,7 @@ const movieHeaders: IHeaderItem[] = [
 const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
 const entryDetails = ref<MovieLog>();
+const search = useSearchStore();
 
 function editEntry(entryInfo: MovieLog) {
 	showEditDialog.value = true;
@@ -52,6 +54,7 @@ async function deleteEntry() {
 		:headers="movieHeaders"
 		:items="movies"
 		:sort-by="sortHeaders"
+		:search="search.dbSearchValue"
 	>
 		<!--	eslint-disable vue/valid-v-slot -->
 		<template v-slot:item.actions="{ item }">

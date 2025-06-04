@@ -7,9 +7,9 @@ export const settingsStore = reactive({
 	defaultEntryScreen: 'game'
 });
 
-export const useSetupStore = defineStore('setup-private', () => {
-	const testMessage = ref('Hello, World');
-	return { testMessage };
+export const useSearchStore = defineStore('db-search', () => {
+	const dbSearchValue = ref<string>('');
+	return { dbSearchValue };
 });
 
 export const useThemeStore = defineStore('theme', () => {

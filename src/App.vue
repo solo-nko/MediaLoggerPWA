@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import { onMounted } from 'vue';
-import { useThemeStore } from './stores/settings.ts';
+import { useThemeStore } from './stores/store.ts';
 
 const themeStore = useThemeStore();
 
