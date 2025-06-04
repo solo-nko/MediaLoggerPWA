@@ -5,8 +5,8 @@ import TVDB from '../components/database_tabs/TVDB.vue';
 import BooksDB from '../components/database_tabs/BooksDB.vue';
 import { settingsStore, useSearchStore } from '../stores/store.ts';
 import MoviesDB from '../components/database_tabs/MoviesDB.vue';
+
 // TODO revisit available sort headers
-// TODO add searchbox
 const currentTab = ref(settingsStore.defaultDBScreen);
 
 // this links each of the "items-per-page" in each tab to a single value

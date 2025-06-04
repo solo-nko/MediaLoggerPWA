@@ -1,13 +1,31 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
-import { onMounted } from 'vue';
+import { computed, onMounted, provide, ref } from 'vue';
 import { useThemeStore } from './stores/store.ts';
+import { injectionKeySaveSuccess, injectionKeySaveToast } from './config/Utils.ts';
+import { Messages } from './config/Messages.ts';
 
 const themeStore = useThemeStore();
+const showSaveSuccess = ref(false);
+const addOrEdit = ref('');
+
+const saveMessage = computed(() => {
+	if (addOrEdit.value === 'add') return Messages.entryAddSuccess;
+	if (addOrEdit.value === 'edit') return Messages.entryEditSuccess;
+	return '';
+});
+
+const configureSaveMessage = (which: 'add' | 'edit') => {
+	showSaveSuccess.value = true;
+	addOrEdit.value = which;
+};
 
 onMounted(() => {
 	themeStore.loadTheme();
 });
+
+provide(injectionKeySaveToast, configureSaveMessage);
+provide(injectionKeySaveSuccess, showSaveSuccess);
 </script>
 
 <template>
@@ -25,6 +43,7 @@ onMounted(() => {
 				</RouterView>
 			</VContainer>
 		</VMain>
+		<VSnackbar v-model="showSaveSuccess" timeout="3000">{{ saveMessage }} </VSnackbar>
 		<VBottomNavigation grow bg-color="primary" color="textOnColor" order="-1" tag="footer">
 			<VBtn :to="{ name: 'Home' }">
 				<VIcon icon="$home"></VIcon>

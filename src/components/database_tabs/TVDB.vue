@@ -2,12 +2,13 @@
 import { liveQuery } from 'dexie';
 import { useObservable, from } from '@vueuse/rxjs';
 import { appDatabase } from '../../database/db.ts';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import TVLog from '../../database/models/TVLog.ts';
 import EntryDialogTV from '../entry_dialogs/EntryDialogTV.vue';
 import { Messages } from '../../config/Messages.ts';
 import {
+	injectionKeySaveToast,
 	itemsPerPageOptions,
 	sortHeaders,
 	sortLogByCreated,
@@ -32,6 +33,7 @@ const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
 const entryDetails = ref<TVLog>();
 const search = useSearchStore();
+const configureSaveMessage = inject<(which: 'add' | 'edit') => void>(injectionKeySaveToast);
 
 function editEntry(entryInfo: TVLog) {
 	showEditDialog.value = true;
@@ -68,6 +70,7 @@ async function deleteEntry() {
 			:entry="entryDetails"
 			:edit-entry="true"
 			@close-entry="showEditDialog = false"
+			@save-entry="configureSaveMessage"
 		></EntryDialogTV>
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">

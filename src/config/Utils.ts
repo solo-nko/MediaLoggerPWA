@@ -2,7 +2,7 @@ import axios from 'axios';
 import { peakImportFile } from 'dexie-export-import';
 import { appDatabase } from '../database/db.ts';
 import Log from '../database/models/Log.ts';
-import { ref } from 'vue';
+import { InjectionKey, Ref, ref } from 'vue';
 import ISortItem from '../types/ISortItem.ts';
 
 const itemsPerPageOptions = { type: Number, default: 10 };
@@ -77,6 +77,10 @@ const sortLogByCreated = (a: Log, b: Log) => {
 };
 
 const sortHeaders = ref<ISortItem[]>([{ key: 'dateModified', order: 'desc' }]);
+/** Provide/Inject injection key for the function managing the save toast message. Used for typing purposes. */
+const injectionKeySaveToast = Symbol() as InjectionKey<(which: 'add' | 'edit') => void>;
+/** Provide/Inject injection key for the boolean managing the save toast message. */
+const injectionKeySaveSuccess = Symbol() as InjectionKey<Ref<boolean>>;
 
 export {
 	itemsPerPageOptions,
@@ -86,5 +90,7 @@ export {
 	sortLogByCreated,
 	sortLogByUpdated,
 	reverseSortLogByUpdated,
-	sortHeaders
+	sortHeaders,
+	injectionKeySaveToast,
+	injectionKeySaveSuccess
 };

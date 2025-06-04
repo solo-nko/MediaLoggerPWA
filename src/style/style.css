@@ -1,8 +1,10 @@
+/*noinspection CssUnresolvedCustomProperty*/
 .save-warning {
 	color: rgba(var(--v-theme-error));
 	margin: auto;
 }
 
+/*noinspection CssUnresolvedCustomProperty*/
 .text-standard {
 	color: rgba(var(--v-theme-text));
 }

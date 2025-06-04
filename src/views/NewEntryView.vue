@@ -3,9 +3,9 @@ import EntryDialogGames from '../components/entry_dialogs/EntryDialogGames.vue';
 import EntryDialogTV from '../components/entry_dialogs/EntryDialogTV.vue';
 import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
 import EntryDialogMovies from '../components/entry_dialogs/EntryDialogMovies.vue';
-import { computed, ref } from 'vue';
-import { Messages } from '../config/Messages.ts';
+import { inject, ref } from 'vue';
 import { settingsStore } from '../stores/store.ts';
+import { injectionKeySaveToast } from '../config/Utils.ts';
 
 // for use with dynamic component solution
 /*const currentTab = ref('game');
@@ -15,21 +15,7 @@ const tabs = {
 };*/
 
 const tabs = ref(settingsStore.defaultEntryScreen);
-const showSaveSuccess = ref(false);
-const addOrEdit = ref('');
-
-function configureSaveMessage(which: 'add' | 'edit') {
-	showSaveSuccess.value = true;
-	addOrEdit.value = which;
-}
-
-/*TODO: this needs to be moved to the DB screen(s) in order to show the edit success.
-   As it stands there is no scenario where the snackbar showing edit success would show because the NewEntryView is only for newly added entries.
-*/
-const saveMessage = computed(() => {
-	if (addOrEdit.value === 'add') return Messages.entryAddSuccess;
-	return Messages.entryEditSuccess;
-});
+const configureSaveMessage = inject<(which: 'add' | 'edit') => void>(injectionKeySaveToast);
 </script>
 
 <template>
@@ -79,7 +65,6 @@ const saveMessage = computed(() => {
 						></EntryDialogBooks>
 					</VTabsWindowItem>
 				</VTabsWindow>
-				<VSnackbar v-model="showSaveSuccess" timeout="5000">{{ saveMessage }}</VSnackbar>
 			</VCol>
 		</VRow>
 	</VContainer>
