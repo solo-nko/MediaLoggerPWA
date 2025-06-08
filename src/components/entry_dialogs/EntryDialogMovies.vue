@@ -94,7 +94,7 @@ async function addMovie() {
 
 async function updateMovie(key: number) {
 	if (!fieldsOk()) return;
-	await appDatabase.books.update(key, {
+	await appDatabase.movies.update(key, {
 		title: logModel.value.title,
 		series: logModel.value.series,
 		rating: logModel.value.rating,
