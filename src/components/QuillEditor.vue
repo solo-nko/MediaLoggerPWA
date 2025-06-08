@@ -6,7 +6,7 @@ import Log from '../database/models/Log.ts';
 
 let quill: Quill | null = null;
 const toolbarOptions = [
-	['bold', 'italic', 'underline'],
+	['bold', 'italic', 'underline', 'strike'],
 	[{ list: 'ordered' }, { list: 'bullet' }],
 	[{ color: [] }, { background: [] }],
 	['link', 'clean']
