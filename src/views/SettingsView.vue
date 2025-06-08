@@ -23,7 +23,7 @@ const iconType = computed(() => {
 		<VListItem>
 			<span>Settings</span>
 		</VListItem>
-		<VDivider color="primary"></VDivider>
+		<VDivider color="accent" thickness="1" opacity="0.5"></VDivider>
 		<VListItem link @click="currentTab = 'GeneralSettings'">General</VListItem>
 		<VListItem link @click="currentTab = 'DatabaseSettings'">Import / Export Database</VListItem>
 		<VListItem link @click="currentTab = 'AppearanceSettings'">Appearance</VListItem>
