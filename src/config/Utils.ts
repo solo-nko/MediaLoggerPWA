@@ -81,6 +81,7 @@ const sortHeaders = ref<ISortItem[]>([{ key: 'dateModified', order: 'desc' }]);
 const injectionKeySaveToast = Symbol() as InjectionKey<(which: 'add' | 'edit') => void>;
 /** Provide/Inject injection key for the boolean managing the save toast message. */
 const injectionKeySaveSuccess = Symbol() as InjectionKey<Ref<boolean>>;
+const injectionKeySnackbarTimeout = Symbol() as InjectionKey<Ref<number>>;
 
 export {
 	itemsPerPageOptions,
@@ -92,5 +93,6 @@ export {
 	reverseSortLogByUpdated,
 	sortHeaders,
 	injectionKeySaveToast,
-	injectionKeySaveSuccess
+	injectionKeySaveSuccess,
+	injectionKeySnackbarTimeout
 };

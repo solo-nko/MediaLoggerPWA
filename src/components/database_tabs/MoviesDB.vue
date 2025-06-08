@@ -74,7 +74,7 @@ async function deleteEntry() {
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">
 		<ConfirmDialog
-			:message="Messages.cantBeUndone"
+			:message="Messages.CANNOT_UNDO"
 			@confirm="deleteEntry"
 			@cancel="showDeleteDialog = false"
 		></ConfirmDialog>

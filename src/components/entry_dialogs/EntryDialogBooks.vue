@@ -185,7 +185,7 @@ async function updateBook(key: number) {
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateBook(props.entry.id) : addBook()">Save</VBtn>
 			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
-			<div v-show="showSaveWarning" class="save-warning">{{ Messages.noBlankTitle }}</div>
+			<div v-show="showSaveWarning" class="save-warning">{{ Messages.NO_BLANK_TITLE }}</div>
 		</VCardActions>
 	</VCard>
 </template>
