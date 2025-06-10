@@ -5,7 +5,7 @@ import QuillEditor from '../QuillEditor.vue';
 import Log from '../../database/models/Log.ts';
 import { ref } from 'vue';
 import { TVStatus } from '../../database/models/TVStatus.ts';
-import { Messages } from '../../config/Messages.ts';
+import Messages from '../../config/Messages.ts';
 import ITVLog from '../../types/ITVLog.ts';
 
 const tvStatus = Object.values(TVStatus);

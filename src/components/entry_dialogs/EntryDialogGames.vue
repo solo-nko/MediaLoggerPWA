@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
 import Log from '../../database/models/Log.ts';
 import { ref } from 'vue';
-import { Messages } from '../../config/Messages.ts';
+import Messages from '../../config/Messages.ts';
 import IGameLog from '../../types/IGameLog.ts';
 
 const gameStatus = Object.values(GameStatus);

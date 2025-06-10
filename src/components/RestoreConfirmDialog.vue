@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { axiosInstance, overwriteDatabase } from '../config/Utils.ts';
+import Messages from '../config/Messages.ts';
 import { DateTime } from 'luxon';
 
 const emits = defineEmits(['confirm', 'cancel']);
@@ -22,6 +23,7 @@ const lastSyncDateFormatted = computed(() => {
 	if (inputSyncDate.isValid) return inputSyncDate.toLocaleString(DateTime.DATETIME_FULL);
 	return 'Unknown';
 });
+const labelText = ref<string>(Messages.INQUIRY_IN_PROGRESS);
 
 const syncFromCloud = async () => {
 	try {
@@ -29,12 +31,12 @@ const syncFromCloud = async () => {
 			console.log(`pulled DB is Blob? ${pulledDB.value instanceof Blob}`);
 			const importSuccess = await overwriteDatabase(pulledDB.value);
 			if (importSuccess) {
-				props.triggerSnackBar('Cloud restore successful!');
+				props.triggerSnackBar(Messages.CLOUD_RESTORE_SUCCESS);
 			}
 		}
 	} catch (error) {
 		console.log(error);
-		props.triggerSnackBar('Cloud restore failed. Please verify your Sync Code.');
+		props.triggerSnackBar(Messages.CLOUD_RESTORE_FAIL);
 	}
 	emits('confirm');
 };
@@ -56,11 +58,13 @@ onMounted(async () => {
 			lastSyncDate.value = response.data.LastUpdated;
 			restoreLoading.value = false;
 			restoreDisabled.value = false;
+			labelText.value = `Log Date: ${lastSyncDateFormatted.value}`;
 		}
 	} catch (error) {
 		console.log(error);
-		// TODO: change text from 'inquiring...' when this happens
-		props.triggerSnackBar('Log not found. Please verify your Sync Code');
+		labelText.value = Messages.LOG_NOT_FOUND;
+		restoreLoading.value = false;
+		props.triggerSnackBar(Messages.CLOUD_RESTORE_FAIL_ABORT);
 	}
 });
 </script>
@@ -68,16 +72,14 @@ onMounted(async () => {
 <template>
 	<VCard>
 		<VCardTitle>Cloud Restore</VCardTitle>
-		<VCardText>{{
-			lastSyncDate ? 'Log found! Press restore to download it. This cannot be undone.' : ''
-		}}</VCardText>
+		<VCardText>{{ lastSyncDate ? Messages.INQUIRY_SUCCESS : '' }} </VCardText>
 		<VCardText>
-			<VLabel>{{ lastSyncDate ? `Log Date: ${lastSyncDateFormatted}` : 'Inquiring...' }}</VLabel>
+			<VLabel>{{ labelText }}</VLabel>
 		</VCardText>
 		<VCardActions>
 			<VBtn :loading="restoreLoading" :disabled="restoreDisabled" @click="syncFromCloud"
-				>Restore</VBtn
-			>
+				>Restore
+			</VBtn>
 			<VBtn @click="onCancel">Cancel</VBtn>
 		</VCardActions>
 	</VCard>

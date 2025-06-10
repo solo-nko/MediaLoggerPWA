@@ -3,7 +3,7 @@ import { ref, watch } from 'vue';
 import GamesDB from '../components/database_tabs/GamesDB.vue';
 import TVDB from '../components/database_tabs/TVDB.vue';
 import BooksDB from '../components/database_tabs/BooksDB.vue';
-import { settingsStore, useSearchStore } from '../stores/store.ts';
+import { settingsStore, useLogDbStore } from '../stores/store.ts';
 import MoviesDB from '../components/database_tabs/MoviesDB.vue';
 
 // TODO revisit available sort headers
@@ -11,7 +11,7 @@ const currentTab = ref(settingsStore.defaultDBScreen);
 
 // this links each of the "items-per-page" in each tab to a single value
 const itemPerPageParent = ref(10);
-const searchStore = useSearchStore();
+const searchStore = useLogDbStore();
 
 // when changing to a different tab, reset search value
 watch(currentTab, () => {

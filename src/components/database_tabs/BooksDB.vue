@@ -6,20 +6,18 @@ import { inject, ref } from 'vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import EntryDialogBooks from '../entry_dialogs/EntryDialogBooks.vue';
 import BookLog from '../../database/models/BookLog.ts';
-import { Messages } from '../../config/Messages.ts';
+import Messages from '../../config/Messages.ts';
 import {
-	itemsPerPageOptions,
 	sortHeaders,
 	sortLogByCreated,
 	sortLogByUpdated,
 	injectionKeySaveToast
 } from '../../config/Utils.ts';
 import IHeaderItem from '../../types/IHeaderItem.ts';
-import { useSearchStore } from '../../stores/store.ts';
+import { useLogDbStore } from '../../stores/store.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const books = useObservable<BookLog[]>(from(liveQuery(() => appDatabase.books.toArray())));
-const itemsPerPageChild = defineModel('itemsPerPage', itemsPerPageOptions);
 const bookHeaders: IHeaderItem[] = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Series', value: 'series' },
@@ -32,7 +30,7 @@ const bookHeaders: IHeaderItem[] = [
 const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
 const entryDetails = ref<BookLog>();
-const search = useSearchStore();
+const logDbStore = useLogDbStore();
 const configureSaveMessage = inject<(which: 'add' | 'edit') => void>(injectionKeySaveToast);
 
 function editEntry(entryInfo: BookLog) {
@@ -53,11 +51,12 @@ async function deleteEntry() {
 
 <template>
 	<VDataTable
-		v-model:items-per-page="itemsPerPageChild"
+		v-model:items-per-page="logDbStore.itemsPerPage"
+		:items-per-page-options="logDbStore.itemsPerPageOptions"
 		:headers="bookHeaders"
 		:items="books"
 		:sort-by="sortHeaders"
-		:search="search.dbSearchValue"
+		:search="logDbStore.dbSearchValue"
 	>
 		<!--	eslint-disable vue/valid-v-slot -->
 		<template v-slot:item.actions="{ item }">

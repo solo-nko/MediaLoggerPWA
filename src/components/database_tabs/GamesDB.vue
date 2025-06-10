@@ -6,7 +6,7 @@ import { inject, ref } from 'vue';
 import EntryDialogGames from '../entry_dialogs/EntryDialogGames.vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import GameLog from '../../database/models/GameLog.ts';
-import { Messages } from '../../config/Messages.ts';
+import Messages from '../../config/Messages.ts';
 import {
 	itemsPerPageOptions,
 	sortHeaders,
@@ -15,7 +15,7 @@ import {
 	injectionKeySaveToast
 } from '../../config/Utils.ts';
 import IHeaderItem from '../../types/IHeaderItem.ts';
-import { useSearchStore } from '../../stores/store.ts';
+import { useLogDbStore } from '../../stores/store.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const games = useObservable<GameLog[]>(from(liveQuery(() => appDatabase.games.toArray())));
@@ -32,7 +32,7 @@ const gameHeaders: IHeaderItem[] = [
 const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
 const entryDetails = ref<GameLog>();
-const search = useSearchStore();
+const logDbStore = useLogDbStore();
 const configureSaveMessage = inject<(which: 'add' | 'edit') => void>(injectionKeySaveToast);
 
 function editEntry(entryInfo: GameLog) {
@@ -53,11 +53,12 @@ async function deleteEntry() {
 
 <template>
 	<VDataTable
-		v-model:items-per-page="itemsPerPageChild"
+		v-model:items-per-page="logDbStore.itemsPerPage"
+		:items-per-page-options="logDbStore.itemsPerPageOptions"
 		:headers="gameHeaders"
 		:items="games"
 		:sort-by="sortHeaders"
-		:search="search.dbSearchValue"
+		:search="logDbStore.dbSearchValue"
 	>
 		<!--	eslint-disable vue/valid-v-slot -->
 		<template v-slot:item.actions="{ item }">

@@ -1,15 +1,40 @@
 import { reactive, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useTheme } from 'vuetify';
+import IItemsPerPageOption from '../types/IItemsPerPageOption.ts';
 
 export const settingsStore = reactive({
 	defaultDBScreen: 'game',
 	defaultEntryScreen: 'game'
 });
 
-export const useSearchStore = defineStore('db-search', () => {
+export const useLogDbStore = defineStore('db-search', () => {
 	const dbSearchValue = ref<string>('');
-	return { dbSearchValue };
+	const itemsPerPageOptions = ref<IItemsPerPageOption[]>([
+		{
+			title: '5',
+			value: 5
+		},
+		{
+			title: '10',
+			value: 10
+		},
+		{
+			title: '20',
+			value: 20
+		},
+		{
+			title: '50',
+			value: 50
+		},
+		{
+			title: 'All',
+			value: -1
+		}
+	]);
+	const itemsPerPage = ref(itemsPerPageOptions.value[0].value);
+
+	return { dbSearchValue, itemsPerPageOptions, itemsPerPage };
 });
 
 export const useThemeStore = defineStore('theme', () => {

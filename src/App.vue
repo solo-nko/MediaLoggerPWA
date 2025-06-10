@@ -7,7 +7,7 @@ import {
 	injectionKeySaveToast,
 	injectionKeySnackbarTimeout
 } from './config/Utils.ts';
-import { Messages } from './config/Messages.ts';
+import Messages from './config/Messages.ts';
 
 const themeStore = useThemeStore();
 const showSaveSuccess = ref(false);
@@ -49,7 +49,7 @@ provide(injectionKeySnackbarTimeout, snackBarTimeout);
 				</RouterView>
 			</VContainer>
 		</VMain>
-		<VSnackbar v-model="showSaveSuccess" :timeout="snackBarTimeout">{{ saveMessage }} </VSnackbar>
+		<VSnackbar v-model="showSaveSuccess" :timeout="snackBarTimeout">{{ saveMessage }}</VSnackbar>
 		<VBottomNavigation grow bg-color="primary" color="textOnColor" order="-1" tag="footer">
 			<VBtn :to="{ name: 'Home' }">
 				<VIcon icon="$home"></VIcon>
