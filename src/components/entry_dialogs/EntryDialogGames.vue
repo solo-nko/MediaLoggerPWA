@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import QuillEditor from '../QuillEditor.vue';
 import Log from '../../database/models/Log.ts';
 import { ref } from 'vue';
-import { Messages } from '../../config/Messages.ts';
+import Messages from '../../config/Messages.ts';
 import IGameLog from '../../types/IGameLog.ts';
 
 const gameStatus = Object.values(GameStatus);
@@ -159,7 +159,7 @@ async function updateGame(key: number) {
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateGame(props.entry.id) : addGame()">Save</VBtn>
 			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
-			<div v-show="showSaveWarning" class="save-warning">{{ Messages.noBlankTitle }}</div>
+			<div v-show="showSaveWarning" class="save-warning">{{ Messages.NO_BLANK_TITLE }}</div>
 		</VCardActions>
 	</VCard>
 </template>

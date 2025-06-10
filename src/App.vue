@@ -1,13 +1,37 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
-import { onMounted } from 'vue';
-import { useThemeStore } from './stores/settings.ts';
+import { computed, onMounted, provide, ref } from 'vue';
+import { useThemeStore } from './stores/store.ts';
+import {
+	injectionKeySaveSuccess,
+	injectionKeySaveToast,
+	injectionKeySnackbarTimeout
+} from './config/Utils.ts';
+import Messages from './config/Messages.ts';
 
 const themeStore = useThemeStore();
+const showSaveSuccess = ref(false);
+const addOrEdit = ref('');
+const snackBarTimeout = ref(3000);
+
+const saveMessage = computed(() => {
+	if (addOrEdit.value === 'add') return Messages.ENTRY_ADD_SUCCESS;
+	if (addOrEdit.value === 'edit') return Messages.ENTRY_EDIT_SUCCESS;
+	return '';
+});
+
+const configureSaveMessage = (which: 'add' | 'edit') => {
+	showSaveSuccess.value = true;
+	addOrEdit.value = which;
+};
 
 onMounted(() => {
 	themeStore.loadTheme();
 });
+
+provide(injectionKeySaveToast, configureSaveMessage);
+provide(injectionKeySaveSuccess, showSaveSuccess);
+provide(injectionKeySnackbarTimeout, snackBarTimeout);
 </script>
 
 <template>
@@ -25,6 +49,7 @@ onMounted(() => {
 				</RouterView>
 			</VContainer>
 		</VMain>
+		<VSnackbar v-model="showSaveSuccess" :timeout="snackBarTimeout">{{ saveMessage }}</VSnackbar>
 		<VBottomNavigation grow bg-color="primary" color="textOnColor" order="-1" tag="footer">
 			<VBtn :to="{ name: 'Home' }">
 				<VIcon icon="$home"></VIcon>

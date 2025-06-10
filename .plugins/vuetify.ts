@@ -6,6 +6,7 @@ import {
 	mdiCog,
 	mdiDelete,
 	mdiHome,
+	mdiMagnify,
 	mdiPencil,
 	mdiPlus,
 	mdiTable,
@@ -39,7 +40,8 @@ const vuetify = createVuetify({
 			trash: mdiDelete,
 			chevronLeft: mdiChevronDoubleLeft,
 			chevronRight: mdiChevronDoubleRight,
-			themeSwitch: mdiThemeLightDark
+			themeSwitch: mdiThemeLightDark,
+			search: mdiMagnify
 		},
 		sets: {
 			mdi
@@ -51,7 +53,7 @@ const vuetify = createVuetify({
 			light1: standardLightTheme,
 			dark1: standardDarkTheme
 		}
-	},
+	}
 });
 
 export default vuetify;

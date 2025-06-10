@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import { axiosInstance, overwriteDatabase, progressCallback } from '../../config/Utils.ts';
-import { computed, ref } from 'vue';
+import {
+	axiosInstance,
+	injectionKeySnackbarTimeout,
+	progressCallback
+} from '../../config/Utils.ts';
+import { computed, inject, ref } from 'vue';
 import { appDatabase } from '../../database/db.ts';
 import { AxiosResponse } from 'axios';
 import { DateTime } from 'luxon';
+import RestoreConfirmDialog from '../RestoreConfirmDialog.vue';
 
 const syncCode = ref(localStorage.getItem('syncCode'));
 const lastSyncDate = ref(localStorage.getItem('lastSyncDate'));
@@ -14,9 +19,10 @@ const lastSyncDateFormatted = computed(() => {
 });
 const cloudSyncMsg = ref('');
 const showCloudSyncMsg = ref(false);
-const snackBarTimeout = ref(4000);
 const dateStampLoading = ref(false);
 const loadingOperation = ref(false);
+const showRestoreDialog = ref(false);
+const snackbarTimeout = inject(injectionKeySnackbarTimeout);
 
 // returns true if empty, or a string if not six characters
 const syncCodeCharLimit = (value: string) => {
@@ -86,26 +92,11 @@ async function SyncToCloud() {
 	}
 }
 
-async function SyncFromCloud() {
+function openRestoreDialog() {
 	loadingOperation.value = true;
 	// if sync code is valid
 	if (syncCode.value !== null && syncCode.value.length == 6) {
-		try {
-			const response = await axiosInstance.get(`/logs/${syncCode.value}`);
-			if (response.status === 200) {
-				// convert to blob
-				const pulledDB = new Blob([JSON.stringify(response.data.IndexedDB)]);
-				console.log(response);
-				console.log(`pulled DB is Blob? ${pulledDB instanceof Blob}`);
-				const importSuccess = await overwriteDatabase(pulledDB);
-				if (importSuccess) {
-					triggerSnackBar('Cloud restore successful!');
-				}
-			}
-		} catch (error) {
-			console.log(error);
-			triggerSnackBar('Cloud restore failed. Please verify your Sync Code.');
-		}
+		showRestoreDialog.value = true;
 	} else {
 		triggerSnackBar('Please enter a valid Sync Code.');
 	}
@@ -131,18 +122,31 @@ async function SyncFromCloud() {
 		></VTextField>
 		<div class="button-row">
 			<VBtn :disabled="loadingOperation" :loading="loadingOperation" @click="SyncToCloud"
-				>Cloud Backup</VBtn
-			>
-			<VBtn :disabled="loadingOperation" :loading="loadingOperation" @click="SyncFromCloud"
-				>Cloud Restore</VBtn
-			>
+				>Cloud Backup
+			</VBtn>
+			<VBtn :disabled="loadingOperation" :loading="loadingOperation" @click="openRestoreDialog"
+				>Cloud Restore
+			</VBtn>
 		</div>
 		<VSkeletonLoader id="backup-stamp" type="text" :loading="dateStampLoading">
 			<VLabel>Last Backup: {{ lastSyncDateFormatted }}</VLabel>
 		</VSkeletonLoader>
 	</div>
+	<VDialog v-model="showRestoreDialog">
+		<RestoreConfirmDialog
+			:sync-code="syncCode"
+			:trigger-snack-bar="triggerSnackBar"
+			@confirm="showRestoreDialog = false"
+			@cancel="
+				() => {
+					showRestoreDialog = false;
+					loadingOperation = false;
+				}
+			"
+		/>
+	</VDialog>
 
-	<VSnackbar v-model="showCloudSyncMsg" :timeout="snackBarTimeout">{{ cloudSyncMsg }}</VSnackbar>
+	<VSnackbar v-model="showCloudSyncMsg" :timeout="snackbarTimeout">{{ cloudSyncMsg }}</VSnackbar>
 </template>
 
 <style scoped>

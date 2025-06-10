@@ -5,7 +5,7 @@ import QuillEditor from '../QuillEditor.vue';
 import Log from '../../database/models/Log.ts';
 import { ref } from 'vue';
 import { TVStatus } from '../../database/models/TVStatus.ts';
-import { Messages } from '../../config/Messages.ts';
+import Messages from '../../config/Messages.ts';
 import ITVLog from '../../types/ITVLog.ts';
 
 const tvStatus = Object.values(TVStatus);
@@ -155,7 +155,7 @@ async function updateTV(key: number) {
 		<VCardActions>
 			<VBtn @click="props.editEntry ? updateTV(props.entry.id) : addTV()">Save</VBtn>
 			<VBtn v-if="closeButton" @click="closeEntry()">Close</VBtn>
-			<div v-show="showSaveWarning" class="save-warning">{{ Messages.noBlankTitle }}</div>
+			<div v-show="showSaveWarning" class="save-warning">{{ Messages.NO_BLANK_TITLE }}</div>
 		</VCardActions>
 	</VCard>
 </template>

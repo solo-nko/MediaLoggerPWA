@@ -2,18 +2,20 @@
 import { liveQuery } from 'dexie';
 import { useObservable, from } from '@vueuse/rxjs';
 import { appDatabase } from '../../database/db.ts';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import EntryDialogGames from '../entry_dialogs/EntryDialogGames.vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import GameLog from '../../database/models/GameLog.ts';
-import { Messages } from '../../config/Messages.ts';
+import Messages from '../../config/Messages.ts';
 import {
 	itemsPerPageOptions,
 	sortHeaders,
 	sortLogByCreated,
-	sortLogByUpdated
+	sortLogByUpdated,
+	injectionKeySaveToast
 } from '../../config/Utils.ts';
 import IHeaderItem from '../../types/IHeaderItem.ts';
+import { useLogDbStore } from '../../stores/store.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const games = useObservable<GameLog[]>(from(liveQuery(() => appDatabase.games.toArray())));
@@ -30,6 +32,8 @@ const gameHeaders: IHeaderItem[] = [
 const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
 const entryDetails = ref<GameLog>();
+const logDbStore = useLogDbStore();
+const configureSaveMessage = inject<(which: 'add' | 'edit') => void>(injectionKeySaveToast);
 
 function editEntry(entryInfo: GameLog) {
 	showEditDialog.value = true;
@@ -49,10 +53,12 @@ async function deleteEntry() {
 
 <template>
 	<VDataTable
-		v-model:items-per-page="itemsPerPageChild"
+		v-model:items-per-page="logDbStore.itemsPerPage"
+		:items-per-page-options="logDbStore.itemsPerPageOptions"
 		:headers="gameHeaders"
 		:items="games"
 		:sort-by="sortHeaders"
+		:search="logDbStore.dbSearchValue"
 	>
 		<!--	eslint-disable vue/valid-v-slot -->
 		<template v-slot:item.actions="{ item }">
@@ -65,11 +71,12 @@ async function deleteEntry() {
 			:entry="entryDetails"
 			:edit-entry="true"
 			@close-entry="showEditDialog = false"
+			@save-entry="configureSaveMessage"
 		></EntryDialogGames>
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">
 		<ConfirmDialog
-			:message="Messages.cantBeUndone"
+			:message="Messages.CANNOT_UNDO"
 			@confirm="deleteEntry"
 			@cancel="showDeleteDialog = false"
 		></ConfirmDialog>

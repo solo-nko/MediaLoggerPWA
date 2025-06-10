@@ -2,22 +2,22 @@
 import { liveQuery } from 'dexie';
 import { useObservable, from } from '@vueuse/rxjs';
 import { appDatabase } from '../../database/db.ts';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import MovieLog from '../../database/models/MovieLog.ts';
 import EntryDialogMovies from '../entry_dialogs/EntryDialogMovies.vue';
-import { Messages } from '../../config/Messages.ts';
+import Messages from '../../config/Messages.ts';
 import {
-	itemsPerPageOptions,
+	injectionKeySaveToast,
 	sortHeaders,
 	sortLogByCreated,
 	sortLogByUpdated
 } from '../../config/Utils.ts';
 import IHeaderItem from '../../types/IHeaderItem.ts';
+import { useLogDbStore } from '../../stores/store.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const movies = useObservable<MovieLog[]>(from(liveQuery(() => appDatabase.movies.toArray())));
-const itemsPerPageChild = defineModel('itemsPerPage', itemsPerPageOptions);
 const movieHeaders: IHeaderItem[] = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Series', value: 'series', key: 'series' },
@@ -29,6 +29,8 @@ const movieHeaders: IHeaderItem[] = [
 const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
 const entryDetails = ref<MovieLog>();
+const logDbStore = useLogDbStore();
+const configureSaveMessage = inject<(which: 'add' | 'edit') => void>(injectionKeySaveToast);
 
 function editEntry(entryInfo: MovieLog) {
 	showEditDialog.value = true;
@@ -48,10 +50,12 @@ async function deleteEntry() {
 
 <template>
 	<VDataTable
-		v-model:items-per-page="itemsPerPageChild"
+		v-model:items-per-page="logDbStore.itemsPerPage"
+		:items-per-page-options="logDbStore.itemsPerPageOptions"
 		:headers="movieHeaders"
 		:items="movies"
 		:sort-by="sortHeaders"
+		:search="logDbStore.dbSearchValue"
 	>
 		<!--	eslint-disable vue/valid-v-slot -->
 		<template v-slot:item.actions="{ item }">
@@ -64,11 +68,12 @@ async function deleteEntry() {
 			:entry="entryDetails"
 			:edit-entry="true"
 			@close-entry="showEditDialog = false"
+			@save-entry="configureSaveMessage"
 		></EntryDialogMovies>
 	</VDialog>
 	<VDialog v-model="showDeleteDialog">
 		<ConfirmDialog
-			:message="Messages.cantBeUndone"
+			:message="Messages.CANNOT_UNDO"
 			@confirm="deleteEntry"
 			@cancel="showDeleteDialog = false"
 		></ConfirmDialog>

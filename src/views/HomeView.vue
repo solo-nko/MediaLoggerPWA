@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import EntryDialogGames from '../components/entry_dialogs/EntryDialogGames.vue';
+import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
+import EntryDialogTV from '../components/entry_dialogs/EntryDialogTV.vue';
 import { appDatabase } from '../database/db.ts';
 import { from, useObservable } from '@vueuse/rxjs';
 import GameLog from '../database/models/GameLog.ts';
-import { liveQuery } from 'dexie';
 import TVLog from '../database/models/TVLog.ts';
 import BookLog from '../database/models/BookLog.ts';
-import EntryDialogTV from '../components/entry_dialogs/EntryDialogTV.vue';
-import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
-import { reverseSortLogByUpdated } from '../config/Utils.ts';
+import { liveQuery } from 'dexie';
+import { injectionKeySaveToast, reverseSortLogByUpdated } from '../config/Utils.ts';
+
+const configureSaveMessage = inject<(which: 'add' | 'edit') => void>(injectionKeySaveToast);
 
 // keep an eye on this void typing. might be problematic
 const currentGames = useObservable<GameLog[] | void>(
@@ -231,7 +233,7 @@ function editEntry(entryInfo, dialogType = 'Game') {
 					<VList class="list">
 						<template v-for="book in readingBooks" :key="book.id">
 							<VListItem>
-								<VRow justify="space-between">
+								<VRow class="now-playing-item" justify="space-between">
 									<VCol tag="div" cols="auto" class="item-title">
 										<span>{{ book.title }}</span>
 									</VCol>
@@ -245,7 +247,7 @@ function editEntry(entryInfo, dialogType = 'Game') {
 						<VCardSubtitle v-if="isThereBooksRereading">Rereading</VCardSubtitle>
 						<template v-for="book in rereadingBooks" :key="book.id">
 							<VListItem>
-								<VRow justify="space-between">
+								<VRow class="now-playing-item" justify="space-between">
 									<VCol tag="div" cols="auto" class="item-title">
 										<span>{{ book.title }}</span>
 									</VCol>
@@ -266,6 +268,7 @@ function editEntry(entryInfo, dialogType = 'Game') {
 				:entry="entryDetails"
 				:edit-entry="true"
 				@close-entry="showEditDialog = false"
+				@save-entry="configureSaveMessage"
 			></Component>
 		</VDialog>
 	</VContainer>
