@@ -7,12 +7,12 @@ This is an application being developed to gain a better understanding of progres
 ## Features
 
 * Progressive app which can be installed for local use with compatible browsers.
-  * On PC this means Edge or Chrome.
-* Uses your browser's IndexedDB for data storage, meaning none of your data leaves your machine. It's all stored locally.
+  * On PC this means Edge or Chrome. I've also tested with Vivaldi.
+* Uses your browser's IndexedDB for data storage, meaning none of your data needs to leave your machine. It's all stored locally.
   * Optionally, you may choose to back up your data to an Azure-based cloud database, to keep it conveniently updated across multiple devices.
 * Supports games, TV series, movies, and books.
-* View, edit, and sort through your database.
-  * Search is also being considered.
+* Mobile-ready responsive design.
+* View, edit, sort, and search through your database.
 * Export your database to a small JSON file as a backup. You can later import it back in.
 * Write your thoughts on each piece of media with a built-in rich text editor.
 
@@ -30,7 +30,7 @@ npm run dev
 # build for production:
 npm run build
 
-#run prettier formatter:
+# run prettier formatter:
 npm run format
 ```
 See repository's prettier config (`.prettierrc.json`) for prettier rules.
@@ -63,7 +63,7 @@ Cloud functionality uses a separately-developed ExpressJS server hosted on Micro
 * ~~Add TV support~~
 * ~~Add Movie support~~
 * ~~Add Book support~~
-* Add search box to database screen
+* ~~Add search box to database screen~~
 * Switch to Azure Functions for backend
 
 ## Things to investigate
