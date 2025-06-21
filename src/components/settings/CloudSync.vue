@@ -9,6 +9,7 @@ import { appDatabase } from '../../database/db.ts';
 import { AxiosResponse } from 'axios';
 import { DateTime } from 'luxon';
 import RestoreConfirmDialog from '../RestoreConfirmDialog.vue';
+import { AjaxResponse } from 'rxjs/internal/ajax/AjaxResponse';
 
 const syncCode = ref(localStorage.getItem('syncCode'));
 const lastSyncDate = ref(localStorage.getItem('lastSyncDate'));
@@ -62,29 +63,39 @@ async function SyncToCloud() {
 	};
 	// if there is a sync code present, this will be considered a PUT request.
 	if (syncCode.value) {
-		const response = await axiosInstance.put(`/logs/${syncCode.value}`, convertedBlob);
-		if (response.status == 200) {
-			updateCodeAndDate(response);
-			triggerSnackBar('Cloud backup successfully updated!');
-		} else if (response.status == 201) {
-			updateCodeAndDate(response);
-			triggerSnackBar('Sync Code not found! A new one has been issued.');
-		} else if (response.status == 503) {
-			triggerSnackBar("The server isn't responding right now. Please try again later.");
-		} else {
-			triggerSnackBar('A server error has occurred. Please try again later.');
-		}
+		await axiosInstance
+			.put(`/logs/${syncCode.value}`, convertedBlob)
+			.then((responseSuccess) => {
+				if (responseSuccess.status === 200) {
+					updateCodeAndDate(responseSuccess);
+					triggerSnackBar('Cloud backup successfully updated!');
+				} else if (responseSuccess.status === 201) {
+					updateCodeAndDate(responseSuccess);
+					triggerSnackBar('Sync Code not found! A new one has been issued.');
+				}
+			})
+			.catch((responseError) => {
+				console.log('error: ', responseError);
+				if (responseError.status === 503) {
+					triggerSnackBar('The server isn\'t responding right now. Please try again later.');
+				} else {
+					triggerSnackBar('A server error has occurred. Please try again later.');
+				}
+			});
 	} else {
 		// else if no sync code present, this will be considered a POST request
-		const response = await axiosInstance.post(`/logs/`, convertedBlob);
-		if (response.status === 201) {
-			updateCodeAndDate(response);
-			triggerSnackBar('Cloud backup successful! A Sync Code has been issued.');
-		} else if (response.status == 503) {
-			triggerSnackBar("The server isn't responding right now. Please try again later.");
-		} else {
-			triggerSnackBar('A server error has occurred. Please try again later.');
-		}
+		await axiosInstance.post(`/logs/`, convertedBlob).then((response) => {
+			if (response.status === 201) {
+				updateCodeAndDate(response);
+				triggerSnackBar('Cloud backup successful! A Sync Code has been issued.');
+			}
+		}).catch((error) => {
+			if (error.status == 503) {
+				triggerSnackBar('The server isn\'t responding right now. Please try again later.');
+			} else {
+				triggerSnackBar('A server error has occurred. Please try again later.');
+			}
+		});
 	}
 	// make sure loading status goes away
 	if (dateStampLoading.value) {
@@ -122,10 +133,10 @@ function openRestoreDialog() {
 		></VTextField>
 		<div class="button-row">
 			<VBtn :disabled="loadingOperation" :loading="loadingOperation" @click="SyncToCloud"
-				>Cloud Backup
+			>Cloud Backup
 			</VBtn>
 			<VBtn :disabled="loadingOperation" :loading="loadingOperation" @click="openRestoreDialog"
-				>Cloud Restore
+			>Cloud Restore
 			</VBtn>
 		</div>
 		<VSkeletonLoader id="backup-stamp" type="text" :loading="dateStampLoading">
