@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
-import { computed, onMounted, provide, ref } from 'vue';
-import { useThemeStore } from './stores/store.ts';
+import { RouterView } from "vue-router";
+import { computed, onMounted, provide, ref } from "vue";
+import { useThemeStore } from "./stores/store.ts";
 import {
 	injectionKeySaveSuccess,
 	injectionKeySaveToast,
 	injectionKeySnackbarTimeout
-} from './config/Utils.ts';
-import Messages from './config/Messages.ts';
+} from "./config/Utils.ts";
+import Messages from "./config/Messages.ts";
 
 const themeStore = useThemeStore();
 const showSaveSuccess = ref(false);
-const addOrEdit = ref('');
+const addOrEdit = ref("");
 const snackBarTimeout = ref(3000);
 
 const saveMessage = computed(() => {
-	if (addOrEdit.value === 'add') return Messages.ENTRY_ADD_SUCCESS;
-	if (addOrEdit.value === 'edit') return Messages.ENTRY_EDIT_SUCCESS;
-	return '';
+	if (addOrEdit.value === "add") return Messages.ENTRY_ADD_SUCCESS;
+	if (addOrEdit.value === "edit") return Messages.ENTRY_EDIT_SUCCESS;
+	return "";
 });
 
-const configureSaveMessage = (which: 'add' | 'edit') => {
+const configureSaveMessage = (which: "add" | "edit") => {
 	showSaveSuccess.value = true;
 	addOrEdit.value = which;
 };

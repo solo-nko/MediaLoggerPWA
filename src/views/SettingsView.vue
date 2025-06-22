@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import DatabaseSettings from '../components/settings/DatabaseSettings.vue';
-import AppearanceSettings from '../components/settings/AppearanceSettings.vue';
-import GeneralSettings from '../components/settings/GeneralSettings.vue';
+import { computed, ref } from "vue";
+import DatabaseSettings from "../components/settings/DatabaseSettings.vue";
+import AppearanceSettings from "../components/settings/AppearanceSettings.vue";
+import GeneralSettings from "../components/settings/GeneralSettings.vue";
 
-const currentTab = ref('GeneralSettings');
+const currentTab = ref("GeneralSettings");
 const settingsTabs = {
 	DatabaseSettings,
 	AppearanceSettings,
@@ -14,7 +14,7 @@ const settingsTabs = {
 const showSettingsDrawer = ref(true);
 
 const iconType = computed(() => {
-	return showSettingsDrawer.value ? '$chevronLeft' : '$chevronRight';
+	return showSettingsDrawer.value ? "$chevronLeft" : "$chevronRight";
 });
 </script>
 

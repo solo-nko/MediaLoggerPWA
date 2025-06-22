@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useRegisterSW } from 'virtual:pwa-register/vue';
+import { computed, ref } from "vue";
+import { useRegisterSW } from "virtual:pwa-register/vue";
 
 // check for updates every hour
 const period = 60 * 60 * 1000;
@@ -14,13 +14,13 @@ function registerPeriodicSync(swUrl: string, r: ServiceWorkerRegistration) {
 	if (period <= 0) return;
 
 	setInterval(async () => {
-		if ('onLine' in navigator && !navigator.onLine) return;
+		if ("onLine" in navigator && !navigator.onLine) return;
 
 		const resp = await fetch(swUrl, {
-			cache: 'no-store',
+			cache: "no-store",
 			headers: {
-				cache: 'no-store',
-				'cache-control': 'no-cache'
+				cache: "no-store",
+				"cache-control": "no-cache"
 			}
 		});
 
@@ -32,13 +32,13 @@ const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
 	immediate: true,
 	onRegisteredSW(swUrl, r) {
 		if (period <= 0) return;
-		if (r?.active?.state === 'activated') {
+		if (r?.active?.state === "activated") {
 			swActivated.value = true;
 			registerPeriodicSync(swUrl, r);
 		} else if (r?.installing) {
-			r.installing.addEventListener('statechange', (e) => {
+			r.installing.addEventListener("statechange", (e) => {
 				const sw = e.target as ServiceWorker;
-				swActivated.value = sw.state === 'activated';
+				swActivated.value = sw.state === "activated";
 				if (swActivated.value) registerPeriodicSync(swUrl, r);
 			});
 		}
@@ -46,9 +46,9 @@ const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
 });
 
 const title = computed(() => {
-	if (offlineReady.value) return 'App ready to work offline';
-	if (needRefresh.value) return 'New content available, click on reload button to update.';
-	return '';
+	if (offlineReady.value) return "App ready to work offline";
+	if (needRefresh.value) return "New content available, click on reload button to update.";
+	return "";
 });
 
 function close() {

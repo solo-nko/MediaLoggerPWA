@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import { DateTime } from 'luxon';
-import { overwriteDatabase } from '../config/Utils.ts';
-import Messages from '../config/Messages.ts';
-import { useSyncStore } from '../stores/store.ts';
+import { computed, onMounted, ref } from "vue";
+import { DateTime } from "luxon";
+import { overwriteDatabase } from "../config/Utils.ts";
+import Messages from "../config/Messages.ts";
+import { useSyncStore } from "../stores/store.ts";
 
-const emits = defineEmits(['confirm', 'cancel']);
+const emits = defineEmits(["confirm", "cancel"]);
 const props = defineProps<{
 	dryRun?: boolean;
 	message?: string;
@@ -15,12 +15,12 @@ const props = defineProps<{
 const syncStore = useSyncStore();
 const restoreLoading = ref(true);
 const restoreDisabled = ref(true);
-const lastSyncDate = ref('');
+const lastSyncDate = ref("");
 const pulledDB = ref<Blob>(undefined);
 const lastSyncDateFormatted = computed(() => {
 	const inputSyncDate = DateTime.fromISO(lastSyncDate.value);
 	if (inputSyncDate.isValid) return inputSyncDate.toLocaleString(DateTime.DATETIME_FULL);
-	return 'Unknown';
+	return "Unknown";
 });
 const labelText = ref<string>(Messages.INQUIRY_IN_PROGRESS);
 
@@ -37,11 +37,11 @@ const syncFromCloud = async () => {
 		console.log(error);
 		props.triggerSnackBar(Messages.CLOUD_RESTORE_FAIL);
 	}
-	emits('confirm');
+	emits("confirm");
 };
 
 const onCancel = () => {
-	emits('cancel');
+	emits("cancel");
 };
 
 // first step, check with the server for the log and pull it down if possible
@@ -68,7 +68,7 @@ onMounted(async () => {
 <template>
 	<VCard>
 		<VCardTitle>Cloud Restore</VCardTitle>
-		<VCardText>{{ lastSyncDate ? Messages.INQUIRY_SUCCESS : '' }}</VCardText>
+		<VCardText>{{ lastSyncDate ? Messages.INQUIRY_SUCCESS : "" }}</VCardText>
 		<VCardText>
 			<VLabel>{{ labelText }}</VLabel>
 		</VCardText>

@@ -1,33 +1,33 @@
-import { computed, reactive, ref } from 'vue';
-import { defineStore } from 'pinia';
-import { useTheme } from 'vuetify';
-import { DateTime } from 'luxon';
-import { AxiosResponse } from 'axios';
-import IItemsPerPageOption from '../types/IItemsPerPageOption.ts';
-import { appDatabase } from '../database/db.ts';
-import { axiosInstance, progressCallback } from '../config/Utils.ts';
+import { computed, reactive, ref } from "vue";
+import { defineStore } from "pinia";
+import { useTheme } from "vuetify";
+import { DateTime } from "luxon";
+import { AxiosResponse } from "axios";
+import IItemsPerPageOption from "../types/IItemsPerPageOption.ts";
+import { appDatabase } from "../database/db.ts";
+import { axiosInstance, progressCallback } from "../config/Utils.ts";
 
 export const settingsStore = reactive({
-	defaultDBScreen: 'game',
-	defaultEntryScreen: 'game'
+	defaultDBScreen: "game",
+	defaultEntryScreen: "game"
 });
 
-const usePrivateStore = defineStore('private-store', () => {
+const usePrivateStore = defineStore("private-store", () => {
 	const controller: AbortController | null = null;
 	return { controller };
 });
 
-export const useSyncStore = defineStore('sync-store', () => {
+export const useSyncStore = defineStore("sync-store", () => {
 	const privateStore = usePrivateStore();
-	const syncCode = ref(localStorage.getItem('syncCode'));
+	const syncCode = ref(localStorage.getItem("syncCode"));
 	const syncCodeValid = computed<boolean>(() => {
 		return syncCode.value && syncCode.value.length === 6;
 	});
-	const lastBackupDate = ref(localStorage.getItem('lastBackupDate'));
+	const lastBackupDate = ref(localStorage.getItem("lastBackupDate"));
 	const lastBackupDateFormatted = computed(() => {
 		const inputBackUpDate = DateTime.fromISO(lastBackupDate.value);
 		if (inputBackUpDate.isValid) return inputBackUpDate.toLocaleString(DateTime.DATETIME_FULL);
-		return 'Unknown';
+		return "Unknown";
 	});
 
 	async function SyncToCloud() {
@@ -35,15 +35,15 @@ export const useSyncStore = defineStore('sync-store', () => {
 		const convertedBlob = JSON.parse(await exportBlob.text());
 		let returnStatus: number | void;
 		const updateCodeAndDate = (response: AxiosResponse) => {
-			if ('LastUpdated' in response.data && 'SyncCode' in response.data) {
+			if ("LastUpdated" in response.data && "SyncCode" in response.data) {
 				lastBackupDate.value = response.data.LastUpdated;
 				// setting to localStorage allows the browser to recall this value when the page is loaded again later
-				localStorage.setItem('lastBackupDate', lastBackupDate.value);
+				localStorage.setItem("lastBackupDate", lastBackupDate.value);
 				syncCode.value = response.data.SyncCode;
-				localStorage.setItem('syncCode', syncCode.value);
+				localStorage.setItem("syncCode", syncCode.value);
 			} else {
-				console.log('API response payload incomplete.');
-				console.log('API Response:');
+				console.log("API response payload incomplete.");
+				console.log("API Response:");
 				console.log(response.data);
 			}
 		};
@@ -56,7 +56,7 @@ export const useSyncStore = defineStore('sync-store', () => {
 					returnStatus = response.status;
 				})
 				.catch((responseError) => {
-					console.log('Response Error: ', responseError);
+					console.log("Response Error: ", responseError);
 					returnStatus = responseError.status;
 				});
 		} else {
@@ -69,7 +69,7 @@ export const useSyncStore = defineStore('sync-store', () => {
 					}
 				})
 				.catch((responseError) => {
-					console.log('Response Error: ', responseError);
+					console.log("Response Error: ", responseError);
 					returnStatus = responseError.status;
 				});
 		}
@@ -96,7 +96,7 @@ export const useSyncStore = defineStore('sync-store', () => {
 				responseObject.status = response.status;
 			})
 			.catch((responseError) => {
-				console.log('Response Error: ', responseError);
+				console.log("Response Error: ", responseError);
 				responseObject.status = responseError.status;
 			})
 			.finally(() => {
@@ -120,27 +120,27 @@ export const useSyncStore = defineStore('sync-store', () => {
 	};
 });
 
-export const useLogDbStore = defineStore('db-search', () => {
-	const dbSearchValue = ref<string>('');
+export const useLogDbStore = defineStore("db-search", () => {
+	const dbSearchValue = ref<string>("");
 	const itemsPerPageOptions = ref<IItemsPerPageOption[]>([
 		{
-			title: '5',
+			title: "5",
 			value: 5
 		},
 		{
-			title: '10',
+			title: "10",
 			value: 10
 		},
 		{
-			title: '20',
+			title: "20",
 			value: 20
 		},
 		{
-			title: '50',
+			title: "50",
 			value: 50
 		},
 		{
-			title: 'All',
+			title: "All",
 			value: -1
 		}
 	]);
@@ -149,16 +149,16 @@ export const useLogDbStore = defineStore('db-search', () => {
 	return { dbSearchValue, itemsPerPageOptions, itemsPerPage };
 });
 
-export const useThemeStore = defineStore('theme', () => {
-	const localStorageTheme = localStorage.getItem('theme');
+export const useThemeStore = defineStore("theme", () => {
+	const localStorageTheme = localStorage.getItem("theme");
 	const lightTheme = ref(false);
 	const themeInstance = useTheme();
 
 	function loadTheme() {
 		// if no prior theme has been set, default to lightmode
 		if (!localStorageTheme) {
-			themeInstance.global.name.value = 'light1';
-			localStorage.setItem('theme', themeInstance.global.name.value);
+			themeInstance.global.name.value = "light1";
+			localStorage.setItem("theme", themeInstance.global.name.value);
 			// else use set theme
 		} else themeInstance.global.name.value = localStorageTheme;
 		if (themeInstance.global.current.value.dark) lightTheme.value = false;
@@ -166,10 +166,10 @@ export const useThemeStore = defineStore('theme', () => {
 	}
 
 	function toggleTheme() {
-		themeInstance.global.name.value = themeInstance.global.current.value.dark ? 'light1' : 'dark1';
+		themeInstance.global.name.value = themeInstance.global.current.value.dark ? "light1" : "dark1";
 		if (themeInstance.global.current.value.dark) lightTheme.value = false;
 		else lightTheme.value = true;
-		localStorage.setItem('theme', themeInstance.global.name.value);
+		localStorage.setItem("theme", themeInstance.global.name.value);
 	}
 
 	return { localStorageTheme, lightTheme, loadTheme, themeInstance, toggleTheme };

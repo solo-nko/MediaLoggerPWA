@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { inject, ref } from 'vue';
-import Messages from '../../config/Messages.ts';
-import { injectionKeySnackbarTimeout } from '../../config/Utils.ts';
-import RestoreConfirmDialog from '../RestoreConfirmDialog.vue';
-import { useSyncStore } from '../../stores/store.ts';
+import { inject, ref } from "vue";
+import Messages from "../../config/Messages.ts";
+import { injectionKeySnackbarTimeout } from "../../config/Utils.ts";
+import RestoreConfirmDialog from "../RestoreConfirmDialog.vue";
+import { useSyncStore } from "../../stores/store.ts";
 
 const syncStore = useSyncStore();
-const cloudSyncMsg = ref('');
+const cloudSyncMsg = ref("");
 const showCloudSyncMsg = ref(false);
 const dateStampLoading = ref(false);
 const loadingOperation = ref(false);
@@ -15,7 +15,7 @@ const snackbarTimeout = inject(injectionKeySnackbarTimeout);
 
 /** Returns true if valid, or a string explaining why if invalid */
 const isSyncCodeFieldInputValid = () => {
-	return syncStore.syncCodeValid || 'Sync Code must be 6 characters.';
+	return syncStore.syncCodeValid || "Sync Code must be 6 characters.";
 };
 
 /** Displays snack bar message.
@@ -34,7 +34,7 @@ async function SyncToCloudAndNotify() {
 			if (result === 200) triggerSnackBar(Messages.CLOUD_BACKUP_SUCCESS);
 			else if (result === 201) triggerSnackBar(Messages.CLOUD_UPDATE_SUCCESS);
 			else if (result === 503) triggerSnackBar(Messages.ERROR_RESPONSE_503);
-			else if (typeof result === 'number') triggerSnackBar(Messages.ERROR_SERVER);
+			else if (typeof result === "number") triggerSnackBar(Messages.ERROR_SERVER);
 		})
 		.finally(() => {
 			loadingOperation.value = false;

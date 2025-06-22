@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineEmits(['confirm', 'cancel']);
+defineEmits(["confirm", "cancel"]);
 const props = defineProps<{
 	message: string;
 }>();

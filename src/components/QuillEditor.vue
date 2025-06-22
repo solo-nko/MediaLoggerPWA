@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import Quill from 'quill';
-import 'quill/dist/quill.snow.css';
-import Log from '../database/models/Log.ts';
+import { onMounted } from "vue";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
+import Log from "../database/models/Log.ts";
 
 let quill: Quill | null = null;
 const toolbarOptions = [
-	['bold', 'italic', 'underline', 'strike'],
-	[{ list: 'ordered' }, { list: 'bullet' }],
+	["bold", "italic", "underline", "strike"],
+	[{ list: "ordered" }, { list: "bullet" }],
 	[{ color: [] }, { background: [] }],
-	['link', 'clean']
+	["link", "clean"]
 ];
-const emits = defineEmits(['content-change']);
+const emits = defineEmits(["content-change"]);
 
 // this should only ever be a string, not a Delta
 // TODO: test for issues here
@@ -19,28 +19,28 @@ const editorContent = defineModel<string>();
 
 // Quill can't be called until the DOM finishes rendering, otherwise you'll get an error
 onMounted(() => {
-	quill = new Quill('#editor', {
-		placeholder: 'Thoughts so far',
-		theme: 'snow',
+	quill = new Quill("#editor", {
+		placeholder: "Thoughts so far",
+		theme: "snow",
 		modules: {
 			toolbar: toolbarOptions
 		}
 	});
 	// if there is already content loaded from the database, use that
-	if (editorContent.value && typeof editorContent.value === 'string') {
+	if (editorContent.value && typeof editorContent.value === "string") {
 		quill.setContents(Log.impressionFromString(editorContent.value));
 	}
 	/* eslint-disable */
-	quill.on('text-change', (delta, oldDelta, source) => {
+	quill.on("text-change", (delta, oldDelta, source) => {
 		// send changes typed into the editor up to the parent
 		editorContent.value = Log.impressionToString(quill.getContents());
-		emits('content-change');
+		emits("content-change");
 	});
 });
 
 function clearEditor() {
 	if (quill != null) {
-		quill.setContents([{ insert: '\n' }]);
+		quill.setContents([{ insert: "\n" }]);
 	}
 }
 
@@ -54,7 +54,7 @@ defineExpose({ clearEditor });
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 #editor-wrapper {
 	height: 100%;
@@ -62,7 +62,7 @@ defineExpose({ clearEditor });
 }
 
 #editor {
-	font-family: 'Roboto', sans-serif;
+	font-family: "Roboto", sans-serif;
 }
 
 /*

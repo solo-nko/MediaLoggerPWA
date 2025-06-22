@@ -1,17 +1,17 @@
-import axios from 'axios';
-import { peakImportFile } from 'dexie-export-import';
-import { InjectionKey, Ref, ref } from 'vue';
-import { appDatabase } from '../database/db.ts';
-import Log from '../database/models/Log.ts';
-import ISortItem from '../types/ISortItem.ts';
+import axios from "axios";
+import { peakImportFile } from "dexie-export-import";
+import { InjectionKey, Ref, ref } from "vue";
+import { appDatabase } from "../database/db.ts";
+import Log from "../database/models/Log.ts";
+import ISortItem from "../types/ISortItem.ts";
 
 /**
  * axios object with the base URL preconfigured
  */
 const axiosInstance = axios.create({
-	baseURL: import.meta.env.PROD ? import.meta.env.VITE_API_URL : 'http://localhost:3050',
+	baseURL: import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:3050",
 	headers: {
-		'Content-Type': 'application/json'
+		"Content-Type": "application/json"
 	}
 });
 
@@ -22,15 +22,15 @@ const axiosInstance = axios.create({
 async function overwriteDatabase(dbToImport: Blob) {
 	try {
 		const importMetadata = await peakImportFile(dbToImport);
-		if (importMetadata.formatName != 'dexie') {
-			console.log('function overwriteDatabase: Invalid format.');
+		if (importMetadata.formatName != "dexie") {
+			console.log("function overwriteDatabase: Invalid format.");
 			return;
 		}
-		console.log('Database name:', importMetadata.data.databaseName);
-		console.log('Database version:', importMetadata.data.databaseVersion);
+		console.log("Database name:", importMetadata.data.databaseName);
+		console.log("Database version:", importMetadata.data.databaseVersion);
 		console.log(
-			'Tables:',
-			importMetadata.data.tables.map((t) => `${t.name} (${t.rowCount} rows)`).join('\n\t')
+			"Tables:",
+			importMetadata.data.tables.map((t) => `${t.name} (${t.rowCount} rows)`).join("\n\t")
 		);
 		await appDatabase.import(dbToImport, { clearTablesBeforeImport: true });
 		return true;
@@ -76,9 +76,9 @@ const sortLogByCreated = (a: Log, b: Log) => {
 	);
 };
 
-const sortHeaders = ref<ISortItem[]>([{ key: 'dateModified', order: 'desc' }]);
+const sortHeaders = ref<ISortItem[]>([{ key: "dateModified", order: "desc" }]);
 /** Provide/Inject injection key for the function managing the save toast message. Used for typing purposes. */
-const injectionKeySaveToast = Symbol() as InjectionKey<(which: 'add' | 'edit') => void>;
+const injectionKeySaveToast = Symbol() as InjectionKey<(which: "add" | "edit") => void>;
 /** Provide/Inject injection key for the boolean managing the save toast message. */
 const injectionKeySaveSuccess = Symbol() as InjectionKey<Ref<boolean>>;
 const injectionKeySnackbarTimeout = Symbol() as InjectionKey<Ref<number>>;
