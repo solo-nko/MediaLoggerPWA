@@ -1,18 +1,18 @@
 import axios from 'axios';
 import { peakImportFile } from 'dexie-export-import';
+import { InjectionKey, Ref, ref } from 'vue';
 import { appDatabase } from '../database/db.ts';
 import Log from '../database/models/Log.ts';
-import { InjectionKey, Ref, ref } from 'vue';
 import ISortItem from '../types/ISortItem.ts';
-
-const itemsPerPageOptions = { type: Number, default: 10 };
-const serverURL = 'https://medialoggerapiexpress-bra0h0atbybshucr.japanwest-01.azurewebsites.net';
 
 /**
  * axios object with the base URL preconfigured
  */
 const axiosInstance = axios.create({
-	baseURL: serverURL
+	baseURL: import.meta.env.PROD ? import.meta.env.VITE_API_URL : 'http://localhost:3050',
+	headers: {
+		'Content-Type': 'application/json'
+	}
 });
 
 /**
@@ -84,7 +84,6 @@ const injectionKeySaveSuccess = Symbol() as InjectionKey<Ref<boolean>>;
 const injectionKeySnackbarTimeout = Symbol() as InjectionKey<Ref<number>>;
 
 export {
-	itemsPerPageOptions,
 	axiosInstance,
 	overwriteDatabase,
 	progressCallback,

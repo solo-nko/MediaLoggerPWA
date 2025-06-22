@@ -8,7 +8,6 @@ import ConfirmDialog from '../ConfirmDialog.vue';
 import GameLog from '../../database/models/GameLog.ts';
 import Messages from '../../config/Messages.ts';
 import {
-	itemsPerPageOptions,
 	sortHeaders,
 	sortLogByCreated,
 	sortLogByUpdated,
@@ -19,7 +18,6 @@ import { useLogDbStore } from '../../stores/store.ts';
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const games = useObservable<GameLog[]>(from(liveQuery(() => appDatabase.games.toArray())));
-const itemsPerPageChild = defineModel('itemsPerPage', itemsPerPageOptions);
 const gameHeaders: IHeaderItem[] = [
 	{ title: 'Title', value: 'title', key: 'title' },
 	{ title: 'Platform', value: 'platform' },
