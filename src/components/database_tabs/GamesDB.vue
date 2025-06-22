@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { liveQuery } from 'dexie';
 import { useObservable, from } from '@vueuse/rxjs';
-import { appDatabase } from '../../database/db.ts';
 import { inject, ref } from 'vue';
+import { appDatabase } from '../../database/db.ts';
 import EntryDialogGames from '../entry_dialogs/EntryDialogGames.vue';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import GameLog from '../../database/models/GameLog.ts';

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
-import DatabaseSchema from '../DatabaseSchema.ts';
 import { Entity } from 'dexie';
 import { Delta } from 'quill/core';
+import DatabaseSchema from '../DatabaseSchema.ts';
 
 export default class Log extends Entity<DatabaseSchema> {
 	id!: number | null;

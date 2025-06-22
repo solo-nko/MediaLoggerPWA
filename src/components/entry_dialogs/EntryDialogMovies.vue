@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { appDatabase } from '../../database/db.ts';
 import { DateTime } from 'luxon';
+import { ref } from 'vue';
+import { appDatabase } from '../../database/db.ts';
 import QuillEditor from '../QuillEditor.vue';
 import Log from '../../database/models/Log.ts';
-import { ref } from 'vue';
 import Messages from '../../config/Messages.ts';
 import IMovieLog from '../../types/IMovieLog.ts';
 

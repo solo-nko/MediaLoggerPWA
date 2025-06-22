@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue';
 import DatabaseSettings from '../components/settings/DatabaseSettings.vue';
 import AppearanceSettings from '../components/settings/AppearanceSettings.vue';
 import GeneralSettings from '../components/settings/GeneralSettings.vue';
-import { computed, ref } from 'vue';
 
 const currentTab = ref('GeneralSettings');
 const settingsTabs = {

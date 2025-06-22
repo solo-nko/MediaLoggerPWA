@@ -1,10 +1,10 @@
-import Dexie, { type EntityTable } from 'dexie';
+import dexie, { type EntityTable } from 'dexie';
 import GameLog from './models/GameLog.ts';
 import TVLog from './models/TVLog.ts';
 import BookLog from './models/BookLog.ts';
 import MovieLog from './models/MovieLog.ts';
 
-export default class DatabaseSchema extends Dexie {
+export default class DatabaseSchema extends dexie {
 	games!: EntityTable<GameLog, 'id'>;
 	television!: EntityTable<TVLog, 'id'>;
 	books!: EntityTable<BookLog, 'id'>;

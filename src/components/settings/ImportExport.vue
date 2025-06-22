@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import 'dexie-export-import';
 import { saveAs } from 'file-saver';
-import { appDatabase } from '../../database/db.ts';
 import { ref } from 'vue';
+import { DateTime } from 'luxon';
+import { appDatabase } from '../../database/db.ts';
 import ConfirmDialog from '../ConfirmDialog.vue';
 import { overwriteDatabase, progressCallback } from '../../config/Utils.ts';
-import { DateTime } from 'luxon';
 
 const importedFile = ref<File>();
 const showDBImportSuccess = ref(false);
