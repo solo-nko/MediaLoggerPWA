@@ -1,7 +1,5 @@
-import { fn } from '@storybook/test';
 import { Meta, StoryObj } from '@storybook/vue3';
 
-import HomeView from '../../src/views/HomeView.vue';
 import App from '../../src/App.vue'
 
 const meta: Meta = {

@@ -1,4 +1,3 @@
-import { fn } from '@storybook/test';
 import { Meta, StoryObj } from '@storybook/vue3';
 
 import RestoreConfirmDialog from '../../src/components/RestoreConfirmDialog.vue';
