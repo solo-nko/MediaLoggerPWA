@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { appDatabase } from '../../database/db.ts';
-import { BookStatus } from '../../database/models/BookStatus.ts';
-import { DateTime } from 'luxon';
-import QuillEditor from '../QuillEditor.vue';
-import Log from '../../database/models/Log.ts';
-import { ref } from 'vue';
-import Messages from '../../config/Messages.ts';
-import IBookLog from '../../types/IBookLog.ts';
-import { useDisplay } from 'vuetify';
+import { DateTime } from "luxon";
+import { ref } from "vue";
+import { useDisplay } from "vuetify";
+import { appDatabase } from "../../database/db.ts";
+import { BookStatus } from "../../database/models/BookStatus.ts";
+import QuillEditor from "../QuillEditor.vue";
+import Log from "../../database/models/Log.ts";
+import Messages from "../../config/Messages.ts";
+import IBookLog from "../../types/IBookLog.ts";
 
 const bookStatus = Object.values(BookStatus);
-const emits = defineEmits(['close-entry', 'save-entry']);
+const emits = defineEmits(["close-entry", "save-entry"]);
 const quill = ref(null);
 const showSaveWarning = ref(false);
 const { smAndDown } = useDisplay();
@@ -25,7 +25,7 @@ const props = withDefaults(
 		entry: {
 			title: null,
 			audiobook: false,
-			series: 'N/A',
+			series: "N/A",
 			status: null,
 			progress: null,
 			rating: null,
@@ -56,21 +56,21 @@ function resetFields() {
 }
 
 function closeEntry(): void {
-	if (props.closeButton) emits('close-entry');
+	if (props.closeButton) emits("close-entry");
 }
 
-function saveEntry(editOrAdd: 'edit' | 'add') {
-	emits('save-entry', editOrAdd);
+function saveEntry(editOrAdd: "edit" | "add") {
+	emits("save-entry", editOrAdd);
 }
 
 function clearNA(event: Event) {
 	const inputElement = event.target as HTMLInputElement;
-	if (inputElement.value == 'N/A') logModel.value.series = '';
+	if (inputElement.value == "N/A") logModel.value.series = "";
 }
 
 function replaceNA(event: Event) {
 	const inputElement = event.target as HTMLInputElement;
-	if (inputElement.value == '') logModel.value.series = 'N/A';
+	if (inputElement.value == "") logModel.value.series = "N/A";
 }
 
 function fieldsOk(): boolean {
@@ -101,7 +101,7 @@ async function addBook() {
 		dateModified: Log.dateToString(DateTime.now())
 	});
 	resetFields();
-	saveEntry('add');
+	saveEntry("add");
 	closeEntry();
 }
 
@@ -117,14 +117,14 @@ async function updateBook(key: number) {
 		impression: logModel.value.impression,
 		dateModified: logModel.value.dateModified
 	});
-	saveEntry('edit');
+	saveEntry("edit");
 	closeEntry();
 }
 </script>
 
 <template>
 	<VCard class="entry-card">
-		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} Book</VCardTitle>
+		<VCardTitle>{{ editEntry ? "Edit" : "Add New" }} Book</VCardTitle>
 		<VContainer>
 			<VRow>
 				<VTextField v-model="logModel.title" label="Title"></VTextField>
@@ -191,5 +191,5 @@ async function updateBook(key: number) {
 </template>
 
 <style lang="scss">
-@use '../../style/entry';
+@use "../../style/entry";
 </style>

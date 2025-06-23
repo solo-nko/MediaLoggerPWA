@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { appDatabase } from '../../database/db.ts';
-import { DateTime } from 'luxon';
-import QuillEditor from '../QuillEditor.vue';
-import Log from '../../database/models/Log.ts';
-import { ref } from 'vue';
-import { TVStatus } from '../../database/models/TVStatus.ts';
-import Messages from '../../config/Messages.ts';
-import ITVLog from '../../types/ITVLog.ts';
+import { DateTime } from "luxon";
+import { ref } from "vue";
+import { appDatabase } from "../../database/db.ts";
+import QuillEditor from "../QuillEditor.vue";
+import Log from "../../database/models/Log.ts";
+import { TVStatus } from "../../database/models/TVStatus.ts";
+import Messages from "../../config/Messages.ts";
+import ITVLog from "../../types/ITVLog.ts";
 
 const tvStatus = Object.values(TVStatus);
-const emits = defineEmits(['close-entry', 'save-entry']);
+const emits = defineEmits(["close-entry", "save-entry"]);
 const quill = ref(null);
 const showSaveWarning = ref(false);
 
@@ -52,12 +52,12 @@ function resetFields() {
 }
 
 function closeEntry(): void {
-	if (props.closeButton) emits('close-entry');
+	if (props.closeButton) emits("close-entry");
 }
 
-function saveEntry(editOrAdd: 'edit' | 'add') {
-	if (editOrAdd === 'edit') emits('save-entry', editOrAdd);
-	else emits('save-entry', editOrAdd);
+function saveEntry(editOrAdd: "edit" | "add") {
+	if (editOrAdd === "edit") emits("save-entry", editOrAdd);
+	else emits("save-entry", editOrAdd);
 }
 
 function fieldsOk(): boolean {
@@ -87,7 +87,7 @@ async function addTV() {
 		dateModified: Log.dateToString(DateTime.now())
 	});
 	resetFields();
-	saveEntry('add');
+	saveEntry("add");
 	closeEntry();
 }
 
@@ -102,14 +102,14 @@ async function updateTV(key: number) {
 		impression: logModel.value.impression,
 		dateModified: logModel.value.dateModified
 	});
-	saveEntry('edit');
+	saveEntry("edit");
 	closeEntry();
 }
 </script>
 
 <template>
 	<VCard class="entry-card">
-		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} TV Series</VCardTitle>
+		<VCardTitle>{{ editEntry ? "Edit" : "Add New" }} TV Series</VCardTitle>
 		<VContainer>
 			<VRow>
 				<VTextField v-model="logModel.title" label="Title"></VTextField>
@@ -161,5 +161,5 @@ async function updateTV(key: number) {
 </template>
 
 <style lang="scss">
-@use '../../style/entry';
+@use "../../style/entry";
 </style>

@@ -1,39 +1,37 @@
 <script setup lang="ts">
-import { liveQuery } from 'dexie';
-import { useObservable, from } from '@vueuse/rxjs';
-import { appDatabase } from '../../database/db.ts';
-import { inject, ref } from 'vue';
-import EntryDialogGames from '../entry_dialogs/EntryDialogGames.vue';
-import ConfirmDialog from '../ConfirmDialog.vue';
-import GameLog from '../../database/models/GameLog.ts';
-import Messages from '../../config/Messages.ts';
+import { liveQuery } from "dexie";
+import { useObservable, from } from "@vueuse/rxjs";
+import { inject, ref } from "vue";
+import { appDatabase } from "../../database/db.ts";
+import EntryDialogGames from "../entry_dialogs/EntryDialogGames.vue";
+import ConfirmDialog from "../ConfirmDialog.vue";
+import GameLog from "../../database/models/GameLog.ts";
+import Messages from "../../config/Messages.ts";
 import {
-	itemsPerPageOptions,
 	sortHeaders,
 	sortLogByCreated,
 	sortLogByUpdated,
 	injectionKeySaveToast
-} from '../../config/Utils.ts';
-import IHeaderItem from '../../types/IHeaderItem.ts';
-import { useLogDbStore } from '../../stores/store.ts';
+} from "../../config/Utils.ts";
+import IHeaderItem from "../../types/IHeaderItem.ts";
+import { useLogDbStore } from "../../stores/store.ts";
 
 // see https://github.com/dexie/Dexie.js/issues/1608
 const games = useObservable<GameLog[]>(from(liveQuery(() => appDatabase.games.toArray())));
-const itemsPerPageChild = defineModel('itemsPerPage', itemsPerPageOptions);
 const gameHeaders: IHeaderItem[] = [
-	{ title: 'Title', value: 'title', key: 'title' },
-	{ title: 'Platform', value: 'platform' },
-	{ title: 'Status', value: 'status', key: 'status' },
-	{ title: 'Date Created', value: 'dateCreated', sortable: true, sortRaw: sortLogByCreated },
-	{ title: 'Date Updated', value: 'dateModified', sortable: true, sortRaw: sortLogByUpdated },
-	{ title: 'Actions', value: 'actions', key: 'actions', sortable: false }
+	{ title: "Title", value: "title", key: "title" },
+	{ title: "Platform", value: "platform" },
+	{ title: "Status", value: "status", key: "status" },
+	{ title: "Date Created", value: "dateCreated", sortable: true, sortRaw: sortLogByCreated },
+	{ title: "Date Updated", value: "dateModified", sortable: true, sortRaw: sortLogByUpdated },
+	{ title: "Actions", value: "actions", key: "actions", sortable: false }
 ];
 
 const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
 const entryDetails = ref<GameLog>();
 const logDbStore = useLogDbStore();
-const configureSaveMessage = inject<(which: 'add' | 'edit') => void>(injectionKeySaveToast);
+const configureSaveMessage = inject<(which: "add" | "edit") => void>(injectionKeySaveToast);
 
 function editEntry(entryInfo: GameLog) {
 	showEditDialog.value = true;

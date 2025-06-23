@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import EntryDialogGames from '../components/entry_dialogs/EntryDialogGames.vue';
-import EntryDialogTV from '../components/entry_dialogs/EntryDialogTV.vue';
-import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
-import EntryDialogMovies from '../components/entry_dialogs/EntryDialogMovies.vue';
-import { inject, ref } from 'vue';
-import { settingsStore } from '../stores/store.ts';
-import { injectionKeySaveToast } from '../config/Utils.ts';
+import { inject, ref } from "vue";
+import EntryDialogGames from "../components/entry_dialogs/EntryDialogGames.vue";
+import EntryDialogTV from "../components/entry_dialogs/EntryDialogTV.vue";
+import EntryDialogBooks from "../components/entry_dialogs/EntryDialogBooks.vue";
+import EntryDialogMovies from "../components/entry_dialogs/EntryDialogMovies.vue";
+import { settingsStore } from "../stores/store.ts";
+import { injectionKeySaveToast } from "../config/Utils.ts";
 
 // for use with dynamic component solution
 /*const currentTab = ref('game');
@@ -15,7 +15,7 @@ const tabs = {
 };*/
 
 const tabs = ref(settingsStore.defaultEntryScreen);
-const configureSaveMessage = inject<(which: 'add' | 'edit') => void>(injectionKeySaveToast);
+const configureSaveMessage = inject<(which: "add" | "edit") => void>(injectionKeySaveToast);
 </script>
 
 <template>

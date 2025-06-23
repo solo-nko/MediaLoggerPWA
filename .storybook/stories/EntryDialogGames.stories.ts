@@ -1,4 +1,3 @@
-import { fn } from '@storybook/test';
 import { Meta, StoryObj } from '@storybook/vue3';
 
 import EntryDialogGames from '../../src/components/entry_dialogs/EntryDialogGames.vue';

@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import 'dexie-export-import';
-import { saveAs } from 'file-saver';
-import { appDatabase } from '../../database/db.ts';
-import { ref } from 'vue';
-import ConfirmDialog from '../ConfirmDialog.vue';
-import { overwriteDatabase, progressCallback } from '../../config/Utils.ts';
-import { DateTime } from 'luxon';
+import "dexie-export-import";
+import { saveAs } from "file-saver";
+import { ref } from "vue";
+import { DateTime } from "luxon";
+import { appDatabase } from "../../database/db.ts";
+import ConfirmDialog from "../ConfirmDialog.vue";
+import { overwriteDatabase, progressCallback } from "../../config/Utils.ts";
 
 const importedFile = ref<File>();
 const showDBImportSuccess = ref(false);
 const showDBImportFailure = ref(false);
-const DBImportFailureMsg = ref('');
+const DBImportFailureMsg = ref("");
 const showDBImportConfirm = ref(false);
 const importWarningMessage =
-	'Importing a new database will clear the existing one. This cannot be undone!';
+	"Importing a new database will clear the existing one. This cannot be undone!";
 const loadingOperation = ref(false);
 
 async function exportDatabase() {
 	loadingOperation.value = true;
 	const exportBlob = await appDatabase.export({ prettyJson: true, progressCallback });
-	const timeString = DateTime.now().toFormat('yyyyLLdd_HHmmss');
+	const timeString = DateTime.now().toFormat("yyyyLLdd_HHmmss");
 	const fileName = `database${timeString}.json`;
 	saveAs(exportBlob, fileName);
 	loadingOperation.value = false;
@@ -29,7 +29,7 @@ async function importDatabase(file: Blob) {
 	loadingOperation.value = true;
 	showDBImportConfirm.value = false;
 	if (!file) {
-		DBImportFailureMsg.value = 'Import failed! No file was provided.';
+		DBImportFailureMsg.value = "Import failed! No file was provided.";
 		showDBImportFailure.value = true;
 		loadingOperation.value = false;
 		return;

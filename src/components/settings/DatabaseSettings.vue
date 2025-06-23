@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ImportExport from './ImportExport.vue';
-import CloudSync from './CloudSync.vue';
+import ImportExport from "./ImportExport.vue";
+import CloudSync from "./CloudSync.vue";
 </script>
 
 <template>

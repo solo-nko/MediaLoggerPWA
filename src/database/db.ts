@@ -1,3 +1,3 @@
-import DatabaseSchema from './DatabaseSchema.ts';
+import DatabaseSchema from "./DatabaseSchema.ts";
 
 export const appDatabase = new DatabaseSchema();

@@ -1,37 +1,37 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue';
-import EntryDialogGames from '../components/entry_dialogs/EntryDialogGames.vue';
-import EntryDialogBooks from '../components/entry_dialogs/EntryDialogBooks.vue';
-import EntryDialogTV from '../components/entry_dialogs/EntryDialogTV.vue';
-import { appDatabase } from '../database/db.ts';
-import { from, useObservable } from '@vueuse/rxjs';
-import GameLog from '../database/models/GameLog.ts';
-import TVLog from '../database/models/TVLog.ts';
-import BookLog from '../database/models/BookLog.ts';
-import { liveQuery } from 'dexie';
-import { injectionKeySaveToast, reverseSortLogByUpdated } from '../config/Utils.ts';
+import { computed, inject, ref } from "vue";
+import { from, useObservable } from "@vueuse/rxjs";
+import { liveQuery } from "dexie";
+import EntryDialogGames from "../components/entry_dialogs/EntryDialogGames.vue";
+import EntryDialogBooks from "../components/entry_dialogs/EntryDialogBooks.vue";
+import EntryDialogTV from "../components/entry_dialogs/EntryDialogTV.vue";
+import { appDatabase } from "../database/db.ts";
+import GameLog from "../database/models/GameLog.ts";
+import TVLog from "../database/models/TVLog.ts";
+import BookLog from "../database/models/BookLog.ts";
+import { injectionKeySaveToast, reverseSortLogByUpdated } from "../config/Utils.ts";
 
-const configureSaveMessage = inject<(which: 'add' | 'edit') => void>(injectionKeySaveToast);
+const configureSaveMessage = inject<(which: "add" | "edit") => void>(injectionKeySaveToast);
 
 // keep an eye on this void typing. might be problematic
 const currentGames = useObservable<GameLog[] | void>(
 	from(
 		liveQuery(() =>
 			appDatabase.games
-				.where('status')
-				.anyOf(['Playing', 'Replaying'])
+				.where("status")
+				.anyOf(["Playing", "Replaying"])
 				.toArray()
 				.then((promisedArray) => {
 					// populate currently playing
 					playingGames.value = promisedArray.filter((game) => {
-						return game.status == 'Playing';
+						return game.status == "Playing";
 					});
 					// sort by last updated
 					playingGames.value.sort((a: GameLog, b: GameLog) => {
 						return reverseSortLogByUpdated(a, b);
 					});
 					replayingGames.value = promisedArray.filter((game) => {
-						return game.status == 'Replaying';
+						return game.status == "Replaying";
 					});
 					replayingGames.value.sort((a: GameLog, b: GameLog) => {
 						return reverseSortLogByUpdated(a, b);
@@ -56,19 +56,19 @@ const currentTV = useObservable<TVLog[] | void>(
 	from(
 		liveQuery(() =>
 			appDatabase.television
-				.where('status')
-				.anyOf(['Watching', 'Rewatching'])
+				.where("status")
+				.anyOf(["Watching", "Rewatching"])
 				.toArray()
 				.then((promisedArray) => {
 					watchingTV.value = promisedArray.filter((tv) => {
-						return tv.status == 'Watching';
+						return tv.status == "Watching";
 					});
 					// sort by last updated
 					watchingTV.value.sort((a: TVLog, b: TVLog) => {
 						return reverseSortLogByUpdated(a, b);
 					});
 					rewatchingTV.value = promisedArray.filter((tv) => {
-						return tv.status == 'Rewatching';
+						return tv.status == "Rewatching";
 					});
 					rewatchingTV.value.sort((a: TVLog, b: TVLog) => {
 						return reverseSortLogByUpdated(a, b);
@@ -93,19 +93,19 @@ const currentBooks = useObservable<BookLog[] | void>(
 	from(
 		liveQuery(() =>
 			appDatabase.books
-				.where('status')
-				.anyOf(['Reading', 'Rereading'])
+				.where("status")
+				.anyOf(["Reading", "Rereading"])
 				.toArray()
 				.then((promisedArray) => {
 					readingBooks.value = promisedArray.filter((book) => {
-						return book.status == 'Reading';
+						return book.status == "Reading";
 					});
 					// sort by last updated
 					readingBooks.value.sort((a: BookLog, b: BookLog) => {
 						return reverseSortLogByUpdated(a, b);
 					});
 					rereadingBooks.value = promisedArray.filter((book) => {
-						return book.status == 'Rereading';
+						return book.status == "Rereading";
 					});
 					rereadingBooks.value.sort((a: BookLog, b: BookLog) => {
 						return reverseSortLogByUpdated(a, b);
@@ -128,14 +128,14 @@ const isThereBooksRereading = computed(() => {
 
 const entryDetails = ref();
 const showEditDialog = ref(false);
-const whichDialog = ref('Game');
+const whichDialog = ref("Game");
 const dialogs = {
 	Game: EntryDialogGames,
 	TV: EntryDialogTV,
 	Book: EntryDialogBooks
 };
 
-function editEntry(entryInfo, dialogType = 'Game') {
+function editEntry(entryInfo, dialogType = "Game") {
 	whichDialog.value = dialogType;
 	showEditDialog.value = true;
 	entryDetails.value = entryInfo;

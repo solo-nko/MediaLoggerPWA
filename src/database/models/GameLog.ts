@@ -1,5 +1,5 @@
-import Log from './Log.ts';
-import { GameStatus } from './GameStatus.ts';
+import Log from "./Log.ts";
+import { GameStatus } from "./GameStatus.ts";
 
 export default class GameLog extends Log {
 	platform: string;

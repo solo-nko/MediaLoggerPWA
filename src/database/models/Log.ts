@@ -1,7 +1,7 @@
-import { DateTime } from 'luxon';
-import DatabaseSchema from '../DatabaseSchema.ts';
-import { Entity } from 'dexie';
-import { Delta } from 'quill/core';
+import { DateTime } from "luxon";
+import { Entity } from "dexie";
+import { Delta } from "quill/core";
+import DatabaseSchema from "../DatabaseSchema.ts";
 
 export default class Log extends Entity<DatabaseSchema> {
 	id!: number | null;
@@ -30,12 +30,12 @@ export default class Log extends Entity<DatabaseSchema> {
 
 	static sortDate(
 		inputArray: Log[],
-		sortHeader: 'dateCreated' | 'dateModified' = 'dateModified',
+		sortHeader: "dateCreated" | "dateModified" = "dateModified",
 		descending = true
 	) {
 		const workArray = [...inputArray];
 		const isStringDate = workArray.every((logItem) => {
-			return typeof logItem[sortHeader] === 'string';
+			return typeof logItem[sortHeader] === "string";
 		});
 		workArray.sort((a, b) => {
 			if (isStringDate) {

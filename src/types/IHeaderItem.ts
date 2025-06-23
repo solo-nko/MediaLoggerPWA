@@ -1,4 +1,4 @@
-import Log from '../database/models/Log.ts';
+import Log from "../database/models/Log.ts";
 
 /* eslint-disable no-unused-vars */
 export default interface IHeaderItem {

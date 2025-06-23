@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { appDatabase } from '../../database/db.ts';
-import { GameStatus } from '../../database/models/GameStatus.ts';
-import { DateTime } from 'luxon';
-import QuillEditor from '../QuillEditor.vue';
-import Log from '../../database/models/Log.ts';
-import { ref } from 'vue';
-import Messages from '../../config/Messages.ts';
-import IGameLog from '../../types/IGameLog.ts';
+import { DateTime } from "luxon";
+import { ref } from "vue";
+import { appDatabase } from "../../database/db.ts";
+import { GameStatus } from "../../database/models/GameStatus.ts";
+import QuillEditor from "../QuillEditor.vue";
+import Log from "../../database/models/Log.ts";
+import Messages from "../../config/Messages.ts";
+import IGameLog from "../../types/IGameLog.ts";
 
 const gameStatus = Object.values(GameStatus);
-const emits = defineEmits(['close-entry', 'save-entry']);
+const emits = defineEmits(["close-entry", "save-entry"]);
 const quill = ref(null);
 const showSaveWarning = ref(false);
 
@@ -52,11 +52,11 @@ function resetFields() {
 }
 
 function closeEntry(): void {
-	if (props.closeButton) emits('close-entry');
+	if (props.closeButton) emits("close-entry");
 }
 
-function saveEntry(editOrAdd: 'edit' | 'add') {
-	emits('save-entry', editOrAdd);
+function saveEntry(editOrAdd: "edit" | "add") {
+	emits("save-entry", editOrAdd);
 }
 
 function fieldsOk(): boolean {
@@ -86,7 +86,7 @@ async function addGame() {
 		dateModified: Log.dateToString(DateTime.now())
 	});
 	resetFields();
-	saveEntry('add');
+	saveEntry("add");
 	closeEntry();
 }
 
@@ -101,14 +101,14 @@ async function updateGame(key: number) {
 		impression: logModel.value.impression,
 		dateModified: logModel.value.dateModified
 	});
-	saveEntry('edit');
+	saveEntry("edit");
 	closeEntry();
 }
 </script>
 
 <template>
 	<VCard class="entry-card">
-		<VCardTitle>{{ editEntry ? 'Edit' : 'Add New' }} Game</VCardTitle>
+		<VCardTitle>{{ editEntry ? "Edit" : "Add New" }} Game</VCardTitle>
 		<VContainer>
 			<VRow>
 				<VTextField v-model="logModel.title" label="Title"></VTextField>
@@ -165,5 +165,5 @@ async function updateGame(key: number) {
 </template>
 
 <style lang="scss">
-@use '../../style/entry';
+@use "../../style/entry";
 </style>
