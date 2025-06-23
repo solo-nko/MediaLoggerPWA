@@ -43,9 +43,9 @@ async function SyncToCloudAndNotify() {
 }
 
 function openRestoreDialog() {
-	loadingOperation.value = true;
 	// if sync code is valid
 	if (syncStore.syncCodeValid) {
+		loadingOperation.value = true;
 		showRestoreDialog.value = true;
 	} else {
 		triggerSnackBar(Messages.ENTER_VALID_CODE);

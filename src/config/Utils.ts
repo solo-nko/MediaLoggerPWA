@@ -5,6 +5,12 @@ import { appDatabase } from "../database/db.ts";
 import Log from "../database/models/Log.ts";
 import ISortItem from "../types/ISortItem.ts";
 
+/* 	Vite CANNOT access Azure-configured environment variables, so VITE_API_URL is instead defined during build using Github Secrets.
+		See below for more info:
+		https://github.com/vitejs/vite/discussions/13443
+		https://learn.microsoft.com/en-us/azure/static-web-apps/build-configuration?tabs=identity&pivots=github-actions#environment-variables
+ */
+
 /**
  * axios object with the base URL preconfigured
  */
